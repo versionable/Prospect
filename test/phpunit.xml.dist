@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+
+<!-- see http://www.phpunit.de/wiki/Documentation -->
+<phpunit bootstrap="test/bootstrap.php"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         stopOnFailure="false">
+           
+  <testsuite name="all">
+    <directory suffix="Test.php">test/HttpClient/</directory>
+  </testsuite>
+</phpunit>
