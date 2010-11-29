@@ -4,6 +4,7 @@ namespace Versionable\HttpClient\Adapter;
 
 use Versionable\HttpClient\Request\RequestInterface;
 use Versionable\HttpClient\Response\ResponseInterface;
+use Versionable\HttpClient\Parameter\File;
 
 class Curl implements AdapterInterface
 {
@@ -59,10 +60,13 @@ class Curl implements AdapterInterface
       \curl_setopt($this->ch, \CURLOPT_CUSTOMREQUEST, $request->getMethod());
     }
 
-    $post = $request->getParameters();
-    if ($request->hasFiles()) {
-      foreach($request->getFiles() as $name => $file) {
-        $post[$name] = '@' . $file->getFilename() . ';type=' . $file->getType();
+    $post = array();
+    foreach($request->getParameters() as $param) {
+      \var_dump($param);
+      if ($param instanceof File) {
+        $post[$param->getName()] = '@' . $param->getValue() . ';type=' . $param->getType();
+      } else {
+        $post[$param->getName()] = $param->getValue();
       }
     }
     

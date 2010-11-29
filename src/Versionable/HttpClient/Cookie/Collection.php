@@ -2,9 +2,11 @@
 
 namespace Versionable\HttpClient\Cookie;
 
-class Collection implements CollectionInterface, \Countable, \ArrayAccess {
+class Collection implements CollectionInterface, \Iterator, \SeekableIterator, \Countable, \ArrayAccess {
   
   protected $cookies = array();
+  
+  protected $position = 0;
 
   public function add(CookieInterface $cookie) {
     $this->cookies[$cookie->getName()] = $cookie;
@@ -32,10 +34,6 @@ class Collection implements CollectionInterface, \Countable, \ArrayAccess {
     return isset($this->cookies[$name]);
   }
 
-  public function count() {
-    return count($this->cookies);
-  }
-
   public function __toString() {
     return $this->toString();
   }
@@ -58,11 +56,76 @@ class Collection implements CollectionInterface, \Countable, \ArrayAccess {
 
   }
   
+
+  /**
+   *
+   * @return boolean
+   */
+  public function rewind()
+  {
+    $this->setPosition(0);
+
+    return reset($this->cookies);
+  }
+
+  /**
+   *
+   * @return mixed
+   */
+  public function next()
+  {
+    $pos = $this->getPostion();
+    $this->setPosition(--$pos);
+
+    return next($this->cookies);
+  }
+
+  /**
+   *
+   * @return boolean
+   */
+  public function current()
+  {
+    return current($this->cookies);
+  }
+
+  /**
+   *
+   * @return mixed
+   */
+  public function key()
+  {
+    return key($this->cookies);
+  }
+
+  /**
+   *
+   * @return boolean
+   */
+  public function valid()
+  {
+    return $this->current() !== false;
+  }
+
+  /**
+   *
+   * @return integer
+   */
+  public function count()
+  {
+    return count($this->cookies);
+  }
+
+  /**
+   *
+   * @param integer $position
+   * @return mixed
+   */
   public function seek($position)
   {
-    if(isset($this->headers[$position]))
+    if(isset($this->cookies[$position]))
     {
-      return $this->headers[$position];
+      return $this->cookies[$position];
     }
 
     return false;
@@ -70,22 +133,39 @@ class Collection implements CollectionInterface, \Countable, \ArrayAccess {
 
   public function offsetSet($offset, $value)
   {
-    $this->headers[$offset] = $value;
+    $this->cookies[$offset] = $value;
   }
 
   public function offsetExists($offset)
   {
-    return isset($this->headers[$offset]);
+    return isset($this->cookies[$offset]);
   }
 
   public function offsetUnset($offset)
   {
-    unset($this->headers[$offset]);
+    unset($this->cookies[$offset]);
   }
 
   public function offsetGet($offset)
   {
     return $this->seek($offset);
   }
-  
+
+  /**
+   *
+   * @param integer $position
+   */
+  protected function setPosition($position)
+  {
+    $this->position = (int)$position;
+  }
+
+  /**
+   *
+   * @return integer
+   */
+  protected function getPostion()
+  {
+    return $this->position;
+  }
 }

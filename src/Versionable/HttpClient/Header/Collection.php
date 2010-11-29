@@ -2,8 +2,11 @@
 
 namespace Versionable\HttpClient\Header;
 
-class Collection implements CollectionInterface, \Countable, \ArrayAccess {
+class Collection implements CollectionInterface, \Iterator, \SeekableIterator, \Countable, \ArrayAccess {
+  
   protected $headers = array();
+  
+  protected $position = 0;
 
   public function add(HeaderInterface $header) {
     $this->headers[$header->getName()] = $header->toString();

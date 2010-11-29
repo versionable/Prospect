@@ -2,10 +2,10 @@
 
 namespace Versionable\HttpClient\Request;
 
+use Versionable\HttpClient\Url\UrlInterface;
 use Versionable\HttpClient\Cookie\Collection as CookieCollectionInterface;
 use Versionable\HttpClient\Header\Collection as HeaderCollectionInterface;
-use Versionable\HttpClient\Url\UrlInterface;
-use Versionable\HttpClient\File\FileInterface;
+use Versionable\HttpClient\Parameter\Collection as ParameterCollectionInterface;
 
 class Request implements RequestInterface
 {
@@ -17,9 +17,7 @@ class Request implements RequestInterface
 
   protected $cookies = null;
 
-  protected $parameter = array();
-
-  protected $files = array();
+  protected $parameters = null;
   
   protected $agent = null;
 
@@ -30,56 +28,12 @@ class Request implements RequestInterface
     return $this->url;
   }
 
-  public function setParameters(array $parameters) {
-    if (\is_array($parameters)) {
-      $this->parameter = $parameters;
-
-      return true;
-    }
-
-    return false;
-  }
-
-  public function getParameter($name) {
-    if ($this->hasParameter($name)) {
-      return $this->parameter[$name];
-    }
-
-    return null;
-  }
-
-  public function setParameter($name, $value) {
-    $this->parameter[$name] = $value;
-  }
-
-  public function hasParameter($name) {
-    return isset($this->parameter[$name]);
+  public function setParameters(ParameterCollectionInterface $parameters) {
+    $this->parameters = $parameters;
   }
 
   public function getParameters() {
-    return $this->parameter;
-  }
-
-  public function addFile($name, FileInterface $file) {
-    if (\file_exists($file->getFilename())) {
-      $this->files[$name] = $file;
-
-      return true;
-    }
-
-    return false;
-  }
-
-  public function getFiles() {
-    return $this->files;
-  }
-
-  public function setFiles($files) {
-    $this->files = $files;
-  }
-
-  public function hasFiles() {
-    return !empty($this->files);
+    return $this->parameters;
   }
 
   public function getMethod() {
