@@ -9,6 +9,6 @@
          stopOnFailure="false">
            
   <testsuite name="all">
-    <directory suffix="Test.php">test/HttpClient/</directory>
+    <directory suffix="Test.php">test/Versionable/Http/Client</directory>
   </testsuite>
 </phpunit>
