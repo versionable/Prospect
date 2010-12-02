@@ -7,7 +7,7 @@ use Versionable\Http\Request\RequestInterface;
 use Versionable\Http\Response\ResponseInterface;
 use Versionable\Http\UserAgent\UserAgentInterface;
 
-class Client implements ClientInterface
+class Http implements HttpInterface
 {
   protected $adapter = null;
 

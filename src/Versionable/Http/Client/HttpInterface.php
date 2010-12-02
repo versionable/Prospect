@@ -6,7 +6,7 @@ use Versionable\Http\Adapter\AdapterInterface;
 use Versionable\Http\Request\RequestInterface;
 use Versionable\Http\Response\ResponseInterface;
 
-interface ClientInterface {
+interface HttpInterface {
   public function setAdapter(AdapterInterface $adapter);
 
   public function getAdapter();
