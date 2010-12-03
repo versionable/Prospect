@@ -3,9 +3,9 @@
 namespace Versionable\Http\Request;
 
 use Versionable\Http\Url\UrlInterface;
-use Versionable\Http\Cookie\Collection as CookieCollectionInterface;
-use Versionable\Http\Header\Collection as HeaderCollectionInterface;
-use Versionable\Http\Parameter\Collection as ParameterCollectionInterface;
+use Versionable\Http\Cookie\CollectionInterface as CookieCollectionInterface;
+use Versionable\Http\Header\CollectionInterface as HeaderCollectionInterface;
+use Versionable\Http\Parameter\CollectionInterface as ParameterCollectionInterface;
 
 class Request implements RequestInterface
 {

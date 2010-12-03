@@ -2,7 +2,7 @@
 
 namespace Versionable\Http\Parameter;
 
-class File extends Parameter implements ParameterInterface, FileInterface
+class File extends Parameter implements FileInterface
 {
   protected $type = '';
   
