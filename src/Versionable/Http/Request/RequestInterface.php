@@ -16,6 +16,8 @@ interface RequestInterface {
 
   public function getParameters();
   
+  public function hasParameters();
+
   public function setMethod($method);
 
   public function getMethod();
@@ -23,6 +25,8 @@ interface RequestInterface {
   public function getHeaders();
 
   public function setHeaders(HeaderCollectionInterface $headers);
+  
+  public function hasHeaders();
 
   public function hasCookies();
 

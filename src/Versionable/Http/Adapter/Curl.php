@@ -59,12 +59,14 @@ class Curl implements AdapterInterface
     }
 
     $post = array();
-    foreach($request->getParameters() as $param) {
-      $class = new \ReflectionClass(\get_class($param));
-      if ($class->implementsInterface('Versionable\\Http\\Parameter\\FileInterface')) {
-        $post[$param->getName()] = '@' . $param->getValue() . ';type=' . $param->getType();
-      } else {
-        $post[$param->getName()] = $param->getValue();
+    if ($request->hasParameters()) {
+      foreach($request->getParameters() as $param) {
+        $class = new \ReflectionClass(\get_class($param));
+        if ($class->implementsInterface('Versionable\\Http\\Parameter\\FileInterface')) {
+          $post[$param->getName()] = '@' . $param->getValue() . ';type=' . $param->getType();
+        } else {
+          $post[$param->getName()] = $param->getValue();
+        }
       }
     }
     
@@ -76,7 +78,7 @@ class Curl implements AdapterInterface
       \curl_setopt($this->ch, \CURLOPT_COOKIE, $request->getCookies()->toString());
     }
 
-    if ($request->getHeaders()) {
+    if ($request->hasHeaders()) {
       \curl_setopt($this->ch, \CURLOPT_HEADER, 1);
       \curl_setopt($this->ch, \CURLOPT_HTTPHEADER, $request->getHeaders()->toArray());
     } else {

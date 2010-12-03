@@ -13,7 +13,7 @@ class Request implements RequestInterface
 
   protected $method = 'GET';
 
-  protected $headers = array();
+  protected $headers = null;
 
   protected $cookies = null;
 
@@ -35,6 +35,10 @@ class Request implements RequestInterface
   public function getParameters() {
     return $this->parameters;
   }
+  
+  public function hasParameters() {
+    return !\is_null($this->parameters);
+  }
 
   public function getMethod() {
     return $this->method;
@@ -47,9 +51,13 @@ class Request implements RequestInterface
   public function setHeaders(HeaderCollectionInterface $headers) {
     $this->headers = $headers;
   }
+  
+  public function hasHeaders() {
+    return !\is_null($this->headers);
+  }
 
   public function hasCookies() {
-    return (is_null($cookies) && count($this->cookies) > 0);
+    return !\is_null($this->cookies);
   }
 
   public function getCookies() {
@@ -62,7 +70,7 @@ class Request implements RequestInterface
 
   public function setMethod($method) {
 
-    if(in_array($method,array('GET', 'POST', 'PUT', 'DELETE')))
+    if (in_array($method,array('GET', 'POST', 'PUT', 'DELETE')))
     {
       $this->method = $method;
 
