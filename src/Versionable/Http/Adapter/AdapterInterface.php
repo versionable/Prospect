@@ -14,4 +14,6 @@ interface AdapterInterface {
    * @return Versionable\Http\Response\ResponseInterface
    */
     public function call(RequestInterface $request, ResponseInterface $response);
+    
+    public function setOption($name, $value);
 }
