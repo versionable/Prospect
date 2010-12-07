@@ -6,15 +6,10 @@ use Versionable\Http\Request\RequestInterface;
 use Versionable\Http\Response\ResponseInterface;
 use Versionable\Http\Parameter\FileIterface;
 
-class Curl implements AdapterInterface
+class Curl extends AdapterAbstract implements AdapterInterface
 {
 
   protected $ch = null;
-
-  protected $options = array(
-      'returntransfer' => array('name' => \CURLOPT_RETURNTRANSFER, 'value' => true),
-      'nobody' => array('name' => \CURLOPT_NOBODY, 'value' => null)
-  );
 
   public function __construct() {
     if (!extension_loaded('curl'))
@@ -26,29 +21,21 @@ class Curl implements AdapterInterface
   public function initialize()
   {
     $this->ch = curl_init();
-
-    foreach($this->options as $option) {
-      \curl_setopt($this->ch, $option['name'], $option['value']);
+    $this->setOption(\CURLOPT_RETURNTRANSFER, true);
+    $this->setOption(\CURLOPT_NOBODY, null);
+    $this->setOption(\CURLOPT_FOLLOWLOCATION, true);
+    $this->setOption(\CURLOPT_MAXREDIRS, 5);
+    
+    foreach($this->options as $name => $value) {
+      \curl_setopt($this->ch, $name, $value);
     }
-    \curl_setopt($this->ch, \CURLOPT_RETURNTRANSFER, true); 
-  }
-
-  public function setOption($name, $value) {
-
-    if (isset($this->options[$name])) {
-      $this->options[$name]['value'] = $value;
-
-      return true;
-    }
-
-    return false;
   }
 
   public function call(RequestInterface $request, ResponseInterface $response)
   {
     $this->initialize();
 
-    \curl_setopt($this->ch, CURLOPT_URL, $request->getUrl()->toString());
+    \curl_setopt($this->ch, CURLOPT_URL, $request->getUrl());
 
     if ($request->getMethod() == 'GET') {
       \curl_setopt($this->ch, \CURLOPT_HTTPGET, true);
@@ -61,12 +48,13 @@ class Curl implements AdapterInterface
     $post = array();
     if ($request->hasParameters()) {
       foreach($request->getParameters() as $param) {
-        $class = new \ReflectionClass(\get_class($param));
-        if ($class->implementsInterface('Versionable\\Http\\Parameter\\FileInterface')) {
-          $post[$param->getName()] = '@' . $param->getValue() . ';type=' . $param->getType();
-        } else {
-          $post[$param->getName()] = $param->getValue();
-        }
+        $post[$param->getName()] = $param->getValue();
+      }
+    }
+    
+    if ($request->hasFiles()) {
+      foreach($request->getFiles() as $file) {
+          $post[$file->getName()] = '@' . $file->getValue() . ';type=' . $file->getType();
       }
     }
     
@@ -84,10 +72,12 @@ class Curl implements AdapterInterface
     } else {
       \curl_setopt($this->ch, \CURLOPT_HEADER, 0);
     }
+    
+    \curl_setopt($this->ch, \CURLOPT_PORT, $request->getPort());
 
     $content = \curl_exec($this->ch);
     $info = \curl_getinfo($this->ch);
-
+    
     $response->setCode($info['http_code']);
     $response->setContent($content);
 
