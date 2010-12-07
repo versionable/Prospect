@@ -128,4 +128,21 @@ class Collection implements CollectionInterface, \Iterator, \SeekableIterator, \
     return $this->seek($offset);
   }
 
+  /**
+   *
+   * @param integer $position
+   */
+  protected function setPosition($position)
+  {
+    $this->position = (int)$position;
+  }
+
+  /**
+   *
+   * @return integer
+   */
+  protected function getPostion()
+  {
+    return $this->position;
+  }
 }
