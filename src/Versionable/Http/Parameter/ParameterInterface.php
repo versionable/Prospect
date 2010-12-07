@@ -3,6 +3,11 @@
 namespace Versionable\Http\Parameter;
 
 interface ParameterInterface {
+  
+  public function __toString();
+
+  public function toString();
+
   public function getName();
 
   public function setName($name);

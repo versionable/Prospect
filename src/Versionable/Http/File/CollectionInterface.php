@@ -1,11 +1,11 @@
 <?php
 
-namespace Versionable\Http\Parameter;
+namespace Versionable\Http\File;
 
 interface CollectionInterface {
   public function __toString();  
 
-  public function add(ParameterInterface $parameter);
+  public function add(FileInterface $parameter);
 
   public function remove($name);
 

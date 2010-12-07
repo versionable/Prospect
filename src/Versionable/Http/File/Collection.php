@@ -1,20 +1,20 @@
 <?php
 
-namespace Versionable\Http\Parameter;
+namespace Versionable\Http\File;
 
 class Collection implements  CollectionInterface, \Iterator, \SeekableIterator, \Countable, \ArrayAccess {
   
-  protected $parameters = array();
+  protected $files = array();
   
   protected $position = 0;
 
-  public function add(ParameterInterface $parameter) {
-    $this->parameters[$parameter->getName()] = $parameter;
+  public function add(FileInterface $file) {
+    $this->files[$file->getName()] = $file;
   }
 
   public function remove($name) {
     if ($this->has($name)) {
-      unset($this->parameters[$name]);
+      unset($this->files[$name]);
 
       return true;
     }
@@ -24,14 +24,14 @@ class Collection implements  CollectionInterface, \Iterator, \SeekableIterator, 
 
   public function get($name) {
     if ($this->has($name)) {
-      return $this->parameters[$name];
+      return $this->files[$name];
     }
 
     return false;
   }
 
   public function has($name) {
-    return isset($this->parameters[$name]);
+    return isset($this->files[$name]);
   }
 
   public function __toString() {
@@ -39,11 +39,11 @@ class Collection implements  CollectionInterface, \Iterator, \SeekableIterator, 
   }
   
   public function toString() {
-    return \implode('\r\n', $this->parameters);
+    return implode('', $this->files);
   }
   
   public function toArray() {
-    return $this->parameters;
+    return $this->files;
   }
 
 
@@ -55,7 +55,7 @@ class Collection implements  CollectionInterface, \Iterator, \SeekableIterator, 
   {
     $this->setPosition(0);
 
-    return reset($this->parameters);
+    return reset($this->files);
   }
 
   /**
@@ -67,7 +67,7 @@ class Collection implements  CollectionInterface, \Iterator, \SeekableIterator, 
     $pos = $this->getPostion();
     $this->setPosition(--$pos);
 
-    return next($this->parameters);
+    return next($this->files);
   }
 
   /**
@@ -76,7 +76,7 @@ class Collection implements  CollectionInterface, \Iterator, \SeekableIterator, 
    */
   public function current()
   {
-    return current($this->parameters);
+    return current($this->files);
   }
 
   /**
@@ -85,7 +85,7 @@ class Collection implements  CollectionInterface, \Iterator, \SeekableIterator, 
    */
   public function key()
   {
-    return key($this->parameters);
+    return key($this->files);
   }
 
   /**
@@ -103,7 +103,7 @@ class Collection implements  CollectionInterface, \Iterator, \SeekableIterator, 
    */
   public function count()
   {
-    return count($this->parameters);
+    return count($this->files);
   }
 
   /**
@@ -113,9 +113,9 @@ class Collection implements  CollectionInterface, \Iterator, \SeekableIterator, 
    */
   public function seek($position)
   {
-    if(isset($this->parameters[$position]))
+    if(isset($this->files[$position]))
     {
-      return $this->parameters[$position];
+      return $this->files[$position];
     }
 
     return false;
@@ -123,17 +123,17 @@ class Collection implements  CollectionInterface, \Iterator, \SeekableIterator, 
 
   public function offsetSet($offset, $value)
   {
-    $this->parameters[$offset] = $value;
+    $this->files[$offset] = $value;
   }
 
   public function offsetExists($offset)
   {
-    return isset($this->parameters[$offset]);
+    return isset($this->files[$offset]);
   }
 
   public function offsetUnset($offset)
   {
-    unset($this->parameters[$offset]);
+    unset($this->files[$offset]);
   }
 
   public function offsetGet($offset)

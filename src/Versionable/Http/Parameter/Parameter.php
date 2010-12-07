@@ -12,6 +12,14 @@ class Parameter implements ParameterInterface
     $this->setName($name);
     $this->setValue($value);
   }
+  
+  public function __toString() {
+    return $this->toString();
+  }
+  
+  public function toString() {
+    return sprintf("%s=%s", urlencode($this->getName()), urlencode($this->getValue()));
+  }
 
   public function getName() {
     return $this->name;
