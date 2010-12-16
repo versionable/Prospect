@@ -9,6 +9,8 @@ interface FileInterface {
   public function __toString();
   
   public function toString();
+  
+  public function getContent();
 
   public function getType();
 

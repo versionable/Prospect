@@ -27,6 +27,10 @@ class Request implements RequestInterface
   protected $body = '';
 
   protected $version = 1.1;
+  
+  public function __construct() {
+    $this->generateBoundary();
+  }
 
   public function setUrl(UrlInterface $url) {
     $this->url = $url;
@@ -36,8 +40,13 @@ class Request implements RequestInterface
     return $this->url;
   }
   
+  public function hasBody() {
+    return $this->getBody() != '';
+  }
+
+
   public function getBody() {
-    return $this->body;
+    return $this->body . $this->getParameters()->toString();
   }
 
   public function setBody($body) {
@@ -58,6 +67,7 @@ class Request implements RequestInterface
 
   public function setFiles(FileCollectionInterface $files) {
     $this->files = $files;
+    $this->files->setBoundary($this->boundary);
   }
 
   public function getFiles() {
@@ -110,7 +120,7 @@ class Request implements RequestInterface
   
   public function getPort() {
     
-    if (is_numeric($this->port) && !\is_null($this->url)) {
+    if (!is_numeric($this->port)) {
       return $this->getUrl()->getPort();
     }
       
@@ -142,35 +152,59 @@ class Request implements RequestInterface
         $data .= $header . "\r\n";
       }
     }
-   
-    
     
     $body = '';
-    if ($this->hasParameters() || $this->getBody() != '') {
-      $data .= "Content-Type: application/x-www-form-urlencoded\r\n";
-
-      if ($this->hasParameters()) {
-        $body = $this->getParameters();
-      }
-      elseif ($this->getBody() != '') {
-        
-        $body = $this->getBody();
-      }
-      $data .= "Content-Length: ".strlen($body)."\r\n";
+    $length = 0;
+    
+    if ($this->hasFiles()) {
+      $data .= "Content-type: multipart/form-data, boundary=$this->boundary\r\n";
     }
+    else if ($this->hasBody()) {
+      $data .= "Content-Type: application/x-www-form-urlencoded\r\n";
+    }
+    
+    if($this->hasBody()) {  
+      $body .= $this->getBody() . "\r\n";
+      
+      $length += strlen($body);      
+    }
+    
+    if ($this->hasFiles()) {
+      
+      foreach ($this->getFiles() as $file) {
+
+        $body .= "--$this->boundary\r\n";
+        $body .= sprintf("Content-Disposition: form-data; name=\"%s\"; filename=\"%s\"\r\n", $file->getName(), $file->getValue());
+        $body .= sprintf("Content-Type: %s\r\n\r\n", $file->getType());
+        $content = $file->getContent();
+        $body .= "". \base64_encode($content)."\r\n";
+        
+        $length += \strlen($content);
+      }
+    }
+    
+    $data .= "Content-Length: ". $length ."\r\n";
     
     if (\strlen($body)) {
       $data .= "\r\n". $body;
     }
     
     if ($this->hasFiles()) {
-      $data .= $this->getFiles();
+      $data .="--$this->boundary--";
     }
+    
+    $data .= "\r\n";
+    
      
     return $data;
   }
   
   public function __toString() {
     return $this->toString();
+  }
+  
+  protected function generateBoundary() {
+    srand((double)microtime()*1000000);
+    $this->boundary = "---------------------".substr(md5(rand(0,32000)),0,10);
   }
 }

@@ -121,11 +121,14 @@ class Url implements UrlInterface {
   }
   
   public function setPort($port) {
-    $this->port = (int)$port;
+    if (\is_numeric($port)) {
+      $this->port = $port;
+    }
   }
 
   public function getPort() { 
-    return $port;
+    var_dump($this);
+    return $this->port;
   }
   
   public function setUsername($username) {

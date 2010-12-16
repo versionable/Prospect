@@ -24,6 +24,11 @@ class Socket extends AdapterAbstract implements AdapterInterface
     $this->initalize();
 
     $handle = \fsockopen($request->getUrl()->getHostname(), $request->getPort());
+    
+    if(!$handle) {
+      throw new \RuntimeException("Erroring connecting");
+    }
+    
     $header = '';
     $resp = '';
     

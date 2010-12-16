@@ -7,6 +7,8 @@ class Collection implements  CollectionInterface, \Iterator, \SeekableIterator, 
   protected $files = array();
   
   protected $position = 0;
+  
+  protected $boundary = '';
 
   public function add(FileInterface $file) {
     $this->files[$file->getName()] = $file;
@@ -39,13 +41,24 @@ class Collection implements  CollectionInterface, \Iterator, \SeekableIterator, 
   }
   
   public function toString() {
-    return implode('', $this->files);
+    
+    $data = array();
+    foreach($this->files as $file) {
+      $data[] = \sprintf('------------------------------%s', $this->boundary);
+      $data[] = $file;
+      $data[] = \sprintf('------------------------------%s', $this->boundary);
+    }
+    
+    return implode("\r\n", $data);
   }
   
   public function toArray() {
     return $this->files;
   }
 
+  public function setBoundary($boundary) {
+    $this->boundary = $boundary;
+  }
 
   /**
    *

@@ -32,21 +32,16 @@ class File implements FileInterface
     $this->value = $value;
   }
   
+  public function getContent() {
+    return \file_get_contents($this->getValue());
+  }
+
   public function __toString() {
     return $this->toString();
   }
   
   public function toString() {
-    srand((double)microtime()*1000000);
-    $boundary = "---------------------".substr(md5(rand(0,32000)),0,10);
-    $data .= "--$boundary\r\n";
-    $content_file = join("", file($this->getValue()));
-    $data .= sprintf("Content-Disposition: form-data; name=\"%s\"; filename=\"%s\"\r\n", $this->getName(), $this->getValue());
-    $data .= sprintf("Content-Type: %s\r\n\r\n", $this->getType());
-    $data .= "". \file_get_contents($this->getValue())."\r\n";
-    $data .="--$boundary--\r\n";
-    
-    return $data;
+    return $this->getContent();
   }
 
   public function getType() {
