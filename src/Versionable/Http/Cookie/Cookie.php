@@ -27,7 +27,7 @@ class Cookie implements CookieInterface
     protected $secure = false;
     protected $httponly = false;
 
-    public function  __construct($name, $value, $expires = null, $path = '/', $domain = null, $secure = false, $httponly = false) {
+    public function  __construct($name, $value, \DateTime $expires = null, $path = '/', $domain = null, $secure = false, $httponly = false) {
       $this->setName($name);
       $this->setValue($value);
       $this->setExpires($expires);
@@ -37,7 +37,11 @@ class Cookie implements CookieInterface
       $this->setHttpOnly($httponly);
     }
 
-    public function  __toString() {
+    public function __toString() {
+      return $this->toString();
+    }
+
+    public function  toString() {
       return sprintf('%s=%s', $this->name, $this->value);
     }
 
@@ -65,6 +69,16 @@ class Cookie implements CookieInterface
       $this->expires = $expires;
     }
 
+    public function hasExpired() {
+      if ($this->expires instanceof \DateTime) {
+        $now = new \DateTime();
+
+        return ($now > $this->expires);
+      }
+
+      return false;
+    }
+
     public function getPath() {
       return $this->path;
     }
@@ -81,7 +95,7 @@ class Cookie implements CookieInterface
       $this->domain = $domain;
     }
 
-    public function getSecure() {
+    public function isSecure() {
       return $this->secure;
     }
 
@@ -89,7 +103,7 @@ class Cookie implements CookieInterface
       $this->secure = (boolean)$secure;
     }
 
-    public function getHttpOnly() {
+    public function isHttpOnly() {
       return $this->httponly;
     }
 

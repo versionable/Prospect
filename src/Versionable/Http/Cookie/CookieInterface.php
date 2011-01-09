@@ -6,6 +6,8 @@ interface CookieInterface {
 
     public function  __toString();
 
+    public function toString();
+
     public function getName();
 
     public function setName($name);
@@ -26,11 +28,11 @@ interface CookieInterface {
 
     public function setDomain($domain);
 
-    public function getSecure();
+    public function isSecure();
 
     public function setSecure($secure);
 
-    public function getHttpOnly();
+    public function isHttpOnly();
 
     public function setHttpOnly($httponly);
 }
