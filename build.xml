@@ -25,7 +25,7 @@
   </target>
 
   <target name="docs" depends="setup,tests" description="generate API documentation">
-    <phpdoc title="VirtualFS"
+    <phpdoc title="Http"
             sourcecode="yes"
             destdir="${docsdir}"
             output="HTML:frames:DOM/phphtmllib"
