@@ -244,6 +244,13 @@ class UrlTest extends \PHPUnit_Framework_TestCase
       $this->assertEquals($this->readAttribute($this->object, 'path'), $path);
     }
 
+    public function testSetPathEmpty()
+    {
+      $path = '';
+      $this->object->setPath($path);
+      $this->assertEquals($this->readAttribute($this->object, 'path'), '/');
+    }
+
     /**
      * @todo Implement testGetPath().
      */
