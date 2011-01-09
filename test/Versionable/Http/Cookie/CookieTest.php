@@ -43,7 +43,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
     {
       $this->assertEquals($this->object->toString(), $this->object->__toString());
     }
-    
+
     /**
      * @todo Implement testGetName().
      */
@@ -97,7 +97,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
       $this->object->setExpires($expires);
       $this->assertEquals($this->readAttribute($this->object, 'expires'), $expires);
     }
-    
+
     public function testHasExpiredFalse()
     {
       $expires = new \DateTime();
@@ -105,7 +105,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
       $this->object->setExpires($expires);
       $this->assertEquals($this->object->hasExpired(), false);
     }
-    
+
     public function testHasExpiredTrue()
     {
       $expires = new \DateTime();
@@ -113,7 +113,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
       $this->object->setExpires($expires);
       $this->assertEquals($this->object->hasExpired(), true);
     }
-    
+
     public function testHasExpiredNotSet()
     {
       $this->assertEquals($this->object->hasExpired(), false);
@@ -156,11 +156,11 @@ class CookieTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @todo Implement testGetSecure().
+     * @todo Implement testIsSecure().
      */
-    public function testGetSecure()
+    public function testIsSecure()
     {
-      $this->assertEquals($this->readAttribute($this->object, 'secure'), $this->object->getSecure());
+      $this->assertEquals($this->readAttribute($this->object, 'secure'), $this->object->isSecure());
     }
 
     /**
@@ -176,9 +176,9 @@ class CookieTest extends \PHPUnit_Framework_TestCase
     /**
      * @todo Implement testGetHttpOnly().
      */
-    public function testGetHttpOnly()
+    public function testIstHttpOnly()
     {
-      $this->assertEquals($this->readAttribute($this->object, 'httponly'), $this->object->getHttpOnly());
+      $this->assertEquals($this->readAttribute($this->object, 'httponly'), $this->object->isHttpOnly());
     }
 
     /**
