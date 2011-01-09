@@ -13,15 +13,6 @@ class Http implements HttpInterface
 
   protected $agent = null;
 
-  public function setUserAgent(UserAgentInterface $useragent) {
-    $this->agent = $useragent;
-  }
-
-  public function getUserAgent() {
-    return $this->agent;
-  }
-
-
   public function setAdapter(AdapterInterface $adapter) {
     $this->adapter = $adapter;
   }
