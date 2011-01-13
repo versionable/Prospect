@@ -3,7 +3,7 @@
   <property name="tmp" value="/tmp" />
   <property name="wsname" value="test" />
   <property name="package" value="${phing.project.name}" override="true" />
-  <property name="builddir" value="${tmp}/build/${phing.project.name}" override="true" />
+  <property name="builddir" value="${tmp}/build/" override="true" />
   <property name="srcdir" value="src/" override="true" />
   <property name="reportdir" value="${builddir}/test/report" />
   <property name="docsdir" value="${builddir}/test/report/api" />
