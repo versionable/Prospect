@@ -9,7 +9,10 @@
          stopOnFailure="false">
 
   <testsuite name="all">
-    <directory suffix="Test.php">test/Versionable/Http</directory>
+    <!--<directory suffix="Test.php">test/Versionable/Http</directory>-->
+    <file>test/Versionable/Http/Client/HttpTest.php</file>
+    <file>test/Versionable/Http/Cookie/CookieTest.php</file>
+    <file>test/Versionable/Http/Url/UrlTest.php</file>
   </testsuite>
 
   <logging>

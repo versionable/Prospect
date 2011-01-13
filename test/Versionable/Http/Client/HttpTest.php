@@ -2,6 +2,21 @@
 
 namespace Versionable\Http\Client;
 
+require_once __DIR__ . '/../../../../src/Versionable/Http/Client/HttpInterface.php';
+require_once __DIR__ . '/../../../../src/Versionable/Http/Client/Http.php';
+require_once __DIR__ . '/../../../../src/Versionable/Http/Adapter/AdapterInterface.php';
+require_once __DIR__ . '/../../../../src/Versionable/Http/Adapter/AdapterInterface.php';
+
+require_once __DIR__ . '/../../../../src/Versionable/Http/Request/RequestInterface.php';
+require_once __DIR__ . '/../../../../src/Versionable/Http/Response/ResponseInterface.php';
+
+require_once __DIR__ . '/../../../../src/Versionable/Http/Url/UrlInterface.php';
+require_once __DIR__ . '/../../../../src/Versionable/Http/Cookie/CollectionInterface.php';
+require_once __DIR__ . '/../../../../src/Versionable/Http/Header/CollectionInterface.php';
+
+require_once __DIR__ . '/../../../../src/Versionable/Http/Parameter/CollectionInterface.php';
+
+require_once __DIR__ . '/../../../../src/Versionable/Http/File/CollectionInterface.php';
 
 /**
  * Test class for Http.
