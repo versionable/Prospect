@@ -1,9 +1,9 @@
 <?php
 
-require_once('../../www/projects/VirtualFS/src/Autoload/src/Autoload/Autoload.php');
+require_once(__DIR__.'/../src/Autoload/src/Versionable/Autoload/Autoload.php');
 
-use Autoload\Autoload;
+use Versionable\Autoload\Autoload;
 
 $al = new Autoload();
-$al->registerNamespace('Versionable', 'src');
+$al->registerNamespace('Versionable', __DIR__.'/../src');
 $al->register();

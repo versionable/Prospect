@@ -1,7 +1,6 @@
 <?php
-namespace Versionable\Http\Cookie;
 
-require_once 'PHPUnit/Framework.php';
+namespace Versionable\Http\Cookie;
 
 /**
  * Test class for Cookie.

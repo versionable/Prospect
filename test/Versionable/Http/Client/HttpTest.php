@@ -2,7 +2,6 @@
 
 namespace Versionable\Http\Client;
 
-require_once 'PHPUnit/Framework.php';
 
 /**
  * Test class for Http.

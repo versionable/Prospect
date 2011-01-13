@@ -1,7 +1,6 @@
 <?php
-namespace Versionable\Http\Url;
 
-require_once 'PHPUnit/Framework.php';
+namespace Versionable\Http\Url;
 
 /**
  * Test class for Url.
