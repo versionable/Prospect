@@ -34,5 +34,5 @@
     </phpdoc>
   </target>
 
-  <target name="all" depends="standards" description="run all targets"/>
+  <target name="all" depends="setup,tests,standards,docs" description="run all targets"/>
 </project>
