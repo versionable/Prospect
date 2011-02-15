@@ -2,18 +2,25 @@
 
 namespace Versionable\Http\Cookie;
 
-class Collection implements CollectionInterface, \Iterator, \SeekableIterator, \Countable, \ArrayAccess {
-  
+class Collection implements CollectionInterface, \Iterator, \SeekableIterator, \Countable, \ArrayAccess
+{
+  /**
+   *
+   * @var array List of cookies
+   */
   protected $cookies = array();
-  
+
   protected $position = 0;
 
-  public function add(CookieInterface $cookie) {
+  public function add(CookieInterface $cookie)
+  {
     $this->cookies[$cookie->getName()] = $cookie;
   }
 
-  public function remove($name) {
-    if ($this->has($name)) {
+  public function remove($name)
+  {
+    if ($this->has($name))
+    {
       unset($this->cookies[$name]);
 
       return true;
@@ -22,40 +29,48 @@ class Collection implements CollectionInterface, \Iterator, \SeekableIterator, \
     return false;
   }
 
-  public function get($name) {
-    if ($this->has($name)) {
+  public function get($name)
+  {
+    if ($this->has($name))
+    {
       return $this->cookies[$name];
     }
 
     return false;
   }
 
-  public function has($name) {
+  public function has($name)
+  {
     return isset($this->cookies[$name]);
   }
 
-  public function __toString() {
+  public function __toString()
+  {
     return $this->toString();
   }
-  
-  public function toString() {
+
+  public function toString()
+  {
     $cookies = array();
 
-    foreach($this->cookies as $c) {
+    foreach($this->cookies as $c)
+    {
       $cookies[] = $c;
     }
 
     return implode(';', $cookies);
   }
-  
-  public function toArray() {
+
+  public function toArray()
+  {
     return $this->cookies;
   }
 
-  public function load() {
+  public function load()
+  {
 
   }
-  
+
 
   /**
    *

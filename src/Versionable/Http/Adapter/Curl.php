@@ -8,10 +8,14 @@ use Versionable\Http\Parameter\FileIterface;
 
 class Curl extends AdapterAbstract implements AdapterInterface
 {
+  /**
+   *
+   * @var resource Curl resource
+   */
+  protected $handle = null;
 
-  protected $ch = null;
-
-  public function __construct() {
+  public function __construct()
+  {
     if (!extension_loaded('curl'))
     {
       throw new \RuntimeException('Curl extension not loaded');
@@ -20,14 +24,15 @@ class Curl extends AdapterAbstract implements AdapterInterface
 
   public function initialize()
   {
-    $this->ch = curl_init();
+    $this->handle = curl_init();
     $this->setOption(\CURLOPT_RETURNTRANSFER, true);
     $this->setOption(\CURLOPT_NOBODY, null);
     $this->setOption(\CURLOPT_FOLLOWLOCATION, true);
     $this->setOption(\CURLOPT_MAXREDIRS, 5);
-    
-    foreach($this->options as $name => $value) {
-      \curl_setopt($this->ch, $name, $value);
+
+    foreach($this->options as $name => $value)
+    {
+      \curl_setopt($this->handle, $name, $value);
     }
   }
 
@@ -35,49 +40,63 @@ class Curl extends AdapterAbstract implements AdapterInterface
   {
     $this->initialize();
 
-    \curl_setopt($this->ch, CURLOPT_URL, $request->getUrl());
+    \curl_setopt($this->handle, CURLOPT_URL, $request->getUrl());
 
-    if ($request->getMethod() == 'GET') {
-      \curl_setopt($this->ch, \CURLOPT_HTTPGET, true);
-    } elseif ($request->getMethod() == 'POST') {
-      \curl_setopt($this->ch, \CURLOPT_POST, true);
-    } else {
-      \curl_setopt($this->ch, \CURLOPT_CUSTOMREQUEST, $request->getMethod());
+    if ($request->getMethod() == 'GET')
+    {
+      \curl_setopt($this->handle, \CURLOPT_HTTPGET, true);
+    }
+    elseif ($request->getMethod() == 'POST')
+    {
+      \curl_setopt($this->handle, \CURLOPT_POST, true);
+    }
+    else
+    {
+      \curl_setopt($this->handle, \CURLOPT_CUSTOMREQUEST, $request->getMethod());
     }
 
     $post = array();
-    if ($request->hasParameters()) {
-      foreach($request->getParameters() as $param) {
+    if ($request->hasParameters())
+    {
+      foreach($request->getParameters() as $param)
+      {
         $post[$param->getName()] = $param->getValue();
       }
     }
-    
-    if ($request->hasFiles()) {
-      foreach($request->getFiles() as $file) {
-          $post[$file->getName()] = '@' . $file->getValue() . ';type=' . $file->getType();
+
+    if ($request->hasFiles())
+    {
+      foreach($request->getFiles() as $file)
+      {
+        $post[$file->getName()] = '@' . $file->getValue() . ';type=' . $file->getType();
       }
     }
-    
-    if ($request->getMethod() == 'POST' || $request->getMethod() == 'PUT') {
-      \curl_setopt ($this->ch, \CURLOPT_POSTFIELDS, $post);
+
+    if ($request->getMethod() == 'POST' || $request->getMethod() == 'PUT')
+    {
+      \curl_setopt ($this->handle, \CURLOPT_POSTFIELDS, $post);
     }
 
-    if ($request->hasCookies()) {
-      \curl_setopt($this->ch, \CURLOPT_COOKIE, $request->getCookies()->toString());
+    if ($request->hasCookies())
+    {
+      \curl_setopt($this->handle, \CURLOPT_COOKIE, $request->getCookies()->toString());
     }
 
-    if ($request->hasHeaders()) {
-      \curl_setopt($this->ch, \CURLOPT_HEADER, 1);
-      \curl_setopt($this->ch, \CURLOPT_HTTPHEADER, $request->getHeaders()->toArray());
-    } else {
-      \curl_setopt($this->ch, \CURLOPT_HEADER, 0);
+    if ($request->hasHeaders())
+    {
+      \curl_setopt($this->handle, \CURLOPT_HEADER, 1);
+      \curl_setopt($this->handle, \CURLOPT_HTTPHEADER, $request->getHeaders()->toArray());
     }
-    
-    \curl_setopt($this->ch, \CURLOPT_PORT, $request->getPort());
+    else
+    {
+      \curl_setopt($this->handle, \CURLOPT_HEADER, 0);
+    }
 
-    $content = \curl_exec($this->ch);
-    $info = \curl_getinfo($this->ch);
-    
+    \curl_setopt($this->handle, \CURLOPT_PORT, $request->getPort());
+
+    $content = \curl_exec($this->handle);
+    $info = \curl_getinfo($this->handle);
+
     $response->setCode($info['http_code']);
     $response->setContent($content);
 

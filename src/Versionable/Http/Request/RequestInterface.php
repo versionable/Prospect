@@ -8,25 +8,26 @@ use Versionable\Http\Header\CollectionInterface as HeaderCollectionInterface;
 use Versionable\Http\Parameter\CollectionInterface as ParameterCollectionInterface;
 use Versionable\Http\File\CollectionInterface as FileCollectionInterface;
 
-interface RequestInterface {
+interface RequestInterface
+{
   public function setUrl(UrlInterface $url);
-  
+
   public function getUrl();
-  
+
   public function setBody($body);
-  
+
   public function getBody();
 
   public function setParameters(ParameterCollectionInterface $parameters);
 
   public function getParameters();
-  
+
   public function hasParameters();
-  
+
   public function setFiles(FileCollectionInterface $files);
 
   public function getFiles();
-  
+
   public function hasFiles();
 
   public function setMethod($method);
@@ -36,20 +37,20 @@ interface RequestInterface {
   public function getHeaders();
 
   public function setHeaders(HeaderCollectionInterface $headers);
-  
+
   public function hasHeaders();
 
   public function hasCookies();
 
   public function getCookies();
-  
+
   public function setCookies(CookieCollectionInterface $collection);
-  
+
   public function setPort($port);
-  
+
   public function getPort();
-  
+
   public function setVersion($version);
-  
+
   public function getVersion();
 }

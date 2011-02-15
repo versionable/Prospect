@@ -2,18 +2,22 @@
 
 namespace Versionable\Http\Header;
 
-class Collection implements CollectionInterface, \Iterator, \SeekableIterator, \Countable, \ArrayAccess {
-  
+class Collection implements CollectionInterface, \Iterator, \SeekableIterator, \Countable, \ArrayAccess
+{
+
   protected $headers = array();
-  
+
   protected $position = 0;
 
-  public function add(HeaderInterface $header) {
+  public function add(HeaderInterface $header)
+  {
     $this->headers[$header->getName()] = $header->toString();
   }
 
-  public function remove($name) {
-    if ($this->has($name)) {
+  public function remove($name)
+  {
+    if ($this->has($name))
+    {
       unset($this->headers[$name]);
 
       return true;
@@ -22,19 +26,23 @@ class Collection implements CollectionInterface, \Iterator, \SeekableIterator, \
     return false;
   }
 
-  public function get($name) {
-    if ($this->has($name)) {
+  public function get($name)
+  {
+    if ($this->has($name))
+    {
       return $this->headers[$name];
     }
 
     return false;
   }
 
-  public function has($name) {
+  public function has($name)
+  {
     return isset($this->headers[$name]);
   }
 
-  public function toArray() {
+  public function toArray()
+  {
     return $this->headers;
   }
 

@@ -9,20 +9,24 @@ use Versionable\Http\UserAgent\UserAgentInterface;
 
 class Http implements HttpInterface
 {
+  /**
+   *
+   * @var AdapterInterface Adapter used
+   */
   protected $adapter = null;
 
-  protected $agent = null;
-
-  public function setAdapter(AdapterInterface $adapter) {
+  public function setAdapter(AdapterInterface $adapter)
+  {
     $this->adapter = $adapter;
   }
 
-  public function getAdapter() {
+  public function getAdapter()
+  {
     return $this->adapter;
   }
 
   public function send(RequestInterface $request, ResponseInterface $response)
-  {    
+  {
     $response = $this->adapter->call($request, $response);
 
     return $response;

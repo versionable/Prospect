@@ -8,7 +8,8 @@ class CacheControl extends Header
 
   protected $value = '0';
 
-  public function toString() {
+  public function toString()
+  {
     return sprintf('%s: max-age=%d', $this->name, $this->value);
   }
 }

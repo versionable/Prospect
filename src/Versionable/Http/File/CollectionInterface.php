@@ -2,8 +2,9 @@
 
 namespace Versionable\Http\File;
 
-interface CollectionInterface {
-  public function __toString();  
+interface CollectionInterface
+{
+  public function __toString();
 
   public function add(FileInterface $parameter);
 
@@ -14,6 +15,6 @@ interface CollectionInterface {
   public function has($name);
 
   public function toString();
-  
+
   public function toArray();
 }

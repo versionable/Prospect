@@ -2,6 +2,7 @@
 
 namespace Versionable\Http\Header;
 
-interface HeaderInterface {
+interface HeaderInterface
+{
   public function __toString();
 }

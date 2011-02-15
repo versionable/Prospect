@@ -11,7 +11,7 @@ use Versionable\Http\File\CollectionInterface as FileCollectionInterface;
 class Request implements RequestInterface
 {
   protected $url = null;
-  
+
   protected $port = null;
 
   protected $method = 'GET';
@@ -21,92 +21,131 @@ class Request implements RequestInterface
   protected $cookies = null;
 
   protected $parameters = null;
-  
+
   protected $files = null;
-  
+
   protected $body = '';
 
   protected $version = 1.1;
-  
-  public function __construct() {
+
+  public function __construct()
+  {
     $this->generateBoundary();
   }
 
-  public function setUrl(UrlInterface $url) {
+  /**
+   *
+   * @param UrlInterface $url
+   */
+  public function setUrl(UrlInterface $url)
+  {
     $this->url = $url;
   }
-  
-  public function getUrl() {
+
+  /**
+   *
+   * @return UrlInterface
+   */
+  public function getUrl()
+  {
     return $this->url;
   }
-  
-  public function hasBody() {
+
+  /**
+   * Returns whether the body has been set
+   *
+   * @return boolean
+   */
+  public function hasBody()
+  {
     return $this->getBody() != '';
   }
 
 
-  public function getBody() {
-    return $this->body . $this->getParameters()->toString();
+  /**
+   * Returns the body
+   *
+   *
+   * @return string
+   */
+  public function getBody()
+  {
+    return $this->body . ($this->hasParameters() ? $this->getParameters()->toString() : '');
   }
 
-  public function setBody($body) {
+  public function setBody($body)
+  {
     $this->body = $body;
   }
-  
-  public function setParameters(ParameterCollectionInterface $parameters) {
+
+  public function setParameters(ParameterCollectionInterface $parameters)
+  {
     $this->parameters = $parameters;
   }
 
-  public function getParameters() {
+  public function getParameters()
+  {
     return $this->parameters;
   }
-  
-  public function hasParameters() {
-    return !\is_null($this->parameters);
+
+  public function hasParameters()
+  {
+    return is_object($this->parameters);
   }
 
-  public function setFiles(FileCollectionInterface $files) {
+  public function setFiles(FileCollectionInterface $files)
+  {
     $this->files = $files;
     $this->files->setBoundary($this->boundary);
   }
 
-  public function getFiles() {
+  public function getFiles()
+  {
     return $this->files;
   }
-  
-  public function hasFiles() {
+
+  public function hasFiles()
+  {
     return !\is_null($this->files);
   }
-  
-  public function getMethod() {
+
+  public function getMethod()
+  {
     return $this->method;
   }
 
-  public function getHeaders() {
+  public function getHeaders()
+  {
     return $this->headers;
   }
 
-  public function setHeaders(HeaderCollectionInterface $headers) {
+  public function setHeaders(HeaderCollectionInterface $headers)
+  {
     $this->headers = $headers;
   }
-  
-  public function hasHeaders() {
+
+  public function hasHeaders()
+  {
     return !\is_null($this->headers);
   }
 
-  public function hasCookies() {
+  public function hasCookies()
+  {
     return !\is_null($this->cookies);
   }
 
-  public function getCookies() {
+  public function getCookies()
+  {
     return $this->cookies;
   }
 
-  public function setCookies(CookieCollectionInterface $collection) {
+  public function setCookies(CookieCollectionInterface $collection)
+  {
     $this->cookies = $collection;
   }
 
-  public function setMethod($method) {
+  public function setMethod($method)
+  {
 
     if (in_array($method,array('GET', 'POST', 'PUT', 'DELETE')))
     {
@@ -117,93 +156,107 @@ class Request implements RequestInterface
 
     return false;
   }
-  
-  public function getPort() {
-    
+
+  public function getPort()
+  {
     if (!is_numeric($this->port)) {
       return $this->getUrl()->getPort();
     }
-      
+
     return 80;
   }
 
-  public function setPort($port) {
+  public function setPort($port)
+  {
     $this->port = $port;
   }
-  
-  public function getVersion() {
+
+  public function getVersion()
+  {
     return $this->version;
   }
 
-  public function setVersion($version) {
+  public function setVersion($version)
+  {
     $this->version = $version;
   }
-    
-  public function toString() {
-    
+
+  public function toString()
+  {
     $data = "";
-    if (!is_null($this->url)) {
+    if (!is_null($this->url))
+    {
       $data = \sprintf("%s %s HTTP/%s\r\n", $this->getMethod(), $this->url->getPathAndQuery(), $this->getVersion());
       $data .= \sprintf("Host: %s\r\n", $this->url->getHostname());
     }
-    
-    if ($this->hasHeaders()) {
-      foreach ($this->getHeaders() as $header) {
+
+    if ($this->hasHeaders())
+    {
+      foreach ($this->getHeaders() as $header)
+      {
         $data .= $header . "\r\n";
       }
     }
-    
+
     $body = '';
     $length = 0;
-    
-    if ($this->hasFiles()) {
+
+    if ($this->hasFiles())
+    {
       $data .= "Content-type: multipart/form-data, boundary=$this->boundary\r\n";
     }
-    else if ($this->hasBody()) {
+    elseif ($this->hasBody())
+    {
       $data .= "Content-Type: application/x-www-form-urlencoded\r\n";
     }
-    
-    if($this->hasBody()) {  
+
+    if($this->hasBody())
+    {
       $body .= $this->getBody() . "\r\n";
-      
-      $length += strlen($body);      
+
+      $length += strlen($body);
     }
-    
-    if ($this->hasFiles()) {
-      
-      foreach ($this->getFiles() as $file) {
+
+    if ($this->hasFiles())
+    {
+      foreach ($this->getFiles() as $file)
+      {
 
         $body .= "--$this->boundary\r\n";
         $body .= sprintf("Content-Disposition: form-data; name=\"%s\"; filename=\"%s\"\r\n", $file->getName(), $file->getValue());
         $body .= sprintf("Content-Type: %s\r\n\r\n", $file->getType());
         $content = $file->getContent();
         $body .= "". \base64_encode($content)."\r\n";
-        
+
         $length += \strlen($content);
       }
     }
-    
+
     $data .= "Content-Length: ". $length ."\r\n";
-    
-    if (\strlen($body)) {
+
+    if (\strlen($body))
+    {
       $data .= "\r\n". $body;
     }
-    
-    if ($this->hasFiles()) {
+
+    if ($this->hasFiles())
+    {
       $data .="--$this->boundary--";
     }
-    
+
     $data .= "\r\n";
-    
-     
+
+
     return $data;
   }
-  
-  public function __toString() {
+
+  public function __toString()
+  {
     return $this->toString();
   }
-  
-  protected function generateBoundary() {
+
+  protected function generateBoundary()
+  {
     srand((double)microtime()*1000000);
     $this->boundary = "---------------------".substr(md5(rand(0,32000)),0,10);
   }

@@ -2,7 +2,8 @@
 
 namespace Versionable\Http\Cookie;
 
-interface CookieInterface {
+interface CookieInterface
+{
 
     public function  __toString();
 

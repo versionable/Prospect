@@ -27,7 +27,8 @@ class Cookie implements CookieInterface
     protected $secure = false;
     protected $httponly = false;
 
-    public function  __construct($name, $value, \DateTime $expires = null, $path = '/', $domain = null, $secure = false, $httponly = false) {
+    public function  __construct($name, $value, \DateTime $expires = null, $path = '/', $domain = null, $secure = false, $httponly = false)
+    {
       $this->setName($name);
       $this->setValue($value);
       $this->setExpires($expires);
@@ -37,40 +38,50 @@ class Cookie implements CookieInterface
       $this->setHttpOnly($httponly);
     }
 
-    public function __toString() {
+    public function __toString()
+    {
       return $this->toString();
     }
 
-    public function  toString() {
+    public function  toString()
+    {
       return sprintf('%s=%s', $this->name, $this->value);
     }
 
-    public function getName() {
+    public function getName()
+    {
       return $this->name;
     }
 
-    public function setName($name) {
+    public function setName($name)
+    {
       $this->name = $name;
     }
 
-    public function getValue() {
+    public function getValue()
+    {
       return $this->value;
     }
 
-    public function setValue($value) {
+    public function setValue($value)
+    {
       $this->value = $value;
     }
 
-    public function getExpires() {
+    public function getExpires()
+    {
       return $this->expires;
     }
 
-    public function setExpires($expires) {
+    public function setExpires($expires)
+    {
       $this->expires = $expires;
     }
 
-    public function hasExpired() {
-      if ($this->expires instanceof \DateTime) {
+    public function hasExpired()
+    {
+      if ($this->expires instanceof \DateTime)
+      {
         $now = new \DateTime();
 
         return ($now > $this->expires);
@@ -79,36 +90,43 @@ class Cookie implements CookieInterface
       return false;
     }
 
-    public function getPath() {
+    public function getPath()
+    {
       return $this->path;
     }
 
-    public function setPath($path) {
+    public function setPath($path)
+    {
       $this->path = empty($path) ? '/' : $path;
     }
 
-    public function getDomain() {
+    public function getDomain()
+    {
       return $this->domain;
     }
 
-    public function setDomain($domain) {
+    public function setDomain($domain)
+    {
       $this->domain = $domain;
     }
 
-    public function isSecure() {
+    public function isSecure()
+    {
       return $this->secure;
     }
 
-    public function setSecure($secure) {
+    public function setSecure($secure)
+    {
       $this->secure = (boolean)$secure;
     }
 
-    public function isHttpOnly() {
+    public function isHttpOnly()
+    {
       return $this->httponly;
     }
 
-    public function setHttpOnly($httponly) {
+    public function setHttpOnly($httponly)
+    {
       $this->httponly = (boolean)$httponly;
     }
-
 }

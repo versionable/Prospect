@@ -2,32 +2,39 @@
 
 namespace Versionable\Http\Header;
 
-class Header implements HeaderInterface {
+class Header implements HeaderInterface
+{
   protected $name;
 
   protected $value;
 
-  public function getName() {
+  public function getName()
+  {
     return $this->name;
   }
 
-  public function setName($name) {
+  public function setName($name)
+  {
     $this->name = $name;
   }
 
-  public function getValue() {
+  public function getValue()
+  {
     return $this->value;
   }
 
-  public function setValue($value) {
+  public function setValue($value)
+  {
     $this->value = $value;
   }
 
-  public function toString() {
+  public function toString()
+  {
     return sprintf('%s: %s', $this->name, $this->value);
   }
 
-  public function  __toString() {
+  public function  __toString()
+  {
     return $this->toString();
   }
 }

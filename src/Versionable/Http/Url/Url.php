@@ -2,7 +2,8 @@
 
 namespace Versionable\Http\Url;
 
-class Url implements UrlInterface {
+class Url implements UrlInterface
+{
 
   protected $scheme = 'http';
 
@@ -23,16 +24,19 @@ class Url implements UrlInterface {
   protected $query_separator = '&';
 
 
-  public function __construct($url, $parameters = array()) {
+  public function __construct($url, $parameters = array())
+  {
     $this->setParameters($parameters);
     $this->setUrl($url);
   }
 
-  public function __toString() {
+  public function __toString()
+  {
     return $this->toString();
   }
 
-  public function toString() {
+  public function toString()
+  {
     return $this->getUrl();
   }
 
@@ -42,88 +46,109 @@ class Url implements UrlInterface {
    *
    * @return string
    */
-  public function getUrl() {
+  public function getUrl()
+  {
     return $this->buildUrl();
   }
 
-  public function setUrl($url) {
+  public function setUrl($url)
+  {
 
-    if (filter_var($url, FILTER_VALIDATE_URL, FILTER_FLAG_SCHEME_REQUIRED) === false) {
+    if (filter_var($url, FILTER_VALIDATE_URL, FILTER_FLAG_SCHEME_REQUIRED) === false)
+    {
       throw new \RuntimeException('Not a valid Url');
     }
 
     $components = parse_url($url);
     if (is_array($components))
     {
-      if (isset($components['user'])) {
+      if (isset($components['user']))
+      {
         $this->setUsername($components['user']);
-        if (isset($components['pass'])) {
+        if (isset($components['pass']))
+        {
           $this->setPassword($components['pass']);
         }
       }
 
       $this->setScheme($components['scheme']);
 
-      if (! empty($components['query'])) {
+      if (! empty($components['query']))
+      {
         $this->setParameters(array_merge($this->parameters, explode($this->query_separator, $components['query'])));
       }
+
       $this->setHostname($components['host']);
 
-      if (isset($components['path'])) {
+      if (isset($components['path']))
+      {
         $this->setPath($components['path']);
       }
 
-      if (isset($components['port'])) {
+      if (isset($components['port']))
+      {
         $this->setPort($components['port']);
       }
 
       $this->setScheme($components['scheme']);
 
-      if (isset($components['fragment'])) {
+      if (isset($components['fragment']))
+      {
         $this->setFragment($components['fragment']);
       }
     }
   }
 
-  public function setParameters(array $parameters) {
+  public function setParameters(array $parameters)
+  {
     $this->parameters = $parameters;
   }
 
-  public function getParameters() {
+  public function getParameters()
+  {
     return $this->parameters;
   }
 
-
-  public function getParameter($name) {
-    if ($this->hasParameter($name)) {
+  public function getParameter($name)
+  {
+    if ($this->hasParameter($name))
+    {
       return $this->parameters[$name];
     }
 
     return null;
   }
 
-  public function setParameter($name, $value) {
+  public function setParameter($name, $value)
+  {
     $this->parameters[$name] = $value;
   }
 
-  public function hasParameter($name) {
+  public function hasParameter($name)
+  {
     return isset($this->parameters[$name]);
   }
 
-  public function setHostname($hostname) {
+  public function setHostname($hostname)
+  {
     $this->hostname = $hostname;
   }
 
-  public function getHostname() {
+  public function getHostname()
+  {
     return $this->hostname;
   }
 
-  public function setScheme($scheme) {
-
-    if ($this->getPort() == 80 || $this->getPort() == 443) {
-      if ($scheme == 'http') {
+  public function setScheme($scheme)
+  {
+    if ($this->getPort() == 80 || $this->getPort() == 443)
+    {
+      if ($scheme == 'http')
+      {
         $this->setPort(80);
-      } elseif ($scheme == 'https') {
+      }
+      elseif ($scheme == 'https')
+      {
         $this->setPort(443);
       }
     }
@@ -131,74 +156,89 @@ class Url implements UrlInterface {
     $this->scheme = $scheme;
   }
 
-  public function getScheme() {
+  public function getScheme()
+  {
     return $this->scheme;
   }
 
-  public function setPort($port) {
-    if (\is_numeric($port)) {
+  public function setPort($port)
+  {
+    if (\is_numeric($port))
+    {
       $this->port = $port;
     }
   }
 
-  public function getPort() {
+  public function getPort()
+  {
     return $this->port;
   }
 
-  public function setUsername($username) {
+  public function setUsername($username)
+  {
     $this->username = $username;
   }
 
-  public function getUsername() {
+  public function getUsername()
+  {
     return $this->username;
   }
 
-  public function setPassword($password) {
+  public function setPassword($password)
+  {
     $this->password = $password;
   }
 
-  public function getPassword() {
+  public function getPassword()
+  {
     return $this->password;
   }
 
-  public function setPath($path) {
-
-    if(empty($path)) {
+  public function setPath($path)
+  {
+    if(empty($path))
+    {
       $path = '/';
     }
 
     $this->path = $path;
   }
 
-  public function getPath() {
+  public function getPath()
+  {
     return $this->path;
   }
 
-  public function setFragment($fragment) {
+  public function setFragment($fragment)
+  {
     $this->fragment = $fragment;
   }
 
-  public function getFragment() {
+  public function getFragment()
+  {
     return $this->fragment;
   }
 
-  public function getPathAndQuery() {
-
+  public function getPathAndQuery()
+  {
     $path = $this->path . $this->getQuery();
 
     return $path;
   }
 
-  public function getQuery() {
+  public function getQuery()
+  {
     $query = '';
-    if (count($this->parameters) > 0) {
+    if (count($this->parameters) > 0)
+    {
       $query = '?' . http_build_query($this->getParameters());
     }
 
     return $query;
   }
 
-  protected function buildUrl() {
+  protected function buildUrl()
+  {
     $components = array(
       'scheme' => $this->getScheme(),
       'host' => $this->getHostname(),
@@ -216,12 +256,14 @@ class Url implements UrlInterface {
 
       foreach ($keys as $key)
       {
-        if (empty($components[$key])) {
+        if (empty($components[$key]))
+        {
           unset($components[$key]);
         }
       }
 
-      if ($components['port'] == 80) {
+      if ($components['port'] == 80)
+      {
         unset($components['port']);
       }
 
@@ -236,6 +278,5 @@ class Url implements UrlInterface {
     }
 
     return http_build_url($components);
-
   }
 }

@@ -2,8 +2,9 @@
 
 namespace Versionable\Http\Parameter;
 
-interface CollectionInterface {
-  public function __toString();  
+interface CollectionInterface
+{
+  public function __toString();
 
   public function add(ParameterInterface $parameter);
 
@@ -14,6 +15,6 @@ interface CollectionInterface {
   public function has($name);
 
   public function toString();
-  
+
   public function toArray();
 }

@@ -2,18 +2,21 @@
 
 namespace Versionable\Http\Parameter;
 
-class Collection implements  CollectionInterface, \Iterator, \SeekableIterator, \Countable, \ArrayAccess {
-  
+class Collection implements  CollectionInterface, \Iterator, \SeekableIterator, \Countable, \ArrayAccess
+{
   protected $parameters = array();
-  
+
   protected $position = 0;
 
-  public function add(ParameterInterface $parameter) {
+  public function add(ParameterInterface $parameter)
+  {
     $this->parameters[$parameter->getName()] = $parameter;
   }
 
-  public function remove($name) {
-    if ($this->has($name)) {
+  public function remove($name)
+  {
+    if ($this->has($name))
+    {
       unset($this->parameters[$name]);
 
       return true;
@@ -22,27 +25,33 @@ class Collection implements  CollectionInterface, \Iterator, \SeekableIterator, 
     return false;
   }
 
-  public function get($name) {
-    if ($this->has($name)) {
+  public function get($name)
+  {
+    if ($this->has($name))
+    {
       return $this->parameters[$name];
     }
 
     return false;
   }
 
-  public function has($name) {
+  public function has($name)
+  {
     return isset($this->parameters[$name]);
   }
 
-  public function __toString() {
+  public function __toString()
+  {
     return $this->toString();
   }
-  
-  public function toString() {
+
+  public function toString()
+  {
     return \implode('\r\n', $this->parameters);
   }
-  
-  public function toArray() {
+
+  public function toArray()
+  {
     return $this->parameters;
   }
 
@@ -157,5 +166,5 @@ class Collection implements  CollectionInterface, \Iterator, \SeekableIterator, 
   protected function getPostion()
   {
     return $this->position;
-  }  
+  }
 }

@@ -2,20 +2,24 @@
 
 namespace Versionable\Http\File;
 
-class Collection implements  CollectionInterface, \Iterator, \SeekableIterator, \Countable, \ArrayAccess {
-  
+class Collection implements  CollectionInterface, \Iterator, \SeekableIterator, \Countable, \ArrayAccess
+{
+
   protected $files = array();
-  
+
   protected $position = 0;
-  
+
   protected $boundary = '';
 
-  public function add(FileInterface $file) {
+  public function add(FileInterface $file)
+  {
     $this->files[$file->getName()] = $file;
   }
 
-  public function remove($name) {
-    if ($this->has($name)) {
+  public function remove($name)
+  {
+    if ($this->has($name))
+    {
       unset($this->files[$name]);
 
       return true;
@@ -24,39 +28,46 @@ class Collection implements  CollectionInterface, \Iterator, \SeekableIterator, 
     return false;
   }
 
-  public function get($name) {
-    if ($this->has($name)) {
+  public function get($name)
+  {
+    if ($this->has($name))
+    {
       return $this->files[$name];
     }
 
     return false;
   }
 
-  public function has($name) {
+  public function has($name)
+  {
     return isset($this->files[$name]);
   }
 
-  public function __toString() {
+  public function __toString()
+  {
     return $this->toString();
   }
-  
-  public function toString() {
-    
+
+  public function toString()
+  {
     $data = array();
-    foreach($this->files as $file) {
+    foreach($this->files as $file)
+    {
       $data[] = \sprintf('------------------------------%s', $this->boundary);
       $data[] = $file;
       $data[] = \sprintf('------------------------------%s', $this->boundary);
     }
-    
+
     return implode("\r\n", $data);
   }
-  
-  public function toArray() {
+
+  public function toArray()
+  {
     return $this->files;
   }
 
-  public function setBoundary($boundary) {
+  public function setBoundary($boundary)
+  {
     $this->boundary = $boundary;
   }
 
@@ -170,5 +181,5 @@ class Collection implements  CollectionInterface, \Iterator, \SeekableIterator, 
   protected function getPostion()
   {
     return $this->position;
-  }  
+  }
 }

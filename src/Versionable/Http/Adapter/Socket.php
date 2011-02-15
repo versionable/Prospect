@@ -7,11 +7,6 @@ use Versionable\Http\Response\ResponseInterface;
 
 class Socket extends AdapterAbstract implements AdapterInterface
 {
-
-
-  public function __construct() {
-  }
-
   public function initalize() {
     $sock = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
     socket_set_nonblock($sock);
@@ -19,19 +14,22 @@ class Socket extends AdapterAbstract implements AdapterInterface
     $this->setOption('Content-Type', 'application/x-www-form-urlencoded');
   }
 
-  public function call(RequestInterface $request, ResponseInterface $response) {
+  public function call(RequestInterface $request, ResponseInterface $response)
+  {
     $this->initalize();
 
     $handle = \fsockopen($request->getUrl()->getHostname(), $request->getPort());
 
-    if(!$handle) {
+    if(!$handle)
+    {
       throw new \RuntimeException("Erroring connecting");
     }
 
     $header = '';
     $resp = '';
 
-    if ($handle) {
+    if ($handle)
+    {
       fputs($handle, $request);
       do
       {
@@ -56,7 +54,8 @@ class Socket extends AdapterAbstract implements AdapterInterface
     return $response;
   }
 
-  protected function parseHeader($response) {
+  protected function parseHeader($response)
+  {
     $part = preg_split ("/\r?\n/", $response, -1, PREG_SPLIT_NO_EMPTY);
 
     $headers = array ();
@@ -99,11 +98,12 @@ class Socket extends AdapterAbstract implements AdapterInterface
 
     return $headers;
   }
-  protected function parseBody($headers, $response, $eol="'\r\n") {
+
+  protected function parseBody($headers, $response, $eol="'\r\n")
+  {
     $tmp = $response;
     $add = strlen($eol);
     $response = '';
-
 
     if (isset ($headers['transfer-encoding']) && $headers['transfer-encoding'] == 'chunked')
     {
@@ -112,9 +112,12 @@ class Socket extends AdapterAbstract implements AdapterInterface
         $tmp = ltrim($tmp);
         $pos = strpos($tmp, $eol);
         $len = hexdec(substr ($tmp, 0, $pos));
-        if (isset($headers['content-encoding'])) {
+        if (isset($headers['content-encoding']))
+        {
           $response .= gzinflate(substr($tmp, ($pos + $add + 10), $len));
-        } else {
+        }
+        else
+        {
           $response .= substr($tmp, ($pos + $add), $len);
         }
 

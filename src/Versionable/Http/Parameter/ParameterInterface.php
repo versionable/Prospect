@@ -2,8 +2,8 @@
 
 namespace Versionable\Http\Parameter;
 
-interface ParameterInterface {
-  
+interface ParameterInterface
+{
   public function __toString();
 
   public function toString();

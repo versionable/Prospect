@@ -2,7 +2,8 @@
 
 namespace Versionable\Http\Cookie;
 
-interface CollectionInterface {
+interface CollectionInterface
+{
   public function add(CookieInterface $cookie);
 
   public function remove($name);
@@ -12,7 +13,7 @@ interface CollectionInterface {
   public function has($name);
 
   public function toString();
-  
+
   public function toArray();
 
   public function load();

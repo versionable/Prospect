@@ -4,33 +4,45 @@ namespace Versionable\Http\Response;
 
 class Response implements ResponseInterface
 {
-  
+
   /*
    * @var integer HTTP Response code
    */
   protected $code = null;
 
-  public function getCode() {
+  /**
+   *
+   * @var string Response body
+   */
+  protected $content = '';
+
+  public function getCode()
+  {
     return $this->code;
   }
 
-  public function setCode($code) {
+  public function setCode($code)
+  {
     $this->code = $code;
-  }  
- 
-  public function getContent() {
+  }
+
+  public function getContent()
+  {
     return $content;
   }
 
-  public function setContent($content) {
+  public function setContent($content)
+  {
     $this->content = $content;
   }
 
-  public function getHeaders() {
-    
+  public function getHeaders()
+  {
+
   }
 
-  public function setHeaders($headers) {
-    
+  public function setHeaders($headers)
+  {
+
   }
 }
