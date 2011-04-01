@@ -116,6 +116,6 @@ class History implements HistoryInterface
   
   public function getLast()
   {
-    return $this->entries[$this->getPosition()];
+    return end($this->entries);;
   }
 }

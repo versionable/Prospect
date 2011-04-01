@@ -14,6 +14,11 @@ class Http implements HttpInterface
    * @var AdapterInterface Adapter used
    */
   protected $adapter = null;
+  
+  public function __construct(AdapterInterface $adapter = null)
+  {
+    $this->setAdapter($adapter);
+  }
 
   public function setAdapter(AdapterInterface $adapter)
   {

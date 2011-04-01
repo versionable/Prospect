@@ -28,8 +28,13 @@ class Request implements RequestInterface
 
   protected $version = 1.1;
 
-  public function __construct()
+  public function __construct(UrlInterface $url = null)
   {
+    if (!is_null($url))
+    {
+      $this->setUrl($url);
+    }
+    
     $this->generateBoundary();
   }
 
