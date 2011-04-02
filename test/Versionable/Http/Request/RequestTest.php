@@ -2,13 +2,21 @@
 namespace Versionable\Http\Request;
 
 
-require_once 'src/Versionable/Http/Request/Request.php';
 require_once 'src/Versionable/Http/Request/RequestInterface.php';
+require_once 'src/Versionable/Http/Request/Request.php';
 
+require_once 'src/Versionable/Http/Url/UrlInterface.php';
 require_once 'src/Versionable/Http/Parameter/ParameterInterface.php';
-require_once 'src/Versionable/Http/Parameter/Parameter.php';
 require_once 'src/Versionable/Http/Parameter/CollectionInterface.php';
-require_once 'src/Versionable/Http/Parameter/Collection.php';
+
+require_once 'src/Versionable/Http/File/FileInterface.php';
+require_once 'src/Versionable/Http/File/CollectionInterface.php';
+
+require_once 'src/Versionable/Http/Header/HeaderInterface.php';
+require_once 'src/Versionable/Http/Header/CollectionInterface.php';
+
+require_once 'src/Versionable/Http/Cookie/CookieInterface.php';
+require_once 'src/Versionable/Http/Cookie/CollectionInterface.php';
 
 
 /**
@@ -38,13 +46,20 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
     }
+    
+    public function testConstruct()
+    {
+      $url = $this->getMock('Versionable\\Http\\Url\\UrlInterface', array(), array('http://testing.com'));
+      $this->object = new Request($url);
+      $this->assertEquals($this->readAttribute($this->object, 'url'), $url);
+    }
 
     /**
      * @todo Implement testSetUrl().
      */
     public function testSetUrl()
     {
-      $url = $this->getMock('Versionable\\Http\\Url\\Url', array(), array('http://testing.com'));
+      $url = $this->getMock('Versionable\\Http\\Url\\UrlInterface', array(), array('http://testing.com'));
       $this->object->setUrl($url);
       $this->assertEquals($this->readAttribute($this->object, 'url'), $url);
     }
@@ -54,7 +69,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetUrl()
     {
-      $url = $this->getMock('Versionable\\Http\\Url\\Url', array(), array('http://testing.com'));
+      $url = $this->getMock('Versionable\\Http\\Url\\UrlInterface', array(), array('http://testing.com'));
       $this->object->setUrl($url);
       $this->assertEquals($this->readAttribute($this->object, 'url'), $this->object->getUrl());
     }
@@ -80,7 +95,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
       $body = $this->readAttribute($this->object, 'body');
       
       $string = 'a=b';
-      $parameters = $this->getMock('Versionable\\Http\\Parameter\\Collection');
+      $parameters = $this->getMock('Versionable\\Http\\Parameter\\CollectionInterface');
       $parameters->expects($this->any())->method('toString')->will($this->returnValue($string));
       
       $this->object->setParameters($parameters);
@@ -104,7 +119,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetParameters()
     {
-      $parameters = $this->getMock('Versionable\\Http\\Parameter\\Collection');
+      $parameters = $this->getMock('Versionable\\Http\\Parameter\\CollectionInterface');
       $this->object->setParameters($parameters);
       $this->assertEquals($parameters, $this->readAttribute($this->object, 'parameters'));
     }
@@ -114,21 +129,24 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetParameters()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+      $parameters = $this->getMock('Versionable\\Http\\Parameter\\CollectionInterface');
+      $this->object->setParameters($parameters);
+      $this->assertEquals($this->object->getParameters(), $this->readAttribute($this->object, 'parameters'));
     }
 
     /**
      * @todo Implement testHasParameters().
      */
-    public function testHasParameters()
+    public function testHasParametersTrue()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+      $parameters = $this->getMock('Versionable\\Http\\Parameter\\CollectionInterface');
+      $this->object->setParameters($parameters);
+      $this->assertTrue($this->object->hasParameters());
+    }
+    
+    public function testHasParametersFalse()
+    {
+      $this->assertFalse($this->object->hasParameters());
     }
 
     /**
@@ -136,10 +154,9 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetFiles()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+      $files = $this->getMock('Versionable\\Http\\File\\CollectionInterface');
+      $this->object->setFiles($files);
+      $this->assertEquals($files, $this->readAttribute($this->object, 'files'));
     }
 
     /**
@@ -147,21 +164,21 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetFiles()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+      $files = $this->getMock('Versionable\\Http\\File\\CollectionInterface');
+      $this->object->setFiles($files);
+      $this->assertEquals($this->object->getFiles(), $this->readAttribute($this->object, 'files'));
     }
 
-    /**
-     * @todo Implement testHasFiles().
-     */
-    public function testHasFiles()
+    public function testHasFilesTrue()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+      $files = $this->getMock('Versionable\\Http\\File\\CollectionInterface');
+      $this->object->setFiles($files);
+      $this->assertTrue($this->object->hasFiles());
+    }
+    
+    public function testHasFilesFalse()
+    {
+      $this->assertFalse($this->object->hasFiles());
     }
 
     /**
@@ -169,98 +186,80 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetMethod()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+      $method = 'DELETE';
+      $this->object->setMethod($method);
+      $this->assertEquals($method, $this->readAttribute($this->object, 'method'));
     }
-
-    /**
-     * @todo Implement testGetHeaders().
-     */
-    public function testGetHeaders()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testSetHeaders().
-     */
-    public function testSetHeaders()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testHasHeaders().
-     */
-    public function testHasHeaders()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testHasCookies().
-     */
-    public function testHasCookies()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testGetCookies().
-     */
-    public function testGetCookies()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testSetCookies().
-     */
-    public function testSetCookies()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
+    
     /**
      * @todo Implement testSetMethod().
      */
     public function testSetMethod()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+      $method = 'POST';
+      $this->object->setMethod($method);
+      $this->assertEquals($method, $this->object->getMethod());
     }
+
+    public function testSetHeaders()
+    {
+      $headers = $this->getMock('Versionable\\Http\\Header\\CollectionInterface');
+      $this->object->setHeaders($headers);
+      $this->assertEquals($headers, $this->readAttribute($this->object, 'headers'));
+    }
+    
+    public function testGetHeaders()
+    {
+      $headers = $this->getMock('Versionable\\Http\\Header\\CollectionInterface');
+      $this->object->setHeaders($headers);
+      $this->assertEquals($this->object->getHeaders(), $this->readAttribute($this->object, 'headers'));
+    }
+
+    public function testHasHeadersTrue()
+    {
+      $headers = $this->getMock('Versionable\\Http\\Header\\CollectionInterface');
+      $this->object->setHeaders($headers);
+      $this->assertTrue($this->object->hasHeaders());
+    }
+    
+    public function testHasHeadersFalse()
+    {
+      $this->assertFalse($this->object->hasHeaders());
+    }
+
+    public function testSetCookies()
+    {
+      $cookies = $this->getMock('Versionable\\Http\\Cookie\\CollectionInterface');
+      $this->object->setCookies($cookies);
+      $this->assertEquals($cookies, $this->readAttribute($this->object, 'cookies'));
+    }
+    
+    public function testGetCookies()
+    {
+      $cookies = $this->getMock('Versionable\\Http\\Cookie\\CollectionInterface');
+      $this->object->setCookies($cookies);
+      $this->assertEquals($this->object->getCookies(), $this->readAttribute($this->object, 'cookies'));
+    }
+
+    public function testHasCookiesTrue()
+    {
+      $cookies = $this->getMock('Versionable\\Http\\Cookie\\CollectionInterface');
+      $this->object->setCookies($cookies);
+      $this->assertTrue($this->object->hasCookies());
+    }
+    
+    public function testHasCookiesFalse()
+    {
+      $this->assertFalse($this->object->hasCookies());
+    }    
 
     /**
      * @todo Implement testGetPort().
      */
     public function testGetPort()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+      $this->object->setPort(8080);
+      $this->assertEquals($this->readAttribute($this->object, 'port'), $this->object->getPort());
     }
 
     /**
@@ -268,10 +267,9 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetPort()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+      $port = 8080;
+      $this->object->setPort($port);
+      $this->assertEquals($port, $this->readAttribute($this->object, 'port'));
     }
 
     /**
@@ -279,10 +277,8 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetVersion()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+      $this->object->setVersion(1,1);
+      $this->assertEquals($this->readAttribute($this->object, 'version'), $this->object->getVersion());
     }
 
     /**
@@ -290,10 +286,9 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetVersion()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+      $version = 1.1;
+      $this->object->setVersion($version);
+      $this->assertEquals($version, $this->readAttribute($this->object, 'version'));
     }
 
     /**
@@ -318,4 +313,3 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         );
     }
 }
-?>
