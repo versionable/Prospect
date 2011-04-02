@@ -159,12 +159,12 @@ class Request implements RequestInterface
       return true;
     }
 
-    return false;
+    throw new \InvalidArgumentException('Invalid HTTP method');
   }
 
   public function getPort()
   {
-    if (!is_numeric($this->port) && false == is_null($this->url)) {
+    if (false == is_null($this->url) && is_numeric($this->getUrl()->getPort())) {
       return $this->getUrl()->getPort();
     }
 

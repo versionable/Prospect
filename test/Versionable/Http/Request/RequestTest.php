@@ -191,14 +191,18 @@ class RequestTest extends \PHPUnit_Framework_TestCase
       $this->assertEquals($method, $this->readAttribute($this->object, 'method'));
     }
     
-    /**
-     * @todo Implement testSetMethod().
-     */
     public function testSetMethod()
     {
       $method = 'POST';
       $this->object->setMethod($method);
       $this->assertEquals($method, $this->object->getMethod());
+    }
+    
+    public function testSetMethodInvalid()
+    {
+      $method = 'INVALID';
+      $this->setExpectedException('\\InvalidArgumentException');
+      $this->object->setMethod($method);
     }
 
     public function testSetHeaders()
@@ -260,6 +264,15 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     {
       $this->object->setPort(8080);
       $this->assertEquals($this->readAttribute($this->object, 'port'), $this->object->getPort());
+    }
+    
+    public function testGetPortWithUrl()
+    {
+      $port = 10000;
+      $url = $this->getMock('Versionable\\Http\\Url\\UrlInterface', array(), array('http://testing.com'));
+      $url->expects($this->any())->method('getPort')->will($this->returnValue($port));
+      $this->object->setUrl($url);
+      $this->assertEquals($port, $this->object->getPort());
     }
 
     /**
