@@ -221,7 +221,12 @@ class Url implements UrlInterface
 
   public function getPathAndQuery()
   {
-    $path = $this->path . $this->getQuery();
+    $path = $this->path;
+    $query = $this->getQuery();
+    if (false === empty($query))
+    {
+      $path .= '?'. $this->getQuery();
+    }
 
     return $path;
   }
@@ -231,7 +236,7 @@ class Url implements UrlInterface
     $query = '';
     if (count($this->parameters) > 0)
     {
-      $query = '?' . http_build_query($this->getParameters());
+      $query = http_build_query($this->getParameters());
     }
 
     return $query;
@@ -273,7 +278,7 @@ class Url implements UrlInterface
 				.((isset($components['host'])) ? $components['host'] : '')
 				.((isset($components['port'])) ? ':' . $components['port'] : '')
 				.((isset($components['path'])) ? $components['path'] : '')
-				.((isset($components['query'])) ? $components['query'] : '')
+				.((!empty($components['query'])) ? '?' . $components['query'] : '')
 				.((isset($components['fragment'])) ? '#' . $components['fragment'] : '');
     }
 
