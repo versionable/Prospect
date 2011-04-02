@@ -12,7 +12,7 @@ class Request implements RequestInterface
 {
   protected $url = null;
 
-  protected $port = null;
+  protected $port = 80;
 
   protected $method = 'GET';
 
@@ -164,11 +164,11 @@ class Request implements RequestInterface
 
   public function getPort()
   {
-    if (!is_numeric($this->port)) {
+    if (!is_numeric($this->port) && false == is_null($this->url)) {
       return $this->getUrl()->getPort();
     }
 
-    return 80;
+    return $this->port;
   }
 
   public function setPort($port)
