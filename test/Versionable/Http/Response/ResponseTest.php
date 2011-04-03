@@ -50,6 +50,13 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
       $this->object->setCode($code);
       $this->assertEquals($code, $this->readAttribute($this->object, 'code'));
     }
+    
+    public function testSetCodeInvalid()
+    {
+      $this->setExpectedException('\\InvalidArgumentException');
+      $code = 999;
+      $this->object->setCode($code);
+    }
 
     /**
      * @todo Implement testGetContent().
@@ -71,26 +78,31 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
       $this->assertEquals($content, $this->readAttribute($this->object, 'content'));
     }
 
-    /**
-     * @todo Implement testGetHeaders().
-     */
     public function testGetHeaders()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+      $headers = $this->getMock('\\Versionable\\Http\\Header\\CollectionInterface');
+      $this->object->setHeaders($headers);
+      $this->assertEquals($headers, $this->object->getHeaders());
     }
 
-    /**
-     * @todo Implement testSetHeaders().
-     */
     public function testSetHeaders()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+      $headers = $this->getMock('\\Versionable\\Http\\Header\\CollectionInterface');
+      $this->object->setHeaders($headers);
+      $this->assertEquals($headers, $this->readAttribute($this->object, 'headers'));
+    }
+    
+    public function testGetCookies()
+    {
+      $cookies = $this->getMock('\\Versionable\\Http\\Cookie\\CollectionInterface');
+      $this->object->setCookies($cookies);
+      $this->assertEquals($cookies, $this->object->getCookies());
+    }
+
+    public function testSetCookies()
+    {
+      $cookies = $this->getMock('\\Versionable\\Http\\Cookie\\CollectionInterface');
+      $this->object->setCookies($cookies);
+      $this->assertEquals($cookies, $this->readAttribute($this->object, 'cookies'));
     }
 }
-?>
