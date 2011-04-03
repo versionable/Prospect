@@ -7,7 +7,13 @@ class Header implements HeaderInterface
   protected $name;
 
   protected $value;
-
+  
+  public function __construct($name = null, $value = null)
+  {
+    $this->setName($name);
+    $this->setValue($value);
+  }
+  
   public function getName()
   {
     return $this->name;

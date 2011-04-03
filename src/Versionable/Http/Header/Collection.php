@@ -4,14 +4,21 @@ namespace Versionable\Http\Header;
 
 class Collection implements CollectionInterface, \Iterator, \SeekableIterator, \Countable, \ArrayAccess
 {
-
+  /**
+   *
+   * @var array Array of \Versionable\Http\Header\HeaderInterface
+   */
   protected $headers = array();
 
+  /**
+   *
+   * @var integer Position of pointer 
+   */
   protected $position = 0;
 
   public function add(HeaderInterface $header)
   {
-    $this->headers[$header->getName()] = $header->toString();
+    $this->headers[$header->getName()] = $header;
   }
 
   public function remove($name)
@@ -43,7 +50,14 @@ class Collection implements CollectionInterface, \Iterator, \SeekableIterator, \
 
   public function toArray()
   {
-    return $this->headers;
+    $headers = array();
+    
+    foreach($this->header as $header)
+    {
+      $headers[] = $header->toString();
+    }
+    
+    return $headers;
   }
 
 
@@ -152,5 +166,20 @@ class Collection implements CollectionInterface, \Iterator, \SeekableIterator, \
   protected function getPostion()
   {
     return $this->position;
+  }
+  
+  public function parse($name, $value)
+  {
+    $class_name = '\\Versionable\\Http\\Header\\' . \str_replace('-', '', $name);
+    if (\class_exists($class_name))
+    {
+      $header = new $class_name($value);
+    }
+    else
+    {
+      $header = new Header($name, $value);
+    }
+    
+    $this->add($header);
   }
 }

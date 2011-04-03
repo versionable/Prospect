@@ -70,7 +70,13 @@ class Collection implements CollectionInterface, \Iterator, \SeekableIterator, \
   {
 
   }
-
+  
+  public function parse($string)
+  { 
+    $cookie = new Cookie('','');
+    $cookie->parse($string);
+    $this->add($cookie);
+  }
 
   /**
    *

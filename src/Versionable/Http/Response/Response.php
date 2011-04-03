@@ -10,7 +10,7 @@ class Response implements ResponseInterface
    */
   protected $code = null;
   
-  protected $valid_codes = array(
+  static public $valid_codes = array(
       100 => 'Continue',
       101 => 'Switching Protocols',
       200 => 'OK',
@@ -59,6 +59,18 @@ class Response implements ResponseInterface
    * @var string Response body
    */
   protected $content = '';
+  
+  /**
+   *
+   * @var \Versionable\Http\Header\Collection
+   */
+  protected $headers = array();
+  
+  /**
+   *
+   * @var \Versionable\Http\Cookie\Collection
+   */
+  protected $cookies = array();
 
   public function getCode()
   {
@@ -67,7 +79,7 @@ class Response implements ResponseInterface
 
   public function setCode($code)
   {
-    if (array_key_exists($code, $this->valid_codes))
+    if (array_key_exists($code, self::$valid_codes))
     {
       $this->code = $code;
     }
@@ -89,11 +101,21 @@ class Response implements ResponseInterface
 
   public function getHeaders()
   {
-
+    return $this->headers;
   }
 
   public function setHeaders($headers)
   {
+    $this->headers = $headers;
+  }
+  
+  public function getCookies()
+  {
+    return $this->cookies;
+  }
 
+  public function setCookies($cookies)
+  {
+    $this->cookies = $cookies;
   }
 }
