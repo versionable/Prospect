@@ -255,33 +255,29 @@ class Url implements UrlInterface
       'fragment' => $this->getFragment()
     );
 
-    if (!function_exists('http_build_url'))
+
+    $keys = array('user','pass','port','path','query','fragment');
+
+    foreach ($keys as $key)
     {
-      $keys = array('user','pass','port','path','query','fragment');
-
-      foreach ($keys as $key)
+      if (empty($components[$key]))
       {
-        if (empty($components[$key]))
-        {
-          unset($components[$key]);
-        }
+        unset($components[$key]);
       }
-
-      if ($components['port'] == 80)
-      {
-        unset($components['port']);
-      }
-
-			return
-				 ((isset($components['scheme'])) ? $components['scheme'] . '://' : '')
-				.((isset($components['user'])) ? $components['user'] . ((isset($components['pass'])) ? ':' . $components['pass'] : '') .'@' : '')
-				.((isset($components['host'])) ? $components['host'] : '')
-				.((isset($components['port'])) ? ':' . $components['port'] : '')
-				.((isset($components['path'])) ? $components['path'] : '')
-				.((!empty($components['query'])) ? '?' . $components['query'] : '')
-				.((isset($components['fragment'])) ? '#' . $components['fragment'] : '');
     }
 
-    return http_build_url($components);
+    if ($components['port'] == 80)
+    {
+      unset($components['port']);
+    }
+
+    return
+       ((isset($components['scheme'])) ? $components['scheme'] . '://' : '')
+      .((isset($components['user'])) ? $components['user'] . ((isset($components['pass'])) ? ':' . $components['pass'] : '') .'@' : '')
+      .((isset($components['host'])) ? $components['host'] : '')
+      .((isset($components['port'])) ? ':' . $components['port'] : '')
+      .((isset($components['path'])) ? $components['path'] : '')
+      .((!empty($components['query'])) ? '?' . $components['query'] : '')
+      .((isset($components['fragment'])) ? '#' . $components['fragment'] : '');
   }
 }

@@ -44,52 +44,42 @@ class Cookie implements CookieInterface
   
   public function parse($string)
   {
-    if (!function_exists('http_parse_cookie'))
-    {
-      $object = http_parse_cookie($string);
-    }
-    else
-    {
-      $parts = \explode('; ', $string);
+    $parts = \explode('; ', $string);
 
-      for($i=0; $i < count($parts); $i++)
+    for($i=0; $i < count($parts); $i++)
+    {
+      if(false !== \strpos($parts[$i], '='))
       {
-        if(false !== \strpos($parts[$i], '='))
+        list($name, $value) = explode('=', $parts[$i]);
+      }
+      else
+      {
+        $name = \str_replace(';', '', $parts[$i]);
+        $value = true;
+      }
+
+      if ($i==0)
+      {
+        $this->setName($name);
+        $this->setValue($value);
+      }
+      else
+      {
+        if($name === 'expires')
         {
-          list($name, $value) = explode('=', $parts[$i]);
-        }
-        else
-        {
-          $name = \str_replace(';', '', $parts[$i]);
-          $value = true;
-        }
-        
-        if ($i==0)
-        {
-          $this->setName($name);
-          $this->setValue($value);
-        }
-        else
-        {
-          if($name === 'expires')
-          {
-            $value = new \DateTime($value);
-          }
-          
-          $map = array(
-            'expires'   => 'setExpires',
-            'path'      => 'setPath',
-            'domain'    => 'setDomain',
-            'secure'    => 'setSecure',
-            'httponly'  => 'setHttpOnly'
-              
-          );
-          $this->$map[$name]($value);          
+          $value = new \DateTime($value);
         }
 
-      }
-      
-      
+        $map = array(
+          'expires'   => 'setExpires',
+          'path'      => 'setPath',
+          'domain'    => 'setDomain',
+          'secure'    => 'setSecure',
+          'httponly'  => 'setHttpOnly'
+
+        );
+        $this->$map[$name]($value);          
+      }      
     }
   }
 
