@@ -44,7 +44,6 @@ class Cookie implements CookieInterface
   
   public function parse($string)
   {
-    //echo $string. "\n";
     if (!function_exists('http_parse_cookie'))
     {
       $object = http_parse_cookie($string);
@@ -61,7 +60,7 @@ class Cookie implements CookieInterface
         }
         else
         {
-          $name = $parts[$i];
+          $name = \str_replace(';', '', $parts[$i]);
           $value = true;
         }
         
@@ -76,8 +75,16 @@ class Cookie implements CookieInterface
           {
             $value = new \DateTime($value);
           }
-          $method = 'set'.\ucfirst($name);
-          $this->$method($value);          
+          
+          $map = array(
+            'expires'   => 'setExpires',
+            'path'      => 'setPath',
+            'domain'    => 'setDomain',
+            'secure'    => 'setSecure',
+            'httponly'  => 'setHttpOnly'
+              
+          );
+          $this->$map[$name]($value);          
         }
 
       }

@@ -25,10 +25,10 @@ class BrowserTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-      $http = $this->getMock('Versionable\\Http\\Client\\HttpInterface');
+      $client = $this->getMock('Versionable\\Http\\Client\\HttpInterface');
       $history = $this->getMock('Versionable\\Http\\History\\HistoryInterface');
 
-      $this->object = new Browser($http, $history);
+      $this->object = new Browser($client, $history);
     }
 
     /**
@@ -44,10 +44,18 @@ class BrowserTest extends \PHPUnit_Framework_TestCase
      */
     public function testGet()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+      $response = $this->getMock('Versionable\Http\Response\ResponseInterface');
+      $response->expects($this->any())->method('getCode')->will($this->returnValue(200));
+      $response->expects($this->any())->method('getContent')->will($this->returnValue('Test content'));
+      $response->expects($this->any())->method('getHeaders')->will($this->returnValue(array()));
+      
+      $client = $this->object->getClient();
+      $client->expects($this->any())->method('send')->will($this->returnValue($response));
+
+      $request = $this->getMock('Versionable\Http\Request\RequestInterface');
+
+      $this->assertEquals($response, $this->object->get($request, $response));
+
     }
 
     /**
@@ -55,10 +63,7 @@ class BrowserTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetClient()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+      $this->assertEquals($this->readAttribute($this->object, 'client'), $this->object->getClient());
     }
 
     /**
@@ -66,10 +71,9 @@ class BrowserTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetClient()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+      $client = $this->getMock('Versionable\\Http\\Client\\HttpInterface');
+      $this->object->setClient($client);
+      $this->assertEquals($client, $this->readAttribute($this->object, 'client'));
     }
 
     /**
@@ -77,10 +81,7 @@ class BrowserTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetHistory()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+      $this->assertEquals($this->readAttribute($this->object, 'history'), $this->object->getHistory());
     }
 
     /**
@@ -88,10 +89,8 @@ class BrowserTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetHistory()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+      $history = $this->getMock('Versionable\\Http\\History\\HistoryInterface');
+      $this->object->setHistory($history);
+      $this->assertEquals($history, $this->readAttribute($this->object, 'history'));
     }
 }
-?>

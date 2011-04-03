@@ -43,6 +43,4 @@ class Browser implements BrowserInterface
   {
     $this->history = $history;
   }
-
-
 }
