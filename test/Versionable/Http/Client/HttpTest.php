@@ -44,6 +44,13 @@ class HttpTest extends \PHPUnit_Framework_TestCase {
   protected function tearDown() {
 
   }
+  
+  public function testConstructorWithAdapter()
+  {
+    $adapter = $this->getMock('Versionable\Http\Adapter\AdapterInterface');
+    $object = new Http($adapter);
+    $this->assertEquals($adapter, $this->readAttribute($object, 'adapter'));
+  }
 
   public function testSetAdapter() {
 
