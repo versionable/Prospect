@@ -290,7 +290,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetVersion()
     {
-      $this->object->setVersion(1,1);
+      $this->object->setVersion(1.1);
       $this->assertEquals($this->readAttribute($this->object, 'version'), $this->object->getVersion());
     }
 
