@@ -177,7 +177,7 @@ class Collection implements CollectionInterface, \Iterator, \SeekableIterator, \
     }
     else
     {
-      $header = new CustomHeader($name, $value);
+      $header = new Custom($name, $value);
     }
     
     $this->add($header);
