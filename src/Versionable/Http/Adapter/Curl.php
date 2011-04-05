@@ -5,6 +5,9 @@ namespace Versionable\Http\Adapter;
 use Versionable\Http\Request\RequestInterface;
 use Versionable\Http\Response\ResponseInterface;
 use Versionable\Http\Parameter\FileIterface;
+use Versionable\Http\Header\Header;
+use Versionable\Http\Header\Collection as HeaderCollection;
+use Versionable\Http\Cookie\Collection as CookieCollection;
 
 class Curl extends AdapterAbstract implements AdapterInterface
 {
@@ -13,6 +16,12 @@ class Curl extends AdapterAbstract implements AdapterInterface
    * @var resource Curl resource
    */
   protected $handle = null;
+  
+  /**
+   *
+   * @var array Curl options 
+   */
+  protected $options = array();
 
   public function __construct()
   {
@@ -23,13 +32,14 @@ class Curl extends AdapterAbstract implements AdapterInterface
   }
 
   public function initialize()
-  {
+  {    
     $this->handle = curl_init();
     $this->setOption(\CURLOPT_RETURNTRANSFER, true);
     $this->setOption(\CURLOPT_NOBODY, null);
     $this->setOption(\CURLOPT_FOLLOWLOCATION, true);
     $this->setOption(\CURLOPT_MAXREDIRS, 5);
-
+    $this->setOption(\CURLOPT_HEADER, true);
+    
     foreach($this->options as $name => $value)
     {
       \curl_setopt($this->handle, $name, $value);
@@ -84,22 +94,56 @@ class Curl extends AdapterAbstract implements AdapterInterface
 
     if ($request->hasHeaders())
     {
-      \curl_setopt($this->handle, \CURLOPT_HEADER, 1);
       \curl_setopt($this->handle, \CURLOPT_HTTPHEADER, $request->getHeaders()->toArray());
-    }
-    else
-    {
-      \curl_setopt($this->handle, \CURLOPT_HEADER, 0);
     }
 
     \curl_setopt($this->handle, \CURLOPT_PORT, $request->getPort());
 
-    $content = \curl_exec($this->handle);
+    $returned = \curl_exec($this->handle);
+    
+    list($code, $headers, $cookies, $content) = $this->parseResponse($returned);
+    
     $info = \curl_getinfo($this->handle);
-
+    
     $response->setCode($info['http_code']);
     $response->setContent($content);
+    $response->setHeaders($headers);
+    $response->setCookies($cookies);
 
     return $response;
+  }
+  
+  public function parseResponse($response)
+  { 
+    list($response_headers,$body) = explode("\r\n\r\n",$response,2); 
+
+    $header_lines = explode("\r\n",$response_headers); 
+
+    // first line of headers is the HTTP response code 
+    $http_response_line = array_shift($header_lines); 
+    
+    $code = null;
+    if (preg_match('@^HTTP/[0-9]\.[0-9] ([0-9]{3})@',$http_response_line, $matches))
+    { 
+      $code = $matches[1]; 
+    }
+    
+    $cookies = new CookieCollection(); 
+    $headers = new HeaderCollection(); 
+    foreach($header_lines as $line)
+    {
+      list($name, $value) = explode(': ', $line);
+
+      if ($name == 'Set-Cookie')
+      {
+        $cookies->parse($value);
+      }
+      else
+      {
+        $headers->parse($name, $value);
+      }
+    }
+
+    return array($code, $headers, $cookies,  $body); 
   }
 }

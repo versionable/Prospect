@@ -17,4 +17,6 @@ interface CollectionInterface
   public function toString();
 
   public function toArray();
+  
+  public function setBoundary($boundary);
 }

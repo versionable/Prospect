@@ -12,7 +12,7 @@ class Request implements RequestInterface
 {
   protected $url = null;
 
-  protected $port = null;
+  protected $port = 80;
 
   protected $method = 'GET';
 
@@ -28,8 +28,13 @@ class Request implements RequestInterface
 
   protected $version = 1.1;
 
-  public function __construct()
+  public function __construct(UrlInterface $url = null)
   {
+    if (!is_null($url))
+    {
+      $this->setUrl($url);
+    }
+    
     $this->generateBoundary();
   }
 
@@ -147,23 +152,23 @@ class Request implements RequestInterface
   public function setMethod($method)
   {
 
-    if (in_array($method,array('GET', 'POST', 'PUT', 'DELETE')))
+    if (in_array($method,array('HEAD', 'GET', 'POST', 'PUT', 'DELETE')))
     {
       $this->method = $method;
 
       return true;
     }
 
-    return false;
+    throw new \InvalidArgumentException('Invalid HTTP method');
   }
 
   public function getPort()
   {
-    if (!is_numeric($this->port)) {
+    if (false == is_null($this->url) && is_numeric($this->getUrl()->getPort())) {
       return $this->getUrl()->getPort();
     }
 
-    return 80;
+    return $this->port;
   }
 
   public function setPort($port)

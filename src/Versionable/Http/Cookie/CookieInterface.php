@@ -4,7 +4,6 @@ namespace Versionable\Http\Cookie;
 
 interface CookieInterface
 {
-
     public function  __toString();
 
     public function toString();
@@ -19,7 +18,7 @@ interface CookieInterface
 
     public function getExpires();
 
-    public function setExpires($expires);
+    public function setExpires(\DateTime $expires);
 
     public function getPath();
 

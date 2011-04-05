@@ -2,12 +2,17 @@
 
 namespace Versionable\Http\Header;
 
-class Header implements HeaderInterface
+abstract class Header implements HeaderInterface
 {
   protected $name;
 
   protected $value;
-
+  
+  public function __construct($value = null)
+  {
+    $this->setValue($value);
+  }
+  
   public function getName()
   {
     return $this->name;
