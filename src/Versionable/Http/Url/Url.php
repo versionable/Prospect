@@ -28,7 +28,7 @@ class Url implements UrlInterface
   {
     $this->setParameters($parameters);
     
-    if (null === $url) {
+    if (null !== $url) {
         $this->setUrl($url);
     }
   }
