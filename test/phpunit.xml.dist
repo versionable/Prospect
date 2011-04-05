@@ -8,9 +8,18 @@
          convertWarningsToExceptions="true"
          stopOnFailure="false">
 
-  <testsuite name="all">
-    <directory suffix="Test.php">test/Versionable/Http</directory>
-  </testsuite>
+  <testsuites>
+    <testsuite name="Http Test Suite">
+      <file>test/Versionable/Http/Browser/BrowserTest.php</file>
+      <file>test/Versionable/Http/Client/HttpTest.php</file>
+      <file>test/Versionable/Http/Cookie/CookieTest.php</file>
+      <file>test/Versionable/Http/History/HistoryTest.php</file>
+      <file>test/Versionable/Http/History/EntryTest.php</file>
+      <file>test/Versionable/Http/Request/RequestTest.php</file>
+      <file>test/Versionable/Http/Response/ResponseTest.php</file>
+      <file>test/Versionable/Http/Url/UrlTest.php</file>
+    </testsuite>
+  </testsuites>
 
   <logging>
     <log type="coverage-html"
