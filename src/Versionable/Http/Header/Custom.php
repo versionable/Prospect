@@ -1,7 +1,7 @@
 <?php
 namespace Versionable\Http\Header;
 
-class ContentType extends Header
+class Custom extends Header
 {
   public function __construct($name = null, $value = null)
   {
