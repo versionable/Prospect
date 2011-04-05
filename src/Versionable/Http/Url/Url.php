@@ -24,10 +24,13 @@ class Url implements UrlInterface
   protected $query_separator = '&';
 
 
-  public function __construct($url, $parameters = array())
+  public function __construct($url = null, $parameters = array())
   {
     $this->setParameters($parameters);
-    $this->setUrl($url);
+    
+    if (null === $url) {
+        $this->setUrl($url);
+    }
   }
 
   public function __toString()
