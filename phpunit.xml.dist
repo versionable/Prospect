@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+
+<!-- see http://www.phpunit.de/wiki/Documentation -->
+<phpunit bootstrap="test/bootstrap.php"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         stopOnFailure="false">
+
+  <testsuites>
+    <testsuite name="Prospect Test Suite">
+      <file>test/Versionable/Prospect/Browser/BrowserTest.php</file>
+      <file>test/Versionable/Prospect/Client/ClientTest.php</file>
+      <file>test/Versionable/Prospect/Cookie/CookieTest.php</file>
+      <file>test/Versionable/Prospect/History/HistoryTest.php</file>
+      <file>test/Versionable/Prospect/History/EntryTest.php</file>
+      <file>test/Versionable/Prospect/Request/RequestTest.php</file>
+      <file>test/Versionable/Prospect/Response/ResponseTest.php</file>
+      <file>test/Versionable/Prospect/Url/UrlTest.php</file>
+    </testsuite>
+  </testsuites>
+
+  <logging>
+    <log type="coverage-html"
+         target="../build/test/report/coverage"
+         charset="UTF-8"
+         yui="true"
+         highlights="true"/>
+    <log type="testdox-html"
+         target="../build/test/report/testdox.html"/>
+    <log type="junit"
+         target="../build/test/report/logfile.xml"
+         logIncompleteSkipped="false"/>
+  </logging>
+
+</phpunit>
