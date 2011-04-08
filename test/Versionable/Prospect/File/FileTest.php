@@ -1,8 +1,6 @@
 <?php
-namespace Versionable\Http\File;
+namespace Versionable\Prospect\File;
 
-
-require_once '/home/stuart/code/Http/src/Versionable/Http/File/File.php';
 
 /**
  * Test class for File.

@@ -1,8 +1,5 @@
 <?php
-namespace Versionable\Http\Parameter;
-
-
-require_once '/home/stuart/code/Http/src/Versionable/Http/Parameter/Parameter.php';
+namespace Versionable\Prospect\Parameter;
 
 /**
  * Test class for Parameter.

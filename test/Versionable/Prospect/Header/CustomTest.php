@@ -1,8 +1,5 @@
 <?php
-namespace Versionable\Http\Header;
-
-
-require_once '/home/stuart/code/Http/src/Versionable/Http/Header/Custom.php';
+namespace Versionable\Prospect\Header;
 
 /**
  * Test class for Custom.
