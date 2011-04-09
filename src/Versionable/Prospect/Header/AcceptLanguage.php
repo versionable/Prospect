@@ -2,9 +2,9 @@
 
 namespace Versionable\Prospect\Header;
 
-class Accept extends Header
+class AcceptLanguage extends Header
 {
-  protected $name = 'Cache-Control';
+  protected $name = 'Accept-Language';
 
-  protected $value = 'max-age=0';
+  protected $value = 'en-US';
 }

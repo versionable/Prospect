@@ -15,6 +15,6 @@ class BasicAuthentication extends Header
 
   public function toString()
   {
-    return sprintf('%s:  Basic %s', $this->name, $this->value);
+    return sprintf('%s: Basic %s', $this->name, $this->value);
   }
 }
