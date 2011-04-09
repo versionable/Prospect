@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Http" basedir="./" default="all">
+<project name="Prospect" basedir="./" default="all">
   <property name="tmp" value="/tmp" />
-  <property name="wsname" value="test" />
+  <property name="wsname" value="tests" />
   <property name="package" value="${phing.project.name}" override="true" />
   <property name="builddir" value="${tmp}/build/" override="true" />
   <property name="srcdir" value="src/" override="true" />
-  <property name="reportdir" value="${builddir}/test/report" />
-  <property name="docsdir" value="${builddir}/test/report/api" />
+  <property name="reportdir" value="${builddir}/tests/report" />
+  <property name="docsdir" value="${builddir}/tests/report/api" />
 
   <target name="setup" description="run tests">
     <!-- Create dirs -->
@@ -16,7 +16,7 @@
   </target>
 
   <target name="tests" depends="setup" description="run tests">
-    <exec command="phpunit --configuration test/phpunit.xml.dist"/>
+    <exec command="phpunit --configuration phpunit.xml.dist"/>
   </target>
 
   <target name="standards" depends="setup" description="test for code standards">
