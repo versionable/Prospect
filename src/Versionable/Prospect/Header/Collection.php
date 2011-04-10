@@ -52,14 +52,13 @@ class Collection implements CollectionInterface, \Iterator, \SeekableIterator, \
   {
     $headers = array();
     
-    foreach($this->header as $header)
+    foreach($this->headers as $header)
     {
       $headers[] = $header->toString();
     }
     
     return $headers;
   }
-
 
   /**
    *
@@ -170,12 +169,13 @@ class Collection implements CollectionInterface, \Iterator, \SeekableIterator, \
   
   public function parse($name, $value)
   {
-    $class_name = '\Versionable\Prospect\Header\\' . \str_replace('-', '', $name);
-    if (\class_exists($class_name))
+    $class_name = 'Versionable\Prospect\Header\\' . \str_replace(' ' , '', \ucwords(\str_replace('-', ' ', $name)));
+
+    try
     {
       $header = new $class_name($value);
     }
-    else
+    catch(\RuntimeException $e)
     {
       $header = new Custom($name, $value);
     }
