@@ -2,6 +2,12 @@
 
 namespace Versionable\Prospect\Response;
 
+use Versionable\Prospect\Header\Collection as HeaderCollection;
+use Versionable\Prospect\Cookie\Collection as CookieCollection;
+
+use Versionable\Prospect\Header\CollectionInterface as HeaderCollectionInterface;
+use Versionable\Prospect\Cookie\CollectionInterface as CookieCollectionInterface;
+
 class Response implements ResponseInterface
 {
 
@@ -71,6 +77,16 @@ class Response implements ResponseInterface
    * @var \Versionable\Prospect\Cookie\Collection
    */
   protected $cookies = array();
+  
+  public function parse($responseString)
+  {    
+    list($code, $headers, $cookies,  $content) = $this->parseResponse($responseString);
+    
+    $this->setCode($code);
+    $this->setHeaders($headers);
+    $this->setCookies($cookies);
+    $this->setContent($content);
+  }
 
   public function getCode()
   {
@@ -85,7 +101,7 @@ class Response implements ResponseInterface
     }
     else
     {    
-      throw new \InvalidArgumentException('Unknown HTTP code');
+      throw new \InvalidArgumentException('Unknown HTTP code: ' . $code);
     }
   }
 
@@ -104,7 +120,7 @@ class Response implements ResponseInterface
     return $this->headers;
   }
 
-  public function setHeaders($headers)
+  public function setHeaders(HeaderCollectionInterface $headers)
   {
     $this->headers = $headers;
   }
@@ -114,8 +130,43 @@ class Response implements ResponseInterface
     return $this->cookies;
   }
 
-  public function setCookies($cookies)
+  public function setCookies(CookieCollectionInterface $cookies)
   {
     $this->cookies = $cookies;
   }
+  
+  protected function parseResponse($response)
+  { 
+    list($response_headers,$body) = explode("\r\n\r\n",$response,2); 
+
+    $header_lines = explode("\r\n",$response_headers); 
+
+    // first line of headers is the HTTP response code 
+    $http_response_line = array_shift($header_lines); 
+    
+    $code = null;
+    if (preg_match('@^HTTP/[0-9]\.[0-9] ([0-9]{3})@',$http_response_line, $matches))
+    { 
+      $code = $matches[1]; 
+    }
+    
+    $cookies = new CookieCollection(); 
+    $headers = new HeaderCollection(); 
+    foreach($header_lines as $line)
+    {
+      list($name, $value) = explode(': ', $line);
+
+      if ($name == 'Set-Cookie')
+      {
+        $cookies->parse($value);
+      }
+      else
+      {
+        $headers->parse($name, $value);
+      }
+    }
+
+    return array($code, $headers, $cookies,  $body); 
+  }
+  
 }
