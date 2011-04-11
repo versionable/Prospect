@@ -73,9 +73,11 @@ class CurlFile extends Curl
 
         $returned = \curl_exec($this->handle);
 
+        $info = \curl_getinfo($this->handle);
+
         \fclose($this->fileHandle);
 
-        $response->parse($returned);
+        $response->setCode($info['http_code']);
 
         return $response;
     }
