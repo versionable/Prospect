@@ -6,7 +6,7 @@ class CacheControl extends Header
 {
   protected $name = 'Cache-Control';
 
-  protected $value = '0';
+  protected $value = 0;
 
   public function toString()
   {

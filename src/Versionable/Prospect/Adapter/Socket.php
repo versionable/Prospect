@@ -7,49 +7,49 @@ use Versionable\Prospect\Response\ResponseInterface;
 
 class Socket extends AdapterAbstract implements AdapterInterface
 {
-  public function initalize() {
-    $sock = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
-    socket_set_nonblock($sock);
+  protected $socket = null;
 
+  public function initalize() {
     $this->setOption('Content-Type', 'application/x-www-form-urlencoded');
   }
 
   public function call(RequestInterface $request, ResponseInterface $response)
   {
-    $this->initalize();
+    //$this->initalize();
 
-    $handle = \fsockopen($request->getUrl()->getHostname(), $request->getPort());
+    $handle = \fsockopen($request->getUrl()->getHostname(), $request->getPort(), $errno, $errstr, 30);
 
     if(!$handle)
     {
       throw new \RuntimeException("Erroring connecting");
     }
 
-    $header = '';
-    $resp = '';
+    $string = '';
 
     if ($handle)
     {
-      fputs($handle, $request);
-      do
-      {
-        $resp .= fgets ($handle, 4096);
-      } while (strpos ($resp, "\r\n\r\n") === false);
+      fputs($handle, $request->toString()."\r\n\r\n");
 
-      $headers = $this->parseHeader($resp);
-
-      while (!feof($handle))
+      while (false === feof($handle))
       {
-        $resp .= fgets($handle, 128);
+        $string .= fgets($handle, 1024);
       }
-
-      $body = $this->parseBody($headers, $resp);
     }
 
+    $response->parse($string);
+    
     fclose($handle);
-
-    $response->setCode($headers['status']);
-    $response->setContent($body);
+    if ($response->getCode() == 301)
+    {
+      $response->getHeaders()->get('Location')->getValue();
+      
+      $request->getUrl()->setUrl($response->getHeaders()->get('Location')->getValue());
+      $request->setCookies($response->getCookies());
+      
+      $class = \get_class($response);
+      
+      $response = $this->call($request, new $class());
+    }
 
     return $response;
   }

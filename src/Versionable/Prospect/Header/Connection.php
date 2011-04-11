@@ -13,8 +13,4 @@ class Connection extends Header
     $this->value = $value;
   }
 
-  public function __toString()
-  {
-    return sprintf('%s: %d', $this->name, $this->value);
-  }
 }
