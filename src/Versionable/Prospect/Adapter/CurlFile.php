@@ -71,13 +71,11 @@ class CurlFile extends Curl
 
         \curl_setopt($this->handle, \CURLOPT_FILE, $this->fileHandle);
 
-        \curl_exec($this->handle);
-
-        $info = \curl_getinfo($this->handle);
-
-        $response->setCode($info['http_code']);
+        $returned = \curl_exec($this->handle);
 
         \fclose($this->fileHandle);
+
+        $response->parse($returned);
 
         return $response;
     }
