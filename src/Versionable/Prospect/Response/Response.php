@@ -70,13 +70,13 @@ class Response implements ResponseInterface
    *
    * @var \Versionable\Prospect\Header\Collection
    */
-  protected $headers = array();
+  protected $headers = null;
   
   /**
    *
    * @var \Versionable\Prospect\Cookie\Collection
    */
-  protected $cookies = array();
+  protected $cookies = null;
   
   public function parse($responseString)
   {    
