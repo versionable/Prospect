@@ -136,7 +136,7 @@ class Response implements ResponseInterface
   }
   
   protected function parseResponse($response)
-  { 
+  {     
     list($response_headers,$body) = explode("\r\n\r\n",$response,2); 
 
     $header_lines = explode("\r\n",$response_headers); 
