@@ -70,13 +70,13 @@ class Response implements ResponseInterface
    *
    * @var \Versionable\Prospect\Header\Collection
    */
-  protected $headers = array();
+  protected $headers = null;
   
   /**
    *
    * @var \Versionable\Prospect\Cookie\Collection
    */
-  protected $cookies = array();
+  protected $cookies = null;
   
   public function parse($responseString)
   {    
@@ -136,7 +136,7 @@ class Response implements ResponseInterface
   }
   
   protected function parseResponse($response)
-  { 
+  {     
     list($response_headers,$body) = explode("\r\n\r\n",$response,2); 
 
     $header_lines = explode("\r\n",$response_headers); 

@@ -1,0 +1,6 @@
+GET / HTTP/1.1
+Host: testing.com
+Connection: Close
+Content-Type: text/html
+Content-Length: 0
+

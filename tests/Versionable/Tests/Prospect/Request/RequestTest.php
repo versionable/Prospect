@@ -294,10 +294,25 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testToString()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+      
+      $url = $this->getMock('Versionable\Prospect\Url\UrlInterface', array(), array('http://testing.com'));
+      $url->expects($this->any())->method('getHostname')->will($this->returnValue('testing.com'));
+      $url->expects($this->any())->method('getPathAndQuery')->will($this->returnValue('/'));
+      
+      $headers = new \Versionable\Prospect\Header\Collection;
+      
+      $close = new \Versionable\Prospect\Header\Connection('Close');
+      $type = new \Versionable\Prospect\Header\ContentType('text/html');
+      
+      $headers->add($close);
+      $headers->add($type);
+      
+      $this->object = new Request($url);
+      
+      $this->object->setHeaders($headers);
+      
+      $request = $string = file_get_contents(__DIR__ . '/../../../../data/request/request.txt');
+      $this->assertEquals($request, $this->object->toString());
     }
 
     /**
@@ -305,9 +320,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function test__toString()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+      $this->assertEquals($this->object->toString(), (string)$this->object);
     }
 }

@@ -31,6 +31,29 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
     }
+    
+    public function testParse()
+    {
+      $string = file_get_contents(__DIR__ . '/../../../../data/response/complete.txt');
+      $content = file_get_contents(__DIR__ . '/../../../../data/response/content.txt');
+      
+      $this->object->parse($string);
+      
+      $this->assertEquals(200, $this->object->getCode());
+      $this->assertEquals($content, $this->object->getContent());
+      
+      $headers = $this->object->getHeaders();
+      
+      $this->assertEquals('nginx/0.7.67', $headers->get('Server')->getValue());
+      $this->assertEquals('Wed, 13 Apr 2011 20:19:22 GMT', $headers->get('Date')->getValue());
+      $this->assertEquals('text/html; charset=UTF-8', $headers->get('Content-Type')->getValue());
+      $this->assertEquals('chunked', $headers->get('Transfer-Encoding')->getValue());
+      $this->assertEquals('close', $headers->get('Connection')->getValue());
+      $this->assertEquals('no-cache', $headers->get('Cache-Control')->getValue());
+      
+      $cookies = $this->object->getCookies();
+      $this->assertTrue($cookies->has('_SESS'));
+    }
 
     /**
      * @todo Implement testGetCode().
