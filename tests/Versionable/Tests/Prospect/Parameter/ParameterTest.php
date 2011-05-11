@@ -37,10 +37,7 @@ class ParameterTest extends \PHPUnit_Framework_TestCase
      */
     public function test__toString()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertEquals($this->object->toString(), $this->object->__toString());
     }
 
     /**
@@ -48,10 +45,7 @@ class ParameterTest extends \PHPUnit_Framework_TestCase
      */
     public function testToString()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertEquals('foo=bar', $this->object->toString());
     }
 
     /**
@@ -59,10 +53,7 @@ class ParameterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetName()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertEquals('foo', $this->object->getName());
     }
 
     /**
@@ -70,10 +61,9 @@ class ParameterTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetName()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $name = 'prospect';
+        $this->object->setName($name);
+        $this->assertEquals($name, $this->readAttribute($this->object, 'name'));
     }
 
     /**
@@ -81,10 +71,7 @@ class ParameterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetValue()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertEquals('bar', $this->object->getValue());
     }
 
     /**
@@ -92,10 +79,9 @@ class ParameterTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetValue()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $value = 'http';
+        $this->object->setValue($value);
+        $this->assertEquals($value, $this->readAttribute($this->object, 'value'));
     }
 }
 ?>
