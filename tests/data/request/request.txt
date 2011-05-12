@@ -1,6 +1,20 @@
 GET / HTTP/1.1
-Host: testing.com
-Connection: Close
-Content-Type: text/html
-Content-Length: 0
+Host: httpclient.dev
+Content-Type: multipart/form-data; boundary=----------------------------!boundary!
+Content-Length: 495
 
+------------------------------!boundary!
+Content-Disposition: form-data; name="name"
+
+prospect
+------------------------------!boundary!
+Content-Disposition: form-data; name="file1"; filename="file1.txt"
+Content-Type: text/plain
+
+Prospect is a PHP 5.3 HTTP library for making.
+------------------------------!boundary!
+Content-Disposition: form-data; name="file2"; filename="file2.txt"
+Content-Type: text/plain
+
+This is more text.
+------------------------------!boundary!--

@@ -4,6 +4,7 @@ namespace Versionable\Prospect\Adapter;
 
 use Versionable\Prospect\Request\RequestInterface;
 use Versionable\Prospect\Response\ResponseInterface;
+use Versionable\Prospect\Request\StringBuilder;
 
 class Socket extends AdapterAbstract implements AdapterInterface
 {
@@ -15,20 +16,19 @@ class Socket extends AdapterAbstract implements AdapterInterface
 
   public function call(RequestInterface $request, ResponseInterface $response)
   {
-    //$this->initalize();
-
     $handle = \fsockopen($request->getUrl()->getHostname(), $request->getPort(), $errno, $errstr, 30);
-
+    
     if(!$handle)
     {
-      throw new \RuntimeException("Erroring connecting");
+      throw new \RuntimeException('Error connecting to host: ' . $request->getUrl()->getHostname());
     }
 
     $string = '';
 
     if ($handle)
     {
-      fputs($handle, $request->toString()."\r\n\r\n");
+      $builder = new StringBuilder($request);
+      fputs($handle, $builder->toString());
 
       while (false === feof($handle))
       {

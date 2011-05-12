@@ -22,13 +22,9 @@ interface RequestInterface
 
   public function getParameters();
 
-  public function hasParameters();
-
   public function setFiles(FileCollectionInterface $files);
 
   public function getFiles();
-
-  public function hasFiles();
 
   public function setMethod($method);
 
@@ -37,10 +33,6 @@ interface RequestInterface
   public function getHeaders();
 
   public function setHeaders(HeaderCollectionInterface $headers);
-
-  public function hasHeaders();
-
-  public function hasCookies();
 
   public function getCookies();
 

@@ -3,6 +3,7 @@
 namespace Versionable\Tests\Prospect\Adapter;
 
 use Versionable\Prospect\Cookie\Collection;
+use Versionable\Prospect\Cookie\Cookie;
 
 /**
  * Test class for Collection.
@@ -34,226 +35,49 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     
   }
 
-  /**
-   * @todo Implement testAdd().
-   */
   public function testAdd()
   {
-    // Remove the following lines when you implement this test.
-    $this->markTestIncomplete(
-    'This test has not been implemented yet.'
-    );
+    $cookie = new Cookie('foo', 'bar');
+    $this->object->add($cookie);
+    
+    $elements = $this->readAttribute($this->object, 'elements');
+    $this->assertEquals($cookie, $elements['foo']);
   }
-
-  /**
-   * @todo Implement testRemove().
-   */
-  public function testRemove()
+  
+  public function testIsInvalidTrue()
+  {  
+    $cookie = new Cookie('foo', 'bar');
+    
+    $this->assertTrue($this->object->isValid($cookie));
+    
+  }
+  
+  public function testIsInvalidFalse()
   {
-    // Remove the following lines when you implement this test.
-    $this->markTestIncomplete(
-    'This test has not been implemented yet.'
-    );
+    $this->assertFalse($this->object->isValid(new \stdClass()));
   }
 
-  /**
-   * @todo Implement testGet().
-   */
-  public function testGet()
-  {
-    // Remove the following lines when you implement this test.
-    $this->markTestIncomplete(
-    'This test has not been implemented yet.'
-    );
-  }
-
-  /**
-   * @todo Implement testHas().
-   */
-  public function testHas()
-  {
-    // Remove the following lines when you implement this test.
-    $this->markTestIncomplete(
-    'This test has not been implemented yet.'
-    );
-  }
-
-  /**
-   * @todo Implement test__toString().
-   */
-  public function test__toString()
-  {
-    // Remove the following lines when you implement this test.
-    $this->markTestIncomplete(
-    'This test has not been implemented yet.'
-    );
-  }
-
-  /**
-   * @todo Implement testToString().
-   */
   public function testToString()
   {
-    // Remove the following lines when you implement this test.
-    $this->markTestIncomplete(
-    'This test has not been implemented yet.'
-    );
+    $cookie = new Cookie('foo', 'bar');
+    $cookie2 = new Cookie('hey', 'ho');
+    
+    $this->object->add($cookie);
+    $this->object->add($cookie2);
+    
+    $string = $cookie . ';'. $cookie2;
+    $this->assertEquals($string, $this->object->toString());
   }
 
-  /**
-   * @todo Implement testToArray().
-   */
-  public function testToArray()
-  {
-    // Remove the following lines when you implement this test.
-    $this->markTestIncomplete(
-    'This test has not been implemented yet.'
-    );
-  }
-
-  /**
-   * @todo Implement testLoad().
-   */
-  public function testLoad()
-  {
-    // Remove the following lines when you implement this test.
-    $this->markTestIncomplete(
-    'This test has not been implemented yet.'
-    );
-  }
-
-  /**
-   * @todo Implement testParse().
-   */
   public function testParse()
   {
-    // Remove the following lines when you implement this test.
-    $this->markTestIncomplete(
-    'This test has not been implemented yet.'
-    );
+    $string = 'foo=bar';
+    $cookie = new Cookie('foo', 'bar');
+    
+    $this->object->parse($string);
+    
+    $array = $this->readAttribute($this->object, 'elements');
+    
+    $this->assertEquals($cookie, $array['foo']);
   }
-
-  /**
-   * @todo Implement testRewind().
-   */
-  public function testRewind()
-  {
-    // Remove the following lines when you implement this test.
-    $this->markTestIncomplete(
-    'This test has not been implemented yet.'
-    );
-  }
-
-  /**
-   * @todo Implement testNext().
-   */
-  public function testNext()
-  {
-    // Remove the following lines when you implement this test.
-    $this->markTestIncomplete(
-    'This test has not been implemented yet.'
-    );
-  }
-
-  /**
-   * @todo Implement testCurrent().
-   */
-  public function testCurrent()
-  {
-    // Remove the following lines when you implement this test.
-    $this->markTestIncomplete(
-    'This test has not been implemented yet.'
-    );
-  }
-
-  /**
-   * @todo Implement testKey().
-   */
-  public function testKey()
-  {
-    // Remove the following lines when you implement this test.
-    $this->markTestIncomplete(
-    'This test has not been implemented yet.'
-    );
-  }
-
-  /**
-   * @todo Implement testValid().
-   */
-  public function testValid()
-  {
-    // Remove the following lines when you implement this test.
-    $this->markTestIncomplete(
-    'This test has not been implemented yet.'
-    );
-  }
-
-  /**
-   * @todo Implement testCount().
-   */
-  public function testCount()
-  {
-    // Remove the following lines when you implement this test.
-    $this->markTestIncomplete(
-    'This test has not been implemented yet.'
-    );
-  }
-
-  /**
-   * @todo Implement testSeek().
-   */
-  public function testSeek()
-  {
-    // Remove the following lines when you implement this test.
-    $this->markTestIncomplete(
-    'This test has not been implemented yet.'
-    );
-  }
-
-  /**
-   * @todo Implement testOffsetSet().
-   */
-  public function testOffsetSet()
-  {
-    // Remove the following lines when you implement this test.
-    $this->markTestIncomplete(
-    'This test has not been implemented yet.'
-    );
-  }
-
-  /**
-   * @todo Implement testOffsetExists().
-   */
-  public function testOffsetExists()
-  {
-    // Remove the following lines when you implement this test.
-    $this->markTestIncomplete(
-    'This test has not been implemented yet.'
-    );
-  }
-
-  /**
-   * @todo Implement testOffsetUnset().
-   */
-  public function testOffsetUnset()
-  {
-    // Remove the following lines when you implement this test.
-    $this->markTestIncomplete(
-    'This test has not been implemented yet.'
-    );
-  }
-
-  /**
-   * @todo Implement testOffsetGet().
-   */
-  public function testOffsetGet()
-  {
-    // Remove the following lines when you implement this test.
-    $this->markTestIncomplete(
-    'This test has not been implemented yet.'
-    );
-  }
-
 }
-
-?>
