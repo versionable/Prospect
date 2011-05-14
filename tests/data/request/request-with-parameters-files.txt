@@ -1,5 +1,5 @@
-GET / HTTP/1.1
-Host: httpclient.dev
+POST / HTTP/1.1
+Host: www.versionable.co.uk
 Content-Type: multipart/form-data; boundary=----------------------------!boundary!
 Content-Length: 495
 

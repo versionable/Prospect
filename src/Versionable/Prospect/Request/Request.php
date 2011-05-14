@@ -9,13 +9,10 @@ use Versionable\Prospect\Header\CollectionInterface as HeaderCollectionInterface
 use Versionable\Prospect\Parameter\CollectionInterface as ParameterCollectionInterface;
 
 
-use Versionable\Prospect\Cookie\Collection as CookieCollection;
-use Versionable\Prospect\File\Collection as FileCollection;
-use Versionable\Prospect\Header\Collection as HeaderCollection;
-use Versionable\Prospect\Parameter\Collection as ParameterCollection;
-
-use Versionable\Prospect\Header\ContentType;
-use Versionable\Prospect\Header\Custom;
+//use Versionable\Prospect\Cookie\Collection as CookieCollection;
+//use Versionable\Prospect\File\Collection as FileCollection;
+//use Versionable\Prospect\Header\Collection as HeaderCollection;
+//use Versionable\Prospect\Parameter\Collection as ParameterCollection;
 
 class Request implements RequestInterface
 {
@@ -47,11 +44,11 @@ class Request implements RequestInterface
     {
       $this->setUrl($url);
     }
-    
-    $this->cookies = new CookieCollection();
-    $this->files = new FileCollection();
-    $this->headers = new HeaderCollection();
-      $this->parameters = new ParameterCollection();
+
+    $this->cookies = new \Versionable\Prospect\Cookie\Collection();
+    $this->files = new \Versionable\Prospect\File\Collection();
+    $this->headers = new \Versionable\Prospect\Header\Collection();
+    $this->parameters = new \Versionable\Prospect\Parameter\Collection();
   }
 
   /**
@@ -186,7 +183,7 @@ class Request implements RequestInterface
     {
       return true;
     }
-    
+
     return false;
   }
  

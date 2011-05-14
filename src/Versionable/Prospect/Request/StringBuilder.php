@@ -38,7 +38,7 @@ class StringBuilder
     $this->data = '';
     $this->body = "\r\n";
 
-    if (is_null($this->getRequest()->getUrl()))
+    if (null === $this->getRequest() || null === $this->getRequest()->getUrl())
     {
       throw new \RuntimeException('No getUrl() set for request');
     }
@@ -55,7 +55,7 @@ class StringBuilder
         
     if ($this->getRequest()->isMultipart())
     {
-      $this->getRequest()->getHeaders()->add(new ContentType('multipart/form-data; boundary=' . $this->boundary));
+      $this->getRequest()->getHeaders()->add(new ContentType('multipart/form-data; boundary=' . $this->getBoundary()));
     }
     else
     {
@@ -71,14 +71,23 @@ class StringBuilder
 
     if ($this->getRequest()->isMultipart())
     {
-      $this->addToBody('--'.$this->boundary."--\r\n");
-    }
       
-    $this->getRequest()->getHeaders()->add(new Custom('Content-Length', $this->contentLength));
+      $this->addToBody('--'.$this->boundary."--\r\n");
+    }    
+    
+    if ($this->hasRequestBody())
+    {
+      $this->getRequest()->getHeaders()->add(new Custom('Content-Length', $this->contentLength));
+    }
     
     $this->addToHead($this->getRequest()->getHeaders()->toString());
     
-    return $this->head . $this->body;
+    if ($this->hasRequestBody())
+    {
+      return $this->head . $this->body;
+    }
+    
+    return $this->head;
   }
 
   public function __toString()
@@ -105,7 +114,7 @@ class StringBuilder
     }
   }
   
-  public function getHTTPHeader()
+  protected function getHTTPHeader()
   {
     $this->head = \sprintf("%s %s HTTP/%s\r\n", $this->getRequest()->getMethod(), $this->getRequest()->getUrl()->getPathAndQuery(), $this->getRequest()->getVersion());
     $this->head .= \sprintf("Host: %s\r\n", $this->getRequest()->getUrl()->getHostname());
@@ -158,5 +167,15 @@ class StringBuilder
   protected function addToHead($string)
   {
     $this->head .= $string;
+  }
+  
+  protected function hasRequestBody()
+  {
+    if (in_array($this->getRequest()->getMethod(), array('POST', 'PUT')))
+    {
+      return true;
+    }
+    
+    return false;
   }
 }

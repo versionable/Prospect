@@ -27,7 +27,8 @@ class Socket extends AdapterAbstract implements AdapterInterface
 
     if ($handle)
     {
-      $builder = new StringBuilder($request);
+      $builder = new StringBuilder();
+      $builder->setRequest($request);
       fputs($handle, $builder->toString());
 
       while (false === feof($handle))

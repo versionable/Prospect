@@ -35,9 +35,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     
   }
 
-  /**
-   * @todo Implement testAdd().
-   */
   public function testAdd()
   {
     $parameter = new Parameter('foo', 'bar');
@@ -47,27 +44,21 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     $this->assertEquals($parameter, $elements['foo']);
   }
 
-  /**
-   * @todo Implement test__toString().
-   */
   public function test__toString()
   {
-    // Remove the following lines when you implement this test.
-    $this->markTestIncomplete(
-    'This test has not been implemented yet.'
-    );
+    $this->assertEquals($this->object->toString(), (string)$this->object);
   }
 
-  /**
-   * @todo Implement testToString().
-   */
   public function testToString()
   {
-    // Remove the following lines when you implement this test.
-    $this->markTestIncomplete(
-    'This test has not been implemented yet.'
-    );
+    
+    $parameter = new Parameter('foo', 'bar');
+    $this->object->add($parameter);
+    
+    $parameter = new Parameter('alpha', 'bravo');
+    $this->object->add($parameter);
+    
+    $this->assertEquals('foo=bar&alpha=bravo', $this->object->toString());
   }
-
 
 }
