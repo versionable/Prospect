@@ -4,9 +4,15 @@ namespace Versionable\Prospect\Request;
 
 use Versionable\Prospect\Url\UrlInterface;
 use Versionable\Prospect\Cookie\CollectionInterface as CookieCollectionInterface;
+use Versionable\Prospect\File\CollectionInterface as FileCollectionInterface;
 use Versionable\Prospect\Header\CollectionInterface as HeaderCollectionInterface;
 use Versionable\Prospect\Parameter\CollectionInterface as ParameterCollectionInterface;
-use Versionable\Prospect\File\CollectionInterface as FileCollectionInterface;
+
+
+//use Versionable\Prospect\Cookie\Collection as CookieCollection;
+//use Versionable\Prospect\File\Collection as FileCollection;
+//use Versionable\Prospect\Header\Collection as HeaderCollection;
+//use Versionable\Prospect\Parameter\Collection as ParameterCollection;
 
 class Request implements RequestInterface
 {
@@ -27,6 +33,10 @@ class Request implements RequestInterface
   protected $body = '';
 
   protected $version = 1.1;
+  
+  protected $parts = array();
+  
+  protected $stringBuilder = null;
 
   public function __construct(UrlInterface $url = null)
   {
@@ -34,8 +44,11 @@ class Request implements RequestInterface
     {
       $this->setUrl($url);
     }
-    
-    $this->generateBoundary();
+
+    $this->cookies = new \Versionable\Prospect\Cookie\Collection();
+    $this->files = new \Versionable\Prospect\File\Collection();
+    $this->headers = new \Versionable\Prospect\Header\Collection();
+    $this->parameters = new \Versionable\Prospect\Parameter\Collection();
   }
 
   /**
@@ -66,7 +79,6 @@ class Request implements RequestInterface
     return $this->getBody() != '';
   }
 
-
   /**
    * Returns the body
    *
@@ -75,7 +87,7 @@ class Request implements RequestInterface
    */
   public function getBody()
   {
-    return $this->body . ($this->hasParameters() ? $this->getParameters()->toString() : '');
+    return $this->body;
   }
 
   public function setBody($body)
@@ -89,29 +101,18 @@ class Request implements RequestInterface
   }
 
   public function getParameters()
-  {
+  {    
     return $this->parameters;
-  }
-
-  public function hasParameters()
-  {
-    return is_object($this->parameters);
   }
 
   public function setFiles(FileCollectionInterface $files)
   {
     $this->files = $files;
-    $this->files->setBoundary($this->boundary);
   }
 
   public function getFiles()
-  {
+  {    
     return $this->files;
-  }
-
-  public function hasFiles()
-  {
-    return !\is_null($this->files);
   }
 
   public function getMethod()
@@ -120,7 +121,7 @@ class Request implements RequestInterface
   }
 
   public function getHeaders()
-  {
+  {    
     return $this->headers;
   }
 
@@ -129,18 +130,8 @@ class Request implements RequestInterface
     $this->headers = $headers;
   }
 
-  public function hasHeaders()
-  {
-    return !\is_null($this->headers);
-  }
-
-  public function hasCookies()
-  {
-    return !\is_null($this->cookies);
-  }
-
   public function getCookies()
-  {
+  {    
     return $this->cookies;
   }
 
@@ -185,109 +176,25 @@ class Request implements RequestInterface
   {
     $this->version = $version;
   }
-
-  public function toString()
-  {
-    $data = "";
-    if (is_null($this->url))
-    {
-      return $data;
-    }
-    
-    $data = \sprintf("%s %s HTTP/%s\r\n", $this->getMethod(), $this->url->getPathAndQuery(), $this->getVersion());
-    $data .= \sprintf("Host: %s\r\n", $this->url->getHostname());
-
-    $data .= $this->getHeaderString();
-
-    $body = '';
-    $length = 0;
-
-    $data .= $this->getContentTypeString();
-
-    if($this->hasBody())
-    {
-      $body .= $this->getBody() . "\r\n";
-
-      $length += strlen($body);
-    }
-
-    list($body, $length) = $this->getFilesString($body, $length);
-
-    $data .= "Content-Length: ". $length ."\r\n";
-
-    if (\strlen($body))
-    {
-      $data .= "\r\n". $body;
-    }
-
-    if ($this->hasFiles())
-    {
-      $data .="--$this->boundary--";
-    }
-
-    $data .= "\r\n";
-
-
-    return $data;
-  }
-
-  public function __toString()
-  {
-    return $this->toString();
-  }
   
-  public function getHeaderString()
+  public function isMultipart()
   {
-    $data = '';
-    if ($this->hasHeaders())
+    if (($this->hasBody() || !$this->getParameters()->isEmpty()) && !$this->getFiles()->isEmpty() && $this->isBodySupported())
     {
-      foreach ($this->getHeaders() as $header)
-      {
-        $data .= $header . "\r\n";
-      }
+      return true;
+    }
+
+    return false;
+  }
+ 
+
+  protected function isBodySupported()
+  {
+    if (in_array($this->getMethod(), array('POST', 'PUT')))
+    {
+      return true;
     }
     
-    return $data; 
-  }
-  
-  protected function getContentTypeString()
-  {
-    $data = '';
-    if ($this->hasFiles())
-    {
-      $data .= "Content-type: multipart/form-data, boundary=$this->boundary\r\n";
-    }
-    elseif ($this->hasBody())
-    {
-      $data .= "Content-Type: application/x-www-form-urlencoded\r\n";
-    }
-    
-    return $data;
-  }
-  
-  protected function getFilesString($body, $length)
-  {
-    if ($this->hasFiles())
-    {
-      foreach ($this->getFiles() as $file)
-      {
-
-        $body .= "--$this->boundary\r\n";
-        $body .= sprintf("Content-Disposition: form-data; name=\"%s\"; filename=\"%s\"\r\n", $file->getName(), $file->getValue());
-        $body .= sprintf("Content-Type: %s\r\n\r\n", $file->getType());
-        $content = $file->getContent();
-        $body .= "". \base64_encode($content)."\r\n";
-
-        $length += \strlen($content);
-      }
-    }
-    
-    return array($body, $length);
-  }
-
-  protected function generateBoundary()
-  {
-    srand((double)microtime()*1000000);
-    $this->boundary = "---------------------".substr(md5(rand(0,32000)),0,10);
+    return false;
   }
 }
