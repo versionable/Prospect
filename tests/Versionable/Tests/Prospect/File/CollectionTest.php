@@ -1,8 +1,9 @@
 <?php
 
-namespace Versionable\Tests\Prospect\Cookie;
+namespace Versionable\Tests\Prospect\File;
 
-use Versionable\Prospect\Cookie\Collection;
+use Versionable\Prospect\File\Collection;
+use Versionable\Prospect\File\File;
 
 /**
  * Test class for Collection.
@@ -39,76 +40,24 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
    */
   public function testAdd()
   {
-    // Remove the following lines when you implement this test.
-    $this->markTestIncomplete(
-    'This test has not been implemented yet.'
-    );
-  }
-
-  /**
-   * @todo Implement testRemove().
-   */
-  public function testRemove()
-  {
-    // Remove the following lines when you implement this test.
-    $this->markTestIncomplete(
-    'This test has not been implemented yet.'
-    );
-  }
-
-  /**
-   * @todo Implement testGet().
-   */
-  public function testGet()
-  {
-    // Remove the following lines when you implement this test.
-    $this->markTestIncomplete(
-    'This test has not been implemented yet.'
-    );
-  }
-
-  /**
-   * @todo Implement testHas().
-   */
-  public function testHas()
-  {
-    // Remove the following lines when you implement this test.
-    $this->markTestIncomplete(
-    'This test has not been implemented yet.'
-    );
-  }
-
-  /**
-   * @todo Implement test__toString().
-   */
-  public function test__toString()
-  {
-    // Remove the following lines when you implement this test.
-    $this->markTestIncomplete(
-    'This test has not been implemented yet.'
-    );
+    $file = new File('foo', 'bar', 'text/plain');
+    $this->object->add($file);
+    
+    $elements = $this->readAttribute($this->object, 'elements');
+    $this->assertEquals($file, $elements['foo']);
   }
 
   /**
    * @todo Implement testToString().
    */
   public function testToString()
-  {
-    // Remove the following lines when you implement this test.
-    $this->markTestIncomplete(
-    'This test has not been implemented yet.'
-    );
-  }
-
-  /**
-   * @todo Implement testToArray().
-   */
-  public function testToArray()
-  {
-    // Remove the following lines when you implement this test.
-    $this->markTestIncomplete(
-    'This test has not been implemented yet.'
-    );
+  {    
+    $this->object->add(new File('image1', __DIR__ . '/../../../../data/file/file1.txt', 'text/plain'));
+    $this->object->add(new File('image2', __DIR__ . '/../../../../data/file/file2.txt', 'text/plain'));
+    
+    $string = file_get_contents(__DIR__ . '/../../../../data/file/string.txt');
+    
+    $this->assertEquals($string, $this->object->toString());
   }
 
   /**
@@ -116,133 +65,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
    */
   public function testSetBoundary()
   {
-    // Remove the following lines when you implement this test.
-    $this->markTestIncomplete(
-    'This test has not been implemented yet.'
-    );
-  }
-
-  /**
-   * @todo Implement testRewind().
-   */
-  public function testRewind()
-  {
-    // Remove the following lines when you implement this test.
-    $this->markTestIncomplete(
-    'This test has not been implemented yet.'
-    );
-  }
-
-  /**
-   * @todo Implement testNext().
-   */
-  public function testNext()
-  {
-    // Remove the following lines when you implement this test.
-    $this->markTestIncomplete(
-    'This test has not been implemented yet.'
-    );
-  }
-
-  /**
-   * @todo Implement testCurrent().
-   */
-  public function testCurrent()
-  {
-    // Remove the following lines when you implement this test.
-    $this->markTestIncomplete(
-    'This test has not been implemented yet.'
-    );
-  }
-
-  /**
-   * @todo Implement testKey().
-   */
-  public function testKey()
-  {
-    // Remove the following lines when you implement this test.
-    $this->markTestIncomplete(
-    'This test has not been implemented yet.'
-    );
-  }
-
-  /**
-   * @todo Implement testValid().
-   */
-  public function testValid()
-  {
-    // Remove the following lines when you implement this test.
-    $this->markTestIncomplete(
-    'This test has not been implemented yet.'
-    );
-  }
-
-  /**
-   * @todo Implement testCount().
-   */
-  public function testCount()
-  {
-    // Remove the following lines when you implement this test.
-    $this->markTestIncomplete(
-    'This test has not been implemented yet.'
-    );
-  }
-
-  /**
-   * @todo Implement testSeek().
-   */
-  public function testSeek()
-  {
-    // Remove the following lines when you implement this test.
-    $this->markTestIncomplete(
-    'This test has not been implemented yet.'
-    );
-  }
-
-  /**
-   * @todo Implement testOffsetSet().
-   */
-  public function testOffsetSet()
-  {
-    // Remove the following lines when you implement this test.
-    $this->markTestIncomplete(
-    'This test has not been implemented yet.'
-    );
-  }
-
-  /**
-   * @todo Implement testOffsetExists().
-   */
-  public function testOffsetExists()
-  {
-    // Remove the following lines when you implement this test.
-    $this->markTestIncomplete(
-    'This test has not been implemented yet.'
-    );
-  }
-
-  /**
-   * @todo Implement testOffsetUnset().
-   */
-  public function testOffsetUnset()
-  {
-    // Remove the following lines when you implement this test.
-    $this->markTestIncomplete(
-    'This test has not been implemented yet.'
-    );
-  }
-
-  /**
-   * @todo Implement testOffsetGet().
-   */
-  public function testOffsetGet()
-  {
-    // Remove the following lines when you implement this test.
-    $this->markTestIncomplete(
-    'This test has not been implemented yet.'
-    );
+    $boundary = 'someboundarytext';
+    $this->object->setBoundary($boundary);
+    $this->assertEquals($boundary, $this->readAttribute($this->object, 'boundary'));
   }
 
 }
-
-?>

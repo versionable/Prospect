@@ -1,0 +1,14 @@
+POST / HTTP/1.1
+Host: httpclient.dev
+Authorization: Basic c3R1YXJ0OnN0dWFydA==
+Content-Type: multipart/form-data; boundary----------------------------85f66a7cda62
+Content-Length: 269
+
+------------------------------85f66a7cda62
+Content-Disposition: form-data; name="file2"; filename="/Users/stuart/NetBeansProjects/Prospect/doc/../tests/data/file/file2.txt"
+Content-Type: text/plain
+
+This is more text.
+------------------------------85f66a7cda62--
+
+

@@ -70,16 +70,6 @@ class FileTest extends \PHPUnit_Framework_TestCase
       $this->assertEquals(file_get_contents($this->filename), $this->object->getContent());
     }
 
-    public function test__toString()
-    {
-      $this->assertEquals($this->object->getContent(), (string)$this->object);
-    }
-
-    public function testToString()
-    {
-      $this->assertEquals($this->object->getContent(), $this->object->toString());
-    }
-
     public function testGetType()
     {
       $this->assertEquals($this->readAttribute($this->object, 'type'), $this->object->getType());

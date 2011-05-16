@@ -3,6 +3,8 @@
 namespace Versionable\Tests\Prospect\Request;
 
 use Versionable\Prospect\Request\Request;
+use Versionable\Prospect\Parameter\Parameter;
+use Versionable\Prospect\File\File;
 
 /**
  * Test class for Request.
@@ -79,12 +81,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
       $this->object->setBody('body');
       $body = $this->readAttribute($this->object, 'body');
       
-      $string = 'a=b';
-      $parameters = $this->getMock('Versionable\Prospect\Parameter\CollectionInterface');
-      $parameters->expects($this->any())->method('toString')->will($this->returnValue($string));
-      
-      $this->object->setParameters($parameters);
-      $this->assertEquals($body . $string, $this->object->getBody());
+      $this->assertEquals($body, $this->object->getBody());
     }
 
     /**
@@ -119,20 +116,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
       $this->assertEquals($this->object->getParameters(), $this->readAttribute($this->object, 'parameters'));
     }
 
-    /**
-     * @todo Implement testHasParameters().
-     */
-    public function testHasParametersTrue()
-    {
-      $parameters = $this->getMock('Versionable\Prospect\Parameter\CollectionInterface');
-      $this->object->setParameters($parameters);
-      $this->assertTrue($this->object->hasParameters());
-    }
-    
-    public function testHasParametersFalse()
-    {
-      $this->assertFalse($this->object->hasParameters());
-    }
 
     /**
      * @todo Implement testSetFiles().
@@ -152,18 +135,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
       $files = $this->getMock('Versionable\Prospect\File\CollectionInterface');
       $this->object->setFiles($files);
       $this->assertEquals($this->object->getFiles(), $this->readAttribute($this->object, 'files'));
-    }
-
-    public function testHasFilesTrue()
-    {
-      $files = $this->getMock('Versionable\Prospect\File\CollectionInterface');
-      $this->object->setFiles($files);
-      $this->assertTrue($this->object->hasFiles());
-    }
-    
-    public function testHasFilesFalse()
-    {
-      $this->assertFalse($this->object->hasFiles());
     }
 
     /**
@@ -204,18 +175,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
       $this->assertEquals($this->object->getHeaders(), $this->readAttribute($this->object, 'headers'));
     }
 
-    public function testHasHeadersTrue()
-    {
-      $headers = $this->getMock('Versionable\Prospect\Header\CollectionInterface');
-      $this->object->setHeaders($headers);
-      $this->assertTrue($this->object->hasHeaders());
-    }
-    
-    public function testHasHeadersFalse()
-    {
-      $this->assertFalse($this->object->hasHeaders());
-    }
-
     public function testSetCookies()
     {
       $cookies = $this->getMock('Versionable\Prospect\Cookie\CollectionInterface');
@@ -228,19 +187,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
       $cookies = $this->getMock('Versionable\Prospect\Cookie\CollectionInterface');
       $this->object->setCookies($cookies);
       $this->assertEquals($this->object->getCookies(), $this->readAttribute($this->object, 'cookies'));
-    }
-
-    public function testHasCookiesTrue()
-    {
-      $cookies = $this->getMock('Versionable\Prospect\Cookie\CollectionInterface');
-      $this->object->setCookies($cookies);
-      $this->assertTrue($this->object->hasCookies());
-    }
-    
-    public function testHasCookiesFalse()
-    {
-      $this->assertFalse($this->object->hasCookies());
-    }    
+    }   
 
     /**
      * @todo Implement testGetPort().
@@ -289,37 +236,4 @@ class RequestTest extends \PHPUnit_Framework_TestCase
       $this->assertEquals($version, $this->readAttribute($this->object, 'version'));
     }
 
-    /**
-     * @todo Implement testToString().
-     */
-    public function testToString()
-    {
-      
-      $url = $this->getMock('Versionable\Prospect\Url\UrlInterface', array(), array('http://testing.com'));
-      $url->expects($this->any())->method('getHostname')->will($this->returnValue('testing.com'));
-      $url->expects($this->any())->method('getPathAndQuery')->will($this->returnValue('/'));
-      
-      $headers = new \Versionable\Prospect\Header\Collection;
-      
-      $close = new \Versionable\Prospect\Header\Connection('Close');
-      $type = new \Versionable\Prospect\Header\ContentType('text/html');
-      
-      $headers->add($close);
-      $headers->add($type);
-      
-      $this->object = new Request($url);
-      
-      $this->object->setHeaders($headers);
-      
-      $request = $string = file_get_contents(__DIR__ . '/../../../../data/request/request.txt');
-      $this->assertEquals($request, $this->object->toString());
-    }
-
-    /**
-     * @todo Implement test__toString().
-     */
-    public function test__toString()
-    {
-      $this->assertEquals($this->object->toString(), (string)$this->object);
-    }
 }

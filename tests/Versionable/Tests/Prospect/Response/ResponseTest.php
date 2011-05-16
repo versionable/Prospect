@@ -52,7 +52,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
       $this->assertEquals('no-cache', $headers->get('Cache-Control')->getValue());
       
       $cookies = $this->object->getCookies();
-      $this->assertTrue($cookies->has('_SESS'));
+      $this->assertTrue($cookies->containsKey('_SESS'));
     }
 
     /**
