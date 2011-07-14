@@ -11,6 +11,7 @@ It has object orientated API making it easy to construct both simple and more co
 The library supports such features as cookies, headers and files.
 
 Features supported out of the box:
+
 * Highly tested code base
 * Object orientated API
 * Ability to send HTTP headers
@@ -27,6 +28,7 @@ Usage
 -----
 
 Performing a simple get request
+
 ```php
     include 'src/Versionable/Prospect/Request/Request.php';
     include 'src/Versionable/Prospect/Url/Url.php';
