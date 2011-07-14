@@ -27,8 +27,7 @@ Usage
 -----
 
 Performing a simple get request
-```php
-<?php
+```php<?php
 
   include 'src/Versionable/Prospect/Request/Request.php';
   include 'src/Versionable/Prospect/Url/Url.php';
@@ -47,5 +46,4 @@ Performing a simple get request
   
   $response = $client>send($request, new Response());
 
-?>
-```
+?>```
