@@ -44,10 +44,9 @@ class Curl extends AdapterAbstract implements AdapterInterface
 
   public function call(RequestInterface $request, ResponseInterface $response)
   {
-
     $this->initialize();
-
-    \curl_setopt($this->handle, CURLOPT_URL, $request->getUrl()->getHostname());
+   
+    \curl_setopt($this->handle, CURLOPT_URL, $request->getUrl());
 
     if ($request->getMethod() == 'GET')
     {
@@ -120,6 +119,4 @@ class Curl extends AdapterAbstract implements AdapterInterface
     
     return $response;
   }
-  
-
 }
