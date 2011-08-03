@@ -31,7 +31,8 @@ class CurlFile extends Curl
     {
         $this->initialize();
         $this->createOutFile($response);
-
+        
+        
         \curl_setopt($this->handle, CURLOPT_URL, $request->getUrl());
 
         if ($request->getMethod() == 'GET') {
@@ -43,36 +44,46 @@ class CurlFile extends Curl
         }
 
         $post = array();
-        if ($request->hasParameters()) {
-            foreach ($request->getParameters() as $param) {
-                $post[$param->getName()] = $param->getValue();
+        $files = array();
+
+        foreach ($request->getParameters() as $param) {
+            $post[$param->getName()] = $param->getValue();
+        }
+
+        foreach ($request->getFiles() as $file) {
+            $files[$file->getName()] = '@' . $file->getValue() . ';type=' . $file->getType();
+        }
+
+        if ($request->getMethod() == 'POST' || $request->getMethod() == 'PUT') { 
+            // Files and any parameters - note body is not used
+            if (!empty($files)) {
+                $body = array_merge($post, $files);
+            } elseif (!empty($post)) {
+                $body = http_build_query($post);
+            } else {
+                $body = $request->getBody();
             }
+
+            \curl_setopt ($this->handle, \CURLOPT_POSTFIELDS, $body);
         }
 
-        if ($request->hasFiles()) {
-            foreach ($request->getFiles() as $file) {
-                $post[$file->getName()] = '@' . $file->getValue() . ';type=' . $file->getType();
-            }
-        }
-
-        if ($request->getMethod() == 'POST' || $request->getMethod() == 'PUT') {
-            \curl_setopt ($this->handle, \CURLOPT_POSTFIELDS, $post);
-        }
-
-        if ($request->hasCookies()) {
+        if (!$request->getCookies()->isEmpty()) {
             \curl_setopt($this->handle, \CURLOPT_COOKIE, $request->getCookies()->toString());
         }
 
-        if ($request->hasHeaders()) {
+        if (!$request->getHeaders()->isEmpty()) {
             \curl_setopt($this->handle, \CURLOPT_HTTPHEADER, $request->getHeaders()->toArray());
         }
 
         \curl_setopt($this->handle, \CURLOPT_PORT, $request->getPort());
-
         \curl_setopt($this->handle, \CURLOPT_FILE, $this->fileHandle);
 
         $returned = \curl_exec($this->handle);
 
+        if (!$returned) {
+            throw new \RuntimeException('Error connecting to host: ' . $request->getUrl()->getHostname());
+        }
+    
         $info = \curl_getinfo($this->handle);
 
         \fclose($this->fileHandle);

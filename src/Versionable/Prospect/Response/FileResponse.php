@@ -2,7 +2,7 @@
 
 namespace Versionable\Prospect\Response;
 
-class File extends Response
+class FileResponse extends Response implements FileResponseInterface
 {
   /**
    * @var string Filename
