@@ -15,11 +15,11 @@ class Collection extends Map implements CollectionInterface
   {
     $class_name = 'Versionable\Prospect\Header\\' . \str_replace(' ' , '', \ucwords(\str_replace('-', ' ', $name)));
 
-    try
+    if (class_exists($class_name))
     {
       $header = new $class_name($value);
     }
-    catch(\RuntimeException $e)
+    else
     {
       $header = new Custom($name, $value);
     }
