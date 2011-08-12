@@ -1,177 +1,290 @@
 <?php
 
+/*
+ * This file is part of the Versionable Prospect package.
+ *
+ * (c) Stuart Lowes <stuart.lowes@versionable.co.uk>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Versionable\Prospect\Cookie;
 
 class Cookie implements CookieInterface
 {
+    /**
+     * Sets a cookie.
+     *
+     * @param  string  $name     The cookie name
+     * @param  string  $value    The value of the cookie
+     * @param  string  $expires  The time the cookie expires
+     * @param  string  $path     The path on the server in which the cookie will be available on
+     * @param  string  $domain   The domain that the cookie is available
+     * @param  bool    $secure   Indicates that the cookie should only be transmitted over a secure HTTPS connection from the client
+     * @param  bool    $httponly The cookie httponly flag
+     */
+    const DATE_FORMAT = 'D, d-M-Y H:i:s T';
 
-  /**
-   * Sets a cookie.
-   *
-   * @param  string  $name     The cookie name
-   * @param  string  $value    The value of the cookie
-   * @param  string  $expires  The time the cookie expires
-   * @param  string  $path     The path on the server in which the cookie will be available on
-   * @param  string  $domain   The domain that the cookie is available
-   * @param  bool    $secure   Indicates that the cookie should only be transmitted over a secure HTTPS connection from the client
-   * @param  bool    $httponly The cookie httponly flag
-   */
+    /**
+     * The Cookie name
+     * @var string
+     */
+    private $name;
+    /**
+     * The Cookie value
+     * @var string
+     */
+    private $value;
+    /**
+     * The date when the Cookie is no longer valid
+     * @var \DateTime
+     */
+    private $expires = null;
+    /**
+     * Cookie path
+     * @var string
+     */
+    private $path = '/';
+    /**
+     * Cookie domain
+     * @var string
+     */
+    private $domain = '';
+    /**
+     * Determines whether a Cookie is marked as secure
+     * @var boolean
+     */
+    private $secure = false;
+    /**
+     * Determines whether a Cookie should be marked as httponly
+     * @var type
+     */
+    private $httponly = false;
 
-  const DATE_FORMAT = 'D, d-M-Y H:i:s T';
-
-  protected $name;
-  protected $value;
-  protected $expires = null;
-  protected $path = '/';
-  protected $domain = '';
-  protected $secure = false;
-  protected $httponly = false;
-
-  public function  __construct($name, $value, \DateTime $expires = null, $path = '/', $domain = null, $secure = false, $httponly = false)
-  {
-    $this->setName($name);
-    $this->setValue($value);
-    
-    if(false === \is_null($expires))
+    /**
+     * Constructor
+     *
+     * @param string $name
+     * @param string $value
+     * @param \DateTime $expires
+     * @param string $path
+     * @param string $domain
+     * @param boolean $secure
+     * @param boolean $httponly
+     */
+    public function __construct($name, $value, \DateTime $expires = null, $path = '/', $domain = null, $secure = false, $httponly = false)
     {
-      $this->setExpires($expires);
-    }
-    $this->setPath($path);
-    $this->setDomain($domain);
-    $this->setSecure($secure);
-    $this->setHttpOnly($httponly);
-  }
-  
-  public function parse($string)
-  {
-    $parts = \explode('; ', $string);
-
-    for($i=0; $i < count($parts); $i++)
-    {
-      if(false !== \strpos($parts[$i], '='))
-      {
-        list($name, $value) = explode('=', $parts[$i]);
-      }
-      else
-      {
-        $name = \str_replace(';', '', $parts[$i]);
-        $value = true;
-      }
-
-      if ($i==0)
-      {
         $this->setName($name);
         $this->setValue($value);
-      }
-      else
-      {
-        if($name === 'expires')
-        {
-          $value = new \DateTime($value);
+
+        if (false === \is_null($expires)) {
+            $this->setExpires($expires);
+        }
+        $this->setPath($path);
+        $this->setDomain($domain);
+        $this->setSecure($secure);
+        $this->setHttpOnly($httponly);
+    }
+
+    /**
+     * Parses a Cookie string
+     * @param type $string
+     * @return boolean
+     */
+    public function parse($string)
+    {
+        /**
+         * @todo validate the cookie string before trying to process it
+         */
+        $parts = \explode('; ', $string);
+
+        for ($i = 0; $i < count($parts); $i++) {
+            if (false !== \strpos($parts[$i], '=')) {
+                list($name, $value) = explode('=', $parts[$i]);
+            } else {
+                $name = \str_replace(';', '', $parts[$i]);
+                $value = true;
+            }
+
+            if ($i == 0) {
+                $this->setName($name);
+                $this->setValue($value);
+            } else {
+                if ($name === 'expires') {
+                    $value = new \DateTime($value);
+                }
+
+                $map = array(
+                    'expires' => 'setExpires',
+                    'path' => 'setPath',
+                    'domain' => 'setDomain',
+                    'secure' => 'setSecure',
+                    'httponly' => 'setHttpOnly'
+                );
+                $this->$map[$name]($value);
+            }
         }
 
-        $map = array(
-          'expires'   => 'setExpires',
-          'path'      => 'setPath',
-          'domain'    => 'setDomain',
-          'secure'    => 'setSecure',
-          'httponly'  => 'setHttpOnly'
-
-        );
-        $this->$map[$name]($value);          
-      }      
+        return true;
     }
-  }
 
-  public function __toString()
-  {
-    return $this->toString();
-  }
-
-  public function  toString()
-  {
-    return sprintf('%s=%s', $this->name, $this->value);
-  }
-
-  public function getName()
-  {
-    return $this->name;
-  }
-
-  public function setName($name)
-  {
-    $this->name = $name;
-  }
-
-  public function getValue()
-  {
-    return $this->value;
-  }
-
-  public function setValue($value)
-  {
-    $this->value = $value;
-  }
-
-  public function getExpires()
-  {
-    return $this->expires;
-  }
-
-  public function setExpires(\DateTime $expires)
-  {
-    $this->expires = $expires;
-  }
-
-  public function hasExpired()
-  {
-    if ($this->expires instanceof \DateTime)
+    /**
+     * Returns a HTTP formatted Cookie string
+     * @return string
+     */
+    public function __toString()
     {
-      $now = new \DateTime();
-
-      return ($now > $this->expires);
+        return $this->toString();
     }
 
-    return false;
-  }
+    /**
+     * Returns a HTTP formatted Cookie string
+     * @return string
+     */
+    public function toString()
+    {
+        return sprintf('%s=%s', $this->name, $this->value);
+    }
 
-  public function getPath()
-  {
-    return $this->path;
-  }
+    /**
+     * Returns the name of the cookie
+     * @return type
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
 
-  public function setPath($path)
-  {
-    $this->path = empty($path) ? '/' : $path;
-  }
+    /**
+     * Sets the name of the Cookie
+     * @param type $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
 
-  public function getDomain()
-  {
-    return $this->domain;
-  }
+    /**
+     * Returns the value of the Cookie
+     * @return type
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
 
-  public function setDomain($domain)
-  {
-    $this->domain = $domain;
-  }
+    /**
+     * Sets the value of the Cookie
+     * @param type $value
+     */
+    public function setValue($value)
+    {
+        $this->value = $value;
+    }
 
-  public function isSecure()
-  {
-    return $this->secure;
-  }
+    /**
+     * Returns the expires date
+     * @return \DateTime
+     */
+    public function getExpires()
+    {
+        return $this->expires;
+    }
 
-  public function setSecure($secure)
-  {
-    $this->secure = (boolean)$secure;
-  }
+    /**
+     * Sets the expires date
+     * @param \DateTime $expires
+     */
+    public function setExpires(\DateTime $expires)
+    {
+        $this->expires = $expires;
+    }
 
-  public function isHttpOnly()
-  {
-    return $this->httponly;
-  }
+    /**
+     * Returns whether the Cookie has expired
+     * @return boolean
+     */
+    public function hasExpired()
+    {
+        if ($this->expires instanceof \DateTime) {
+            $now = new \DateTime();
 
-  public function setHttpOnly($httponly)
-  {
-    $this->httponly = (boolean)$httponly;
-  }
+            return ($now > $this->expires);
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns the path
+     * @return string
+     */
+    public function getPath()
+    {
+        return $this->path;
+    }
+
+    /**
+     * Sets the Cookie path
+     * @param string $path
+     */
+    public function setPath($path)
+    {
+        $this->path = empty($path) ? '/' : $path;
+    }
+
+    /**
+     * Gets the Cookie domain
+     * @return string
+     */
+    public function getDomain()
+    {
+        return $this->domain;
+    }
+
+    /**
+     * Sets the Cookie domain
+     * @param string $domain
+     */
+    public function setDomain($domain)
+    {
+        $this->domain = $domain;
+    }
+
+    /**
+     * Returns whether the Cookie is marked as secure
+     * @return boolean
+     */
+    public function isSecure()
+    {
+        return $this->secure;
+    }
+
+    /**
+     * Sets whether a cookie is marked as secure
+     * @param boolean $secure
+     */
+    public function setSecure($secure)
+    {
+        $this->secure = (boolean) $secure;
+    }
+
+    /**
+     * Returns whether the Cookie is marked as secure
+     * @return boolean
+     */
+    public function isHttpOnly()
+    {
+        return $this->httponly;
+    }
+
+    /**
+     * Sets whether a Cookie is marked as secure
+     * @param boolean $httponly
+     */
+    public function setHttpOnly($httponly)
+    {
+        $this->httponly = (boolean) $httponly;
+    }
 }

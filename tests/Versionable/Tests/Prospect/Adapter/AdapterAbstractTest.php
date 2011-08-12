@@ -10,41 +10,38 @@ use Versionable\Prospect\Adapter\AdapterAbstract;
  */
 class AdapterAbstractTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var AdapterAbstract
+     */
+    protected $object;
 
-  /**
-   * @var AdapterAbstract
-   */
-  protected $object;
+    /**
+     * Sets up the fixture, for example, opens a network connection.
+     * This method is called before a test is executed.
+     */
+    protected function setUp()
+    {
+        $this->object = $this->getMockForAbstractClass('Versionable\Prospect\Adapter\AdapterAbstract');
+    }
 
-  /**
-   * Sets up the fixture, for example, opens a network connection.
-   * This method is called before a test is executed.
-   */
-  protected function setUp()
-  {
-    $this->object = $this->getMockForAbstractClass('Versionable\Prospect\Adapter\AdapterAbstract');
-  }
+    /**
+     * Tears down the fixture, for example, closes a networÏk connection.
+     * This method is called after a test is executed.
+     */
+    protected function tearDown()
+    {
+        
+    }
 
-  /**
-   * Tears down the fixture, for example, closes a network connection.
-   * This method is called after a test is executed.
-   */
-  protected function tearDown()
-  {
-    
-  }
+    /**
+     * @todo Implement testSetOption().
+     */
+    public function testSetOption()
+    {
+        $this->object->setOption('foo', 'bar');
 
-  /**
-   * @todo Implement testSetOption().
-   */
-  public function testSetOption()
-  {
-    $this->object->setOption('foo', 'bar');
-    
-    $attrs = $this->readAttribute($this->object, 'options');
-    
-    $this->assertEquals('bar', $attrs['foo']);
-  }
+
+        $this->assertEquals('bar', $this->object->getOption('foo'));
+    }
 
 }
-

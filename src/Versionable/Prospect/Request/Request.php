@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Versionable Prospect package.
+ *
+ * (c) Stuart Lowes <stuart.lowes@versionable.co.uk>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Versionable\Prospect\Request;
 
 use Versionable\Prospect\Url\UrlInterface;
@@ -33,9 +42,9 @@ class Request implements RequestInterface
   protected $body = '';
 
   protected $version = 1.1;
-  
+
   protected $parts = array();
-  
+
   protected $stringBuilder = null;
 
   public function __construct(UrlInterface $url = null)
@@ -101,7 +110,7 @@ class Request implements RequestInterface
   }
 
   public function getParameters()
-  {    
+  {
     return $this->parameters;
   }
 
@@ -111,7 +120,7 @@ class Request implements RequestInterface
   }
 
   public function getFiles()
-  {    
+  {
     return $this->files;
   }
 
@@ -121,7 +130,7 @@ class Request implements RequestInterface
   }
 
   public function getHeaders()
-  {    
+  {
     return $this->headers;
   }
 
@@ -131,7 +140,7 @@ class Request implements RequestInterface
   }
 
   public function getCookies()
-  {    
+  {
     return $this->cookies;
   }
 
@@ -176,7 +185,7 @@ class Request implements RequestInterface
   {
     $this->version = $version;
   }
-  
+
   public function isMultipart()
   {
     if ($this->hasContent() && false === $this->getFiles()->isEmpty() && $this->isBodySupported())
@@ -186,14 +195,14 @@ class Request implements RequestInterface
 
     return false;
   }
-  
+
   protected function hasContent()
   {
     if ($this->hasBody() || !$this->getParameters()->isEmpty())
     {
         return true;
     }
-    
+
     return false;
   }
 
@@ -205,7 +214,7 @@ class Request implements RequestInterface
     {
       return true;
     }
-    
+
     return false;
   }
 }
