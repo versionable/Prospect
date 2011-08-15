@@ -23,7 +23,7 @@ class Client implements ClientInterface
 
      * @var AdapterInterface
      */
-    protected $adapter = null;
+    private $adapter = null;
 
     /**
      * Constructor
