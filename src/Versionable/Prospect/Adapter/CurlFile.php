@@ -4,10 +4,6 @@ namespace Versionable\Prospect\Adapter;
 
 use Versionable\Prospect\Request\RequestInterface;
 use Versionable\Prospect\Response\ResponseInterface;
-use Versionable\Prospect\Parameter\FileIterface;
-use Versionable\Prospect\Header\Header;
-use Versionable\Prospect\Header\Collection as HeaderCollection;
-use Versionable\Prospect\Cookie\Collection as CookieCollection;
 
 class CurlFile extends Curl
 {
@@ -43,27 +39,37 @@ class CurlFile extends Curl
         }
 
         $post = array();
-        if ($request->hasParameters()) {
-            foreach ($request->getParameters() as $param) {
-                $post[$param->getName()] = $param->getValue();
-            }
+        $files = array();
+        
+        foreach ($request->getParameters() as $param) {
+            $post[$param->getName()] = $param->getValue();
         }
 
-        if ($request->hasFiles()) {
-            foreach ($request->getFiles() as $file) {
-                $post[$file->getName()] = '@' . $file->getValue() . ';type=' . $file->getType();
+        foreach ($request->getFiles() as $file) {
+            $files[$file->getName()] = '@' . $file->getValue() . ';type=' . $file->getType();
+        }
+        
+        if ($request->getMethod() == 'POST' || $request->getMethod() == 'PUT') {
+            if (!empty($files)) {
+                $body = array_merge($post, $files);
+            } elseif (!empty($post)) {
+                $body = \http_build_query($post);
+            } else {
+                $body = $request->getBody();
             }
+            
+            \curl_setopt($this->handle, \CURLOPT_POSTFIELDS, $body);
         }
 
         if ($request->getMethod() == 'POST' || $request->getMethod() == 'PUT') {
             \curl_setopt ($this->handle, \CURLOPT_POSTFIELDS, $post);
         }
 
-        if ($request->hasCookies()) {
+        if (!$request->getCookies()->isEmpty()) {
             \curl_setopt($this->handle, \CURLOPT_COOKIE, $request->getCookies()->toString());
         }
 
-        if ($request->hasHeaders()) {
+        if (!$request->getHeaders()->isEmpty()) {
             \curl_setopt($this->handle, \CURLOPT_HTTPHEADER, $request->getHeaders()->toArray());
         }
 
