@@ -38,22 +38,19 @@ class Curl extends AdapterAbstract implements AdapterInterface
    */
   public function call(RequestInterface $request, ResponseInterface $response)
   {
-
-    $this->initialize();
-
-    \curl_setopt($this->handle, CURLOPT_URL, $request->getUrl()->getHostname());
+    $this->setOption(CURLOPT_URL, $request->getUrl());
 
     if ($request->getMethod() == 'GET')
     {
-      \curl_setopt($this->handle, \CURLOPT_HTTPGET, true);
+      $this->setOption(\CURLOPT_HTTPGET, true);
     }
     elseif ($request->getMethod() == 'POST')
     {
-      \curl_setopt($this->handle, \CURLOPT_POST, true);
+      $this->setOption(\CURLOPT_POST, true);
     }
     else
     {
-      \curl_setopt($this->handle, \CURLOPT_CUSTOMREQUEST, $request->getMethod());
+      $this->setOption(\CURLOPT_CUSTOMREQUEST, $request->getMethod());
     }
 
     $post = array();
@@ -88,22 +85,23 @@ class Curl extends AdapterAbstract implements AdapterInterface
         $body = $request->getBody();
       }
 
-      \curl_setopt ($this->handle, \CURLOPT_POSTFIELDS, $body);
+      $this->setOption(\CURLOPT_POSTFIELDS, $body);
     }
 
     if (!$request->getCookies()->isEmpty())
     {
-      \curl_setopt($this->handle, \CURLOPT_COOKIE, $request->getCookies()->toString());
+      $this->setOption(\CURLOPT_COOKIE, $request->getCookies()->toString());
     }
 
     if (!$request->getHeaders()->isEmpty())
     {
-      \curl_setopt($this->handle, \CURLOPT_HTTPHEADER, $request->getHeaders()->toArray());
+      $this->setOption(\CURLOPT_HTTPHEADER, $request->getHeaders()->toArray());
     }
 
-    \curl_setopt($this->handle, \CURLOPT_PORT, $request->getPort());
+    $this->setOption(\CURLOPT_PORT, $request->getPort());
 
-    $returned = \curl_exec($this->handle);
+    $this->initialize();
+    $returned = \curl_exec($this->getHandle());
 
     if (!$returned)
     {
@@ -115,9 +113,18 @@ class Curl extends AdapterAbstract implements AdapterInterface
     return $response;
   }
 
-  private function initialize()
+  public function getHandle() {
+      return $this->handle;
+  }
+
+  public function setHandle($handle)
   {
-    $this->handle = curl_init();
+      $this->handle = $handle;
+  }
+
+  protected function initialize()
+  {
+    $this->setHandle(\curl_init());
     $this->setOption(\CURLOPT_RETURNTRANSFER, true);
     $this->setOption(\CURLOPT_NOBODY, null);
     $this->setOption(\CURLOPT_FOLLOWLOCATION, true);
@@ -126,7 +133,7 @@ class Curl extends AdapterAbstract implements AdapterInterface
 
     foreach($this->getOptions() as $name => $value)
     {
-      \curl_setopt($this->handle, $name, $value);
+      $this->setOption($name, $value);
     }
   }
 }

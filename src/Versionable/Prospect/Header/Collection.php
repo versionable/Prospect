@@ -32,7 +32,7 @@ class Collection extends Map implements CollectionInterface
      */
     public function parse($name, $value)
     {
-        $class_name = 'Versionable\Prospect\Header\\' . \str_replace(' ', '', \ucwords(\str_replace('-', ' ', $name)));
+        $class_name = '\Versionable\Prospect\Header\\' . \str_replace(' ', '', \ucwords(\str_replace('-', ' ', $name)));
 
         if (class_exists($class_name)) {
             $header = new $class_name($value);
