@@ -88,16 +88,18 @@ class Cookie implements CookieInterface
     }
 
     /**
-     * Parses a Cookie string
+     * Parses a raw Cookie string
      * @param type $string
-     * @return boolean
+     * @return Cookie
      */
-    public function parse($string)
+    public static function parse($string)
     {
         /**
          * @todo validate the cookie string before trying to process it
          */
         $parts = \explode('; ', $string);
+
+
 
         for ($i = 0; $i < count($parts); $i++) {
             if (false !== \strpos($parts[$i], '=')) {
@@ -108,8 +110,7 @@ class Cookie implements CookieInterface
             }
 
             if ($i == 0) {
-                $this->setName($name);
-                $this->setValue($value);
+                $cookie = new self($name, $value);
             } else {
                 if ($name === 'expires') {
                     $value = new \DateTime($value);
@@ -122,11 +123,11 @@ class Cookie implements CookieInterface
                     'secure' => 'setSecure',
                     'httponly' => 'setHttpOnly'
                 );
-                $this->$map[$name]($value);
+                $cookie->$map[$name]($value);
             }
         }
 
-        return true;
+        return $cookie;
     }
 
     /**
