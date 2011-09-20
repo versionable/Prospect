@@ -29,7 +29,7 @@ abstract class AdapterAbstract
      */
     public function setOption($name, $value)
     {
-        if (is_string($name)) {
+        if (!empty($name)) {
             $this->options[$name] = $value;
 
             return true;
