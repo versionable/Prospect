@@ -15,6 +15,8 @@ use Versionable\Prospect\Header\Collection as HeaderCollection;
 use Versionable\Prospect\Cookie\Collection as CookieCollection;
 use Versionable\Prospect\Header\CollectionInterface as HeaderCollectionInterface;
 use Versionable\Prospect\Cookie\CollectionInterface as CookieCollectionInterface;
+use Versionable\Prospect\Cookie\Cookie;
+use Versionable\Prospect\Header\Header;
 
 class Response implements ResponseInterface
 {
@@ -90,14 +92,15 @@ class Response implements ResponseInterface
      */
     private $cookies = null;
 
+    public function __construct()
+    {
+        $this->setHeaders(new HeaderCollection());
+        $this->setCookies(new CookieCollection());
+    }
+
     public function parse($responseString)
     {
-        list($code, $headers, $cookies, $content) = $this->parseResponse($responseString);
-
-        $this->setCode($code);
-        $this->setHeaders($headers);
-        $this->setCookies($cookies);
-        $this->setContent($content);
+        $this->parseResponse($responseString);
     }
 
     public function getCode()
@@ -146,31 +149,29 @@ class Response implements ResponseInterface
 
     protected function parseResponse($response)
     {
-        list($response_headers, $body) = explode("\r\n\r\n", $response, 2);
+        list($response_headers, $content) = explode("\r\n\r\n", $response, 2);
+
+        $this->setContent($content);
 
         $header_lines = explode("\r\n", $response_headers);
 
         // first line of headers is the HTTP response code
         $http_response_line = array_shift($header_lines);
 
-        $code = null;
         if (preg_match('@^HTTP/[0-9]\.[0-9] ([0-9]{3})@', $http_response_line, $matches)) {
-            $code = $matches[1];
+            $this->setCode($matches[0]);
         }
 
-        $cookies = new CookieCollection();
-        $headers = new HeaderCollection();
         foreach ($header_lines as $line) {
             list($name, $value) = explode(': ', $line);
 
             if ($name == 'Set-Cookie') {
-                $cookies->parse($value);
+                $cookie = Cookie::parse($value);
+                $this->getCookies()->add($cookie);
             } else {
-                $headers->parse($name, $value);
+                $header = Header::parse($name, $value);
+                $this->getHeaders()->add($header);
             }
         }
-
-        return array($code, $headers, $cookies, $body);
     }
-
 }
