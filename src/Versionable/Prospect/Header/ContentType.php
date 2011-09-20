@@ -11,7 +11,7 @@
 
 namespace Versionable\Prospect\Header;
 
-class ContentType extends Header
+class ContentType extends HeaderAbstract
 {
     public function __construct($value)
     {

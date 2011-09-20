@@ -25,25 +25,6 @@ class Collection extends Map implements CollectionInterface
     }
 
     /**
-     * Parses a header string creating a header object and returning it
-     * A Custom header will be returned if no specific header class is found
-     * @param type $name
-     * @param type $value
-     */
-    public function parse($name, $value)
-    {
-        $class_name = '\Versionable\Prospect\Header\\' . \str_replace(' ', '', \ucwords(\str_replace('-', ' ', $name)));
-
-        if (class_exists($class_name)) {
-            $header = new $class_name($value);
-        } else {
-            $header = new Custom($name, $value);
-        }
-
-        $this->add($header);
-    }
-
-    /**
      * Returns the formatted Headers
      * @return string
      */

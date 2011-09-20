@@ -11,7 +11,7 @@
 
 namespace Versionable\Prospect\Header;
 
-class DesktopUserAgent extends Header
+class DesktopUserAgent extends HeaderAbstract
 {
     public function __construct($value = null)
     {

@@ -11,7 +11,7 @@
 
 namespace Versionable\Prospect\Header;
 
-class AcceptLanguage extends Header
+class AcceptLanguage extends HeaderAbstract
 {
     public function __construct($value = null)
     {

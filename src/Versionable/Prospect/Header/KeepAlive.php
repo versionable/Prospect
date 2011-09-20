@@ -11,7 +11,7 @@
 
 namespace Versionable\Prospect\Header;
 
-class KeepAlive extends Header
+class KeepAlive extends HeaderAbstract
 {
     public function __construct($value = null)
     {

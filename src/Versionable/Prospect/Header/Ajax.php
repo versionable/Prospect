@@ -11,7 +11,7 @@
 
 namespace Versionable\Prospect\Header;
 
-class Ajax extends Header
+class Ajax extends HeaderAbstract
 {
     public function __construct($value = null)
     {

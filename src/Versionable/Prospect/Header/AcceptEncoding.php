@@ -11,7 +11,7 @@
 
 namespace Versionable\Prospect\Header;
 
-class AcceptEncoding extends Header
+class AcceptEncoding extends HeaderAbstract
 {
     public function __construct($value = null)
     {

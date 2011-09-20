@@ -11,82 +11,32 @@
 
 namespace Versionable\Prospect\Header;
 
-abstract class Header implements HeaderInterface
+class Header extends HeaderAbstract
 {
-    /**
-     * Header name
-     * @var string
-     */
-    private $name;
 
-    /**
-     * Header value
-     * @var type
-     */
-    private $value;
-
-    /**
-     * Constructor
-     * @param scalar $value
-     */
-    public function __construct($value = null)
+    public function __construct($name = null, $value = null)
     {
-        if (!is_null($value)) {
-            $this->setValue($value);
-        }
+        $this->setName($name);
+        $this->setValue($value);
     }
 
-    /**
-     * Sets the Header name
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
 
     /**
-     * Returns the Header name
-     * @param string $name
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-
-    /**
-     * Returns the Header value
-     * @return scalar
-     */
-    public function getValue()
-    {
-        return $this->value;
-    }
-
-    /**
-     * Sets the Header value
+     * Parses a header string creating a header object and returning it
+     * A Custom header will be returned if no specific header class is found
+     * @param type $name
      * @param type $value
      */
-    public function setValue($value)
+    public static function parse($name, $value)
     {
-        $this->value = $value;
-    }
+        $class_name = '\Versionable\Prospect\Header\\' . \str_replace(' ', '', \ucwords(\str_replace('-', ' ', $name)));
 
-    /**
-     * Returns the formatted Header string
-     * @return type
-     */
-    public function toString()
-    {
-        return sprintf('%s: %s', $this->name, $this->value);
-    }
+        if (class_exists($class_name)) {
+            $header = new $class_name($value);
+        } else {
+            $header = new self($name, $value);
+        }
 
-    /**
-     * Returns as toString()
-     * @return type
-     */
-    public function __toString()
-    {
-        return $this->toString();
+        return $header;
     }
 }

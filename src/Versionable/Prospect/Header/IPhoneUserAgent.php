@@ -11,7 +11,7 @@
 
 namespace Versionable\Prospect\Header;
 
-class IPhoneUserAgent extends Header
+class IPhoneUserAgent extends HeaderAbstract
 {
     public function __construct($value = null)
     {

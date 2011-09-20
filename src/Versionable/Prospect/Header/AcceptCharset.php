@@ -11,7 +11,7 @@
 
 namespace Versionable\Prospect\Header;
 
-class AcceptCharset extends Header
+class AcceptCharset extends HeaderAbstract
 {
     /**
      * Constructor

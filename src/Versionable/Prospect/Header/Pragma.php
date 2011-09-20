@@ -11,7 +11,7 @@
 
 namespace Versionable\Prospect\Header;
 
-class Pragma extends Header
+class Pragma extends HeaderAbstract
 {
     public function __construct($value = null)
     {

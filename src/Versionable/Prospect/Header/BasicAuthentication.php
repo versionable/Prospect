@@ -11,7 +11,7 @@
 
 namespace Versionable\Prospect\Header;
 
-class BasicAuthentication extends Header
+class BasicAuthentication extends HeaderAbstract
 {
   public function __construct($username, $password)
   {

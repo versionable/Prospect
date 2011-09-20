@@ -11,7 +11,7 @@
 
 namespace Versionable\Prospect\Header;
 
-class CacheControl extends Header
+class CacheControl extends HeaderAbstract
 {
     public function __construct($value = null)
     {

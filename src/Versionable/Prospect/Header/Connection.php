@@ -11,7 +11,7 @@
 
 namespace Versionable\Prospect\Header;
 
-class Connection extends Header
+class Connection extends HeaderAbstract
 {
     public function __construct($value = null)
     {
