@@ -15,6 +15,7 @@ use Versionable\Prospect\Adapter\AdapterInterface;
 use Versionable\Prospect\Request\RequestInterface;
 use Versionable\Prospect\Response\ResponseInterface;
 use Versionable\Prospect\UserAgent\UserAgentInterface;
+use Versionable\Prospect\Response\Response;
 
 class Client implements ClientInterface
 {
@@ -64,8 +65,15 @@ class Client implements ClientInterface
      * @param ResponseInterface $response
      * @return ResponseInterface
      */
-    public function send(RequestInterface $request, ResponseInterface $response)
+    public function send(RequestInterface $request, ResponseInterface $response = null)
     {
+        if (null === $response)
+        {
+            $response = new Response();
+        }
+
+
+
         $response = $this->adapter->call($request, $response);
 
         return $response;
