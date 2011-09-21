@@ -16,9 +16,11 @@ use Versionable\Prospect\Cookie\CollectionInterface as CookieCollectionInterface
 
 interface ResponseInterface
 {
-  public function setCode($code);
+  public function setStatusCode($code);
 
-  public function getCode();
+  public function getStatusCode();
+
+  public function getStatusMessage();
 
   public function setHeaders(HeaderCollectionInterface $headers);
 

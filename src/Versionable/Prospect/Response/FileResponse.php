@@ -74,7 +74,7 @@ class FileResponse extends Response implements FileResponseInterface
         $line = trim($string);
 
         if (preg_match('@^HTTP/[0-9]\.[0-9] ([0-9]{3})@', $line, $matches)) {
-            $this->setCode($matches[1]);
+            $this->setStatusCode($matches[1]);
         }
         elseif(false === empty($line))
         {

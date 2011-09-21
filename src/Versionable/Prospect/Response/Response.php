@@ -103,18 +103,28 @@ class Response implements ResponseInterface
         $this->parseResponse($responseString);
     }
 
-    public function getCode()
+    public function getStatusCode()
     {
         return $this->code;
     }
 
-    public function setCode($code)
+    public function setStatusCode($code)
     {
         if (array_key_exists($code, self::$valid_codes)) {
             $this->code = $code;
         } else {
             throw new \InvalidArgumentException('Unknown HTTP code: ' . $code);
         }
+    }
+
+    public function getStatusMessage()
+    {
+        if (null !== $this->getStatusCode())
+        {
+            return self::$valid_codes[$this->getStatusCode()];
+        }
+
+        return null;
     }
 
     public function getContent()
