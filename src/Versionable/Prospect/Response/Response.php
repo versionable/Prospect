@@ -119,8 +119,7 @@ class Response implements ResponseInterface
 
     public function getStatusMessage()
     {
-        if (null !== $this->getStatusCode())
-        {
+        if (null !== $this->getStatusCode()) {
             return self::$valid_codes[$this->getStatusCode()];
         }
 
@@ -169,7 +168,7 @@ class Response implements ResponseInterface
         $http_response_line = array_shift($header_lines);
 
         if (preg_match('@^HTTP/[0-9]\.[0-9] ([0-9]{3})@', $http_response_line, $matches)) {
-            $this->setCode($matches[0]);
+            $this->setStatusCode($matches[1]);
         }
 
         foreach ($header_lines as $line) {
@@ -184,4 +183,5 @@ class Response implements ResponseInterface
             }
         }
     }
+
 }

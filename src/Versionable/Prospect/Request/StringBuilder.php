@@ -11,7 +11,7 @@
 
 namespace Versionable\Prospect\Request;
 
-use Versionable\Prospect\Header\Custom;
+use Versionable\Prospect\Header\Header;
 use Versionable\Prospect\Header\ContentType;
 
 class StringBuilder
@@ -111,7 +111,7 @@ class StringBuilder
         }
 
         if (!$this->getRequest()->getCookies()->isEmpty()) {
-            $this->getRequest()->getHeaders()->add(new Custom('Cookie', $this->getRequest()->getCookies()->toString()));
+            $this->getRequest()->getHeaders()->add(new Header('Cookie', $this->getRequest()->getCookies()->toString()));
         }
 
         $this->getFilesString();
@@ -122,7 +122,7 @@ class StringBuilder
         }
 
         if ($this->hasRequestBody()) {
-            $this->getRequest()->getHeaders()->add(new Custom('Content-Length', $this->contentLength));
+            $this->getRequest()->getHeaders()->add(new Header('Content-Length', $this->contentLength));
         }
 
         $this->addToHead($this->getRequest()->getHeaders()->toString());

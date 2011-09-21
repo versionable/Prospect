@@ -31,14 +31,14 @@ class CookieTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
     }
-    
+
     public function testParse()
     {
-      $this->object->parse('foo=bar; expires=Fri, 01-Apr-2011 00:00:00 GMT; path=/user/; domain=testing.com; secure; httponly;');
-      
+      $new = Cookie::parse('foo=bar; expires=Fri, 01-Apr-2011 00:00:00 GMT; path=/user/; domain=testing.com; secure; httponly;');
+
       $cookie = new Cookie('foo', 'bar', new \DateTime('01-Apr-2011 00:00:00 GMT'), '/user/', 'testing.com', true, true);
-      
-      $this->assertEquals($cookie, $this->object);
+
+      $this->assertEquals($cookie, $new);
     }
 
     /**
