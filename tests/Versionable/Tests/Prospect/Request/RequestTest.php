@@ -236,4 +236,32 @@ class RequestTest extends \PHPUnit_Framework_TestCase
       $this->assertEquals($version, $this->readAttribute($this->object, 'version'));
     }
 
+    public function testIsMultiPartFalseOnlyBody()
+    {
+        $this->object->setBody('some body');
+        $this->assertFalse($this->object->isMultipart());
+    }
+    
+    public function testIsMultiPartFalseHasContentBody()
+    {
+        $this->object->setBody('some body');
+        $this->assertFalse($this->object->isMultipart());
+    }
+    
+    public function testIsMultiPartFalseHasContentAndFilesButBodyNotSupported()
+    {
+        $this->object->setBody('some body');
+        $this->object->getFiles()->add(new File('test', 'test.txt', 'text/plain'));
+        
+        $this->assertFalse($this->object->isMultipart());
+    }
+    
+    public function testIsMultiPartFalseHasContentAndFilesAndBodySupported()
+    {
+        $this->object->setMethod('POST');
+        $this->object->setBody('some body');
+        $this->object->getFiles()->add(new File('test', 'test.txt', 'text/plain'));
+        
+        $this->assertTrue($this->object->isMultipart());
+    }
 }

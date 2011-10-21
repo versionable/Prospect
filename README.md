@@ -6,17 +6,17 @@ What is Prospect?
 
 Prospect is a fully featured PHP 5.3 HTTP compliant client library.
 
-It has object orientated API making it easy to construct both simple and more complicated requests. 
+It has object orientated API making it easy to construct both simple and more complicated requests.
 
 The library supports such features as cookies, headers and files.
 
 Features supported out of the box:
 
-* Highly tested code base
-* Object orientated API
-* Ability to send HTTP headers
-* Cookies
-* Files
+*  Highly tested code base
+*  Object orientated API
+*  Send and receive HTTP headers
+*  Cookies
+*  Files
 
 Requirements
 ------------
@@ -41,9 +41,9 @@ Performing a simple get request
     use \Versionable\Prospect\Adapter\Curl;
     use \Versionable\Prospect\Client\Client;
     use \Versionable\Prospect\Response\Response;
-  
+
     $request = new Request(new Url('http://versionable.co.uk/'));
     $client = new Client(new Curl());
-  
+
     $response = $client>send($request, new Response());
 ```

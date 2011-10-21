@@ -30,7 +30,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
   protected function tearDown() {
 
   }
-  
+
   public function testConstructorWithAdapter()
   {
     $adapter = $this->getMock('Versionable\Prospect\Adapter\AdapterInterface');
@@ -66,6 +66,22 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
     $this->object->setAdapter($adapter);
 
     $this->assertEquals($response, $this->object->send($request, $response));
+
+  }
+
+  public function testSendNoResponse() {
+    $response = $this->getMock('Versionable\Prospect\Response\ResponseInterface');
+    $response->expects($this->any())->method('getCode')->will($this->returnValue(200));
+    $response->expects($this->any())->method('getContent')->will($this->returnValue('Test content'));
+    $response->expects($this->any())->method('getHeaders')->will($this->returnValue(array()));
+
+    $request = $this->getMock('Versionable\Prospect\Request\RequestInterface');
+
+    $adapter = $this->getMock('Versionable\Prospect\Adapter\AdapterInterface');
+    $adapter->expects($this->any())->method('call')->will($this->returnValue($response));
+    $this->object->setAdapter($adapter);
+
+    $this->assertEquals($response, $this->object->send($request));
 
   }
 }

@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Versionable Prospect package.
+ *
+ * (c) Stuart Lowes <stuart.lowes@versionable.co.uk>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Versionable\Prospect\Request;
 
 use Versionable\Prospect\Url\UrlInterface;
@@ -8,11 +17,10 @@ use Versionable\Prospect\File\CollectionInterface as FileCollectionInterface;
 use Versionable\Prospect\Header\CollectionInterface as HeaderCollectionInterface;
 use Versionable\Prospect\Parameter\CollectionInterface as ParameterCollectionInterface;
 
-
-//use Versionable\Prospect\Cookie\Collection as CookieCollection;
-//use Versionable\Prospect\File\Collection as FileCollection;
-//use Versionable\Prospect\Header\Collection as HeaderCollection;
-//use Versionable\Prospect\Parameter\Collection as ParameterCollection;
+use Versionable\Prospect\Cookie\Collection as CookieCollection;
+use Versionable\Prospect\File\Collection as FileCollection;
+use Versionable\Prospect\Header\Collection as HeaderCollection;
+use Versionable\Prospect\Parameter\Collection as ParameterCollection;
 
 class Request implements RequestInterface
 {
@@ -33,9 +41,9 @@ class Request implements RequestInterface
   protected $body = '';
 
   protected $version = 1.1;
-  
+
   protected $parts = array();
-  
+
   protected $stringBuilder = null;
 
   public function __construct(UrlInterface $url = null)
@@ -45,10 +53,10 @@ class Request implements RequestInterface
       $this->setUrl($url);
     }
 
-    $this->cookies = new \Versionable\Prospect\Cookie\Collection();
-    $this->files = new \Versionable\Prospect\File\Collection();
-    $this->headers = new \Versionable\Prospect\Header\Collection();
-    $this->parameters = new \Versionable\Prospect\Parameter\Collection();
+    $this->cookies = new CookieCollection();
+    $this->files = new FileCollection();
+    $this->headers = new HeaderCollection();
+    $this->parameters = new ParameterCollection();
   }
 
   /**
@@ -101,7 +109,7 @@ class Request implements RequestInterface
   }
 
   public function getParameters()
-  {    
+  {
     return $this->parameters;
   }
 
@@ -111,7 +119,7 @@ class Request implements RequestInterface
   }
 
   public function getFiles()
-  {    
+  {
     return $this->files;
   }
 
@@ -121,7 +129,7 @@ class Request implements RequestInterface
   }
 
   public function getHeaders()
-  {    
+  {
     return $this->headers;
   }
 
@@ -131,7 +139,7 @@ class Request implements RequestInterface
   }
 
   public function getCookies()
-  {    
+  {
     return $this->cookies;
   }
 
@@ -176,17 +184,28 @@ class Request implements RequestInterface
   {
     $this->version = $version;
   }
-  
+
   public function isMultipart()
   {
-    if (($this->hasBody() || !$this->getParameters()->isEmpty()) && !$this->getFiles()->isEmpty() && $this->isBodySupported())
+    if ($this->hasContent() && false === $this->getFiles()->isEmpty() && $this->isBodySupported())
     {
       return true;
     }
 
     return false;
   }
- 
+
+  protected function hasContent()
+  {
+    if ($this->hasBody() || !$this->getParameters()->isEmpty())
+    {
+        return true;
+    }
+
+    return false;
+  }
+
+
 
   protected function isBodySupported()
   {
@@ -194,7 +213,7 @@ class Request implements RequestInterface
     {
       return true;
     }
-    
+
     return false;
   }
 }

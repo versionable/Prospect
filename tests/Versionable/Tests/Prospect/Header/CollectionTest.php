@@ -3,7 +3,7 @@
 namespace Versionable\Test\Prospect\Header;
 
 use Versionable\Prospect\Header\Collection;
-use Versionable\Prospect\Header\Custom;
+use Versionable\Prospect\Header\Header;
 use Versionable\Prospect\Header\Connection;
 
 /**
@@ -33,32 +33,16 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
    */
   protected function tearDown()
   {
-    
+
   }
 
   public function testAdd()
   {
-    $header = new Custom('foo', 'bar');
+    $header = new Header('foo', 'bar');
     $this->object->add($header);
-    
+
     $elements = $this->readAttribute($this->object, 'elements');
     $this->assertEquals($header, $elements['foo']);
-  }
-
-  public function testParse()
-  {
-    $this->object->parse('Connection', 'Close');
-    $elements = $this->readAttribute($this->object, 'elements');
-    
-    $this->assertEquals(new Connection('Close'), $elements['Connection']);
-  }
-  
-  public function testParseToCustom()
-  {
-    $this->object->parse('Name', 'Prospect');
-    $elements = $this->readAttribute($this->object, 'elements');
-    
-    $this->assertEquals(new Custom('Name', 'Prospect'), $elements['Name']);
   }
 
 }

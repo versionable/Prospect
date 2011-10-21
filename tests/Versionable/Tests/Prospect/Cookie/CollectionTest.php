@@ -32,26 +32,26 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
    */
   protected function tearDown()
   {
-    
+
   }
 
   public function testAdd()
   {
     $cookie = new Cookie('foo', 'bar');
     $this->object->add($cookie);
-    
+
     $elements = $this->readAttribute($this->object, 'elements');
     $this->assertEquals($cookie, $elements['foo']);
   }
-  
+
   public function testIsInvalidTrue()
-  {  
+  {
     $cookie = new Cookie('foo', 'bar');
-    
+
     $this->assertTrue($this->object->isValid($cookie));
-    
+
   }
-  
+
   public function testIsInvalidFalse()
   {
     $this->assertFalse($this->object->isValid(new \stdClass()));
@@ -61,10 +61,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
   {
     $cookie = new Cookie('foo', 'bar');
     $cookie2 = new Cookie('hey', 'ho');
-    
+
     $this->object->add($cookie);
     $this->object->add($cookie2);
-    
+
     $string = $cookie . ';'. $cookie2;
     $this->assertEquals($string, $this->object->toString());
   }
@@ -73,11 +73,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
   {
     $string = 'foo=bar';
     $cookie = new Cookie('foo', 'bar');
-    
-    $this->object->parse($string);
-    
-    $array = $this->readAttribute($this->object, 'elements');
-    
-    $this->assertEquals($cookie, $array['foo']);
+
+    $new = Cookie::parse($string);
+
+    $this->assertEquals($cookie, $new);
   }
 }

@@ -31,54 +31,54 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
     }
-    
+
     public function testParse()
     {
       $string = file_get_contents(__DIR__ . '/../../../../data/response/complete.txt');
       $content = file_get_contents(__DIR__ . '/../../../../data/response/content.txt');
-      
+
       $this->object->parse($string);
-      
-      $this->assertEquals(200, $this->object->getCode());
+
+      $this->assertEquals(200, $this->object->getStatusCode());
       $this->assertEquals($content, $this->object->getContent());
-      
+
       $headers = $this->object->getHeaders();
-      
+
       $this->assertEquals('nginx/0.7.67', $headers->get('Server')->getValue());
       $this->assertEquals('Wed, 13 Apr 2011 20:19:22 GMT', $headers->get('Date')->getValue());
       $this->assertEquals('text/html; charset=UTF-8', $headers->get('Content-Type')->getValue());
       $this->assertEquals('chunked', $headers->get('Transfer-Encoding')->getValue());
       $this->assertEquals('close', $headers->get('Connection')->getValue());
       $this->assertEquals('no-cache', $headers->get('Cache-Control')->getValue());
-      
+
       $cookies = $this->object->getCookies();
       $this->assertTrue($cookies->containsKey('_SESS'));
     }
 
     /**
-     * @todo Implement testGetCode().
+     * @todo Implement testGetStatusCode().
      */
-    public function testGetCode()
+    public function testGetStatusCode()
     {
-      $this->object->setCode(418);
-      $this->assertEquals($this->readAttribute($this->object, 'code'), $this->object->getCode());
+      $this->object->setStatusCode(418);
+      $this->assertEquals($this->readAttribute($this->object, 'code'), $this->object->getStatusCode());
     }
 
     /**
-     * @todo Implement testSetCode().
+     * @todo Implement testSetStatusCode().
      */
-    public function testSetCode()
+    public function testSetStatusCode()
     {
       $code = 200;
-      $this->object->setCode($code);
+      $this->object->setStatusCode($code);
       $this->assertEquals($code, $this->readAttribute($this->object, 'code'));
     }
-    
+
     public function testSetCodeInvalid()
     {
       $this->setExpectedException('\InvalidArgumentException');
       $code = 999;
-      $this->object->setCode($code);
+      $this->object->setStatusCode($code);
     }
 
     /**
@@ -114,7 +114,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
       $this->object->setHeaders($headers);
       $this->assertEquals($headers, $this->readAttribute($this->object, 'headers'));
     }
-    
+
     public function testGetCookies()
     {
       $cookies = $this->getMock('Versionable\Prospect\Cookie\CollectionInterface');

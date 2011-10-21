@@ -7,89 +7,29 @@ use Versionable\Prospect\Response\ResponseInterface;
 
 class CurlFile extends Curl
 {
-    protected $fileHandle;
-    
-    public function initialize()
+    public function __construct()
     {
-        $this->handle = curl_init();
-        $this->setOption(\CURLOPT_RETURNTRANSFER, false);
-        $this->setOption(\CURLOPT_NOBODY, null);
-        $this->setOption(\CURLOPT_FOLLOWLOCATION, true);
-        $this->setOption(\CURLOPT_MAXREDIRS, 5);
-        $this->setOption(\CURLOPT_HEADER, false);
-
-        foreach ($this->options as $name => $value) {
-            \curl_setopt($this->handle, $name, $value);
-        }
+        parent::__construct();
     }
 
     public function call(RequestInterface $request, ResponseInterface $response)
     {
-        $this->initialize();
-        $this->createOutFile($response);
+        $this->setup($request, $response);
+        $this->setHandle(\curl_init());
+        $this->initialize($request, $response);
 
-        \curl_setopt($this->handle, CURLOPT_URL, $request->getUrl());
-
-        if ($request->getMethod() == 'GET') {
-            \curl_setopt($this->handle, \CURLOPT_HTTPGET, true);
-        } elseif ($request->getMethod() == 'POST') {
-            \curl_setopt($this->handle, \CURLOPT_POST, true);
-        } else {
-            \curl_setopt($this->handle, \CURLOPT_CUSTOMREQUEST, $request->getMethod());
-        }
-
-        $post = array();
-        $files = array();
-        
-        foreach ($request->getParameters() as $param) {
-            $post[$param->getName()] = $param->getValue();
-        }
-
-        foreach ($request->getFiles() as $file) {
-            $files[$file->getName()] = '@' . $file->getValue() . ';type=' . $file->getType();
-        }
-        
-        if ($request->getMethod() == 'POST' || $request->getMethod() == 'PUT') {
-            if (!empty($files)) {
-                $body = array_merge($post, $files);
-            } elseif (!empty($post)) {
-                $body = \http_build_query($post);
-            } else {
-                $body = $request->getBody();
-            }
-            
-            \curl_setopt($this->handle, \CURLOPT_POSTFIELDS, $body);
-        }
-
-        if ($request->getMethod() == 'POST' || $request->getMethod() == 'PUT') {
-            \curl_setopt ($this->handle, \CURLOPT_POSTFIELDS, $post);
-        }
-
-        if (!$request->getCookies()->isEmpty()) {
-            \curl_setopt($this->handle, \CURLOPT_COOKIE, $request->getCookies()->toString());
-        }
-
-        if (!$request->getHeaders()->isEmpty()) {
-            \curl_setopt($this->handle, \CURLOPT_HTTPHEADER, $request->getHeaders()->toArray());
-        }
-
-        \curl_setopt($this->handle, \CURLOPT_PORT, $request->getPort());
-
-        \curl_setopt($this->handle, \CURLOPT_FILE, $this->fileHandle);
-
-        $returned = \curl_exec($this->handle);
-
-        $info = \curl_getinfo($this->handle);
-
-        \fclose($this->fileHandle);
-
-        $response->setCode($info['http_code']);
+        $this->send($request, $response);
 
         return $response;
     }
 
-    protected function createOutFile(ResponseInterface $response)
+    protected function setup(RequestInterface $request, ResponseInterface $response)
     {
-        $this->fileHandle = \fopen($response->getFilename(), 'w+');
+        parent::setup($request, $response);
+        $this->setOption(\CURLOPT_HEADERFUNCTION, array($response, 'headerCallback'));
+        $this->setOption(\CURLOPT_HEADER, false);
+        $this->setOption(\CURLOPT_URL, $request->getUrl()->toString());
+        $this->setOption(\CURLOPT_FILE, $response->getFileHandle());
     }
 }
+

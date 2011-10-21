@@ -1,6 +1,4 @@
-POST / HTTP/1.1
+GET / HTTP/1.1
 Host: www.versionable.co.uk
 Content-Type: application/x-www-form-urlencoded
-Content-Length: 22
-
-name=prospect&blah=wah
+Cookie: foo=bar
