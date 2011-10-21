@@ -49,7 +49,7 @@ class Socket extends AdapterAbstract implements AdapterInterface
         fclose($handle);
 
         // Handle 301 redirects
-        if ($response->getCode() == 301) {
+        if ($response->getStatusCode() == 301) {
             $response->getHeaders()->get('Location')->getValue();
 
             $request->getUrl()->setUrl($response->getHeaders()->get('Location')->getValue());

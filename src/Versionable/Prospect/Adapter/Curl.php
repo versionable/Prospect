@@ -64,8 +64,7 @@ class Curl extends AdapterAbstract implements AdapterInterface
         $this->setOption(\CURLOPT_MAXREDIRS, 5);
         $this->setOption(\CURLOPT_URL, $request->getUrl());
 
-        foreach($this->getOptions() as $name => $value)
-        {
+        foreach ($this->getOptions() as $name => $value) {
             \curl_setopt($this->getHandle(), $name, $value);
         }
     }
@@ -74,14 +73,6 @@ class Curl extends AdapterAbstract implements AdapterInterface
     {
         $this->setOption(\CURLOPT_HEADER, true);
         $this->setOption(\CURLOPT_RETURNTRANSFER, true);
-
-        if ($request->getMethod() == 'GET') {
-            $this->setOption(\CURLOPT_HTTPGET, true);
-        } elseif ($request->getMethod() == 'POST') {
-            $this->setOption(\CURLOPT_POST, true);
-        } else {
-            $this->setOption(\CURLOPT_CUSTOMREQUEST, $request->getMethod());
-        }
 
         $post = array();
         $files = array();
@@ -94,20 +85,12 @@ class Curl extends AdapterAbstract implements AdapterInterface
             $files[$file->getName()] = '@' . $file->getValue() . ';type=' . $file->getType();
         }
 
-        if ($request->getMethod() == 'POST' || $request->getMethod() == 'PUT') {
-            // Files and any parameters - note body is not used
-            if (!empty($files)) {
-                $body = array_merge($post, $files);
-            }
-
-            // Only parametsrs
-            elseif (!empty($post)) {
-                $body = http_build_query($post);
-            } else {
-                $body = $request->getBody();
-            }
-
-            $this->setOption(\CURLOPT_POSTFIELDS, $body);
+        if ($request->getMethod() == 'GET') {
+            $this->setOption(\CURLOPT_HTTPGET, true);
+        } elseif ($request->getMethod() == 'POST') {
+            $this->setOption(\CURLOPT_POST, true);
+        } else {
+            $this->setOption(\CURLOPT_CUSTOMREQUEST, $request->getMethod());
         }
 
         if (!$request->getCookies()->isEmpty()) {
@@ -116,6 +99,24 @@ class Curl extends AdapterAbstract implements AdapterInterface
 
         if (!$request->getHeaders()->isEmpty()) {
             $this->setOption(\CURLOPT_HTTPHEADER, $request->getHeaders()->toArray());
+        }
+
+        if ($request->getMethod() == 'POST' || $request->getMethod() == 'PUT') {
+
+            // Files and there are parameters set body is ignored
+            if (!empty($files)) {
+                $body = array_merge($post, $files);
+            }
+            // Only parametsrs
+            elseif (!empty($post)) {
+                $body = http_build_query($post);
+            } else {
+                $body = $request->getBody();
+            }
+
+            if (false === empty($body)) {
+                $this->setOption(\CURLOPT_POSTFIELDS, $body);
+            }
         }
 
         $this->setOption(\CURLOPT_PORT, $request->getPort());
@@ -131,4 +132,5 @@ class Curl extends AdapterAbstract implements AdapterInterface
 
         return $returned;
     }
+
 }

@@ -54,4 +54,6 @@ interface RequestInterface
   public function setVersion($version);
 
   public function getVersion();
+
+  public function isMultipart();
 }

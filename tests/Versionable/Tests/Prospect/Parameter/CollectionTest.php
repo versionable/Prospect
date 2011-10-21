@@ -32,14 +32,14 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
    */
   protected function tearDown()
   {
-    
+
   }
 
   public function testAdd()
   {
     $parameter = new Parameter('foo', 'bar');
     $this->object->add($parameter);
-    
+
     $elements = $this->readAttribute($this->object, 'elements');
     $this->assertEquals($parameter, $elements['foo']);
   }
@@ -51,16 +51,16 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
   public function testToString()
   {
-    
+
     $parameter = new Parameter('foo', 'bar');
     $this->object->add($parameter);
-    
+
     $parameter = new Parameter('alpha', 'bravo');
     $this->object->add($parameter);
-    
+
     $this->assertEquals('foo=bar&alpha=bravo', $this->object->toString());
   }
-  
+
   public function testIsValidTrue()
   {
       $this->assertTrue($this->object->isValid(new Parameter('foo', 'bar')));
@@ -69,6 +69,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
   public function testIsValidFalse()
   {
       $this->assertFalse($this->object->isValid(new \stdClass()));
-  }  
-  
+  }
+
 }

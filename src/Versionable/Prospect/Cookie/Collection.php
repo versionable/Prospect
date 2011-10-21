@@ -42,26 +42,6 @@ class Collection extends Map implements CollectionInterface
     }
 
     /**
-     * Parses a cookie string and adds it to the collection
-     * Returns true on success otherwise false
-     *
-     * @param string $string
-     * @return boolean
-     */
-    public function parse($string)
-    {
-        $cookie = new Cookie('', '');
-
-        if($cookie->parse($string)) {
-            $this->add($cookie);
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * Returns a correctly formatted HTTP Cookie string
      *
      * @return string
