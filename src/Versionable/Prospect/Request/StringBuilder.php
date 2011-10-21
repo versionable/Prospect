@@ -26,13 +26,13 @@ class StringBuilder
      * The headers string
      * @var string
      */
-    private $head = '';
+    private $headers = '';
 
     /**
      * The body string
      * @var string
      */
-    private $body = "";
+    private $content = "";
 
     /**
      * The content length
@@ -88,8 +88,28 @@ class StringBuilder
      */
     public function toString()
     {
+        return $this->build();
+    }
+
+    public function getHeaders()
+    {
+        return $this->headers;
+    }
+
+    public function getContent()
+    {
+        if ($this->getBoundary() === '') {
+
+            $this->generateBoundary();
+        }
+        
+        return $this->getParameterString() . $this->getFilesString();
+    }
+
+    public function build()
+    {
         $this->data = '';
-        $this->body = "\r\n";
+        $this->content = "\r\n";
 
         if (null === $this->getRequest() || null === $this->getRequest()->getUrl()) {
             throw new \RuntimeException('No getUrl() set for request');
@@ -102,11 +122,9 @@ class StringBuilder
 
         $this->getHTTPHeader();
 
-        $this->addToBody($this->getParameterString());
-
         if ($this->getRequest()->isMultipart()) {
             $this->getRequest()->getHeaders()->add(new ContentType('multipart/form-data; boundary=' . $this->getBoundary()));
-        } else {
+        } else if(false === $this->getRequest()->getHeaders()->containsKey('Content-Type')) {
             $this->getRequest()->getHeaders()->add(new ContentType('application/x-www-form-urlencoded'));
         }
 
@@ -114,24 +132,26 @@ class StringBuilder
             $this->getRequest()->getHeaders()->add(new Header('Cookie', $this->getRequest()->getCookies()->toString()));
         }
 
-        $this->getFilesString();
+        $content = $this->getContent();
+
+        $this->addToContent($content);
 
         if ($this->getRequest()->isMultipart()) {
 
-            $this->addToBody('--' . $this->boundary . "--\r\n");
+            $this->addToContent('--' . $this->boundary . "--\r\n");
         }
 
         if ($this->hasRequestBody()) {
             $this->getRequest()->getHeaders()->add(new Header('Content-Length', $this->contentLength));
         }
 
-        $this->addToHead($this->getRequest()->getHeaders()->toString());
+        $this->addToHeaders($this->getRequest()->getHeaders()->toString());
 
         if ($this->hasRequestBody()) {
-            return $this->head . $this->body;
+            return $this->headers . $this->content;
         }
 
-        return $this->head;
+        return $this->headers;
     }
 
     /**
@@ -148,6 +168,7 @@ class StringBuilder
      */
     private function getFilesString()
     {
+        $string = '';
 
         foreach ($this->getRequest()->getFiles() as $file) {
             $body = sprintf("Content-Disposition: form-data; name=\"%s\"; filename=\"%s\"\r\n", $file->getName(), basename($file->getValue()));
@@ -155,8 +176,10 @@ class StringBuilder
             $content = $file->getContent();
             $body .= "" . $content . "\r\n";
             $body = $this->addBoundary($body);
-            $this->addToBody($body);
-        }
+            $string .= $body;
+        };
+
+        return $string;
     }
 
     /**
@@ -164,8 +187,8 @@ class StringBuilder
      */
     private function getHTTPHeader()
     {
-        $this->head = \sprintf("%s %s HTTP/%s\r\n", $this->getRequest()->getMethod(), $this->getRequest()->getUrl()->getPathAndQuery(), $this->getRequest()->getVersion());
-        $this->head .= \sprintf("Host: %s\r\n", $this->getRequest()->getUrl()->getHostname());
+        $this->headers = \sprintf("%s %s HTTP/%s\r\n", $this->getRequest()->getMethod(), $this->getRequest()->getUrl()->getPathAndQuery(), $this->getRequest()->getVersion());
+        $this->headers .= \sprintf("Host: %s\r\n", $this->getRequest()->getUrl()->getHostname());
     }
 
     /**
@@ -216,19 +239,20 @@ class StringBuilder
      * And adds the length the content lenght
      * @param string $string
      */
-    private function addToBody($string)
+    private function addToContent($string)
     {
-        $this->body .= $string;
+        $this->content .= $string;
         $this->contentLength += strlen($string);
+
     }
 
     /**
      * Adds the string to the headers
      * @param string $string
      */
-    private function addToHead($string)
+    private function addToHeaders($string)
     {
-        $this->head .= $string;
+        $this->headers .= $string;
     }
 
     /**
