@@ -3,4 +3,4 @@
 	url = git://github.com/versionable/Autoload.git
 [submodule "vendor/versionable-common"]
 	path = vendor/versionable-common
-	url = git@github.com:versionable/Common.git
+	url = git://github.com/versionable/Common.git
