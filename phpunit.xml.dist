@@ -24,14 +24,14 @@
 
   <logging>
     <log type="coverage-html"
-         target="../build/tests/report/coverage"
+         target="./build/tests/report/coverage"
          charset="UTF-8"
          yui="true"
          highlights="true"/>
     <log type="testdox-html"
-         target="../build/tests/report/testdox.html"/>
+         target="./build/tests/report/testdox.html"/>
     <log type="junit"
-         target="../build/tests/report/logfile.xml"
+         target="./build/tests/report/logfile.xml"
          logIncompleteSkipped="false"/>
   </logging>
 
