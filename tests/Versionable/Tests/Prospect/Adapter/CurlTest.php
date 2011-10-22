@@ -39,10 +39,9 @@ class CurlTest extends \PHPUnit_Framework_TestCase
    */
   public function testInitialize()
   {
-    // Remove the following lines when you implement this test.
-    $this->markTestIncomplete(
-    'This test has not been implemented yet.'
-    );
+    $this->object->initialize();
+
+    $this->assertAttributeInternalType('resource', 'handle', $this->object);
   }
 
   /**

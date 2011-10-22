@@ -76,6 +76,19 @@ class StringBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->object->toString());
     }
     
+    public function testToStringWithParameters()
+    {
+        $request = new Request;
+        $request->setUrl(new Url('http://www.versionable.co.uk'));
+        $request->setMethod('POST');
+        
+        $request->getParameters()->add(new Parameter('name', 'prospect'));
+        $request->getParameters()->add(new Parameter('blah', 'wah'));
+        $this->object->setRequest($request);
+        
+        $expected = file_get_contents(__DIR__ . '/../../../../data/request/request-with-parameters.txt');
+        $this->assertEquals($expected, $this->object->toString());
+    }
 
     public function testToStringWithParameterAndBody()
     {
@@ -106,11 +119,37 @@ class StringBuilderTest extends \PHPUnit_Framework_TestCase
         
         $this->assertEquals($expected, $this->object->toString());
     }
+    
+    public function testToStringNoUrl()
+    {
+        $this->setExpectedException('\RuntimeException');
+        
+        $request = new Request;
+        
+        $this->object->setRequest($request);
+        
+        $this->object->toString();
+        
+    }
+    
+    public function testWithCookies()
+    {
+        $request = new Request;
+        $request->setUrl(new Url('http://www.versionable.co.uk'));
+        $this->object->setRequest($request);
+        
+        $request->getCookies()->add(new \Versionable\Prospect\Cookie\Cookie('foo', 'bar'));
+        
+        $expected = file_get_contents(__DIR__ . '/../../../../data/request/request-with-cookie.txt');
+        
+        $this->assertEquals($expected, $this->object->toString());
+    }
 
     public function test__toString()
     {
         $request = new Request;
         $request->setUrl(new Url('http://www.versionable.co.uk'));
+        
         $this->object->setRequest($request);
         $this->assertEquals($this->object->toString(), (string)$this->object);
     }

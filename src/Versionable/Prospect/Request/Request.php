@@ -179,14 +179,25 @@ class Request implements RequestInterface
   
   public function isMultipart()
   {
-    if (($this->hasBody() || !$this->getParameters()->isEmpty()) && !$this->getFiles()->isEmpty() && $this->isBodySupported())
+    if ($this->hasContent() && false === $this->getFiles()->isEmpty() && $this->isBodySupported())
     {
       return true;
     }
 
     return false;
   }
- 
+  
+  protected function hasContent()
+  {
+    if ($this->hasBody() || !$this->getParameters()->isEmpty())
+    {
+        return true;
+    }
+    
+    return false;
+  }
+
+
 
   protected function isBodySupported()
   {
