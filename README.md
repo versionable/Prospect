@@ -47,5 +47,5 @@ Performing a simple get request
     $request = new Request(new Url('http://versionable.co.uk/'));
     $client = new Client(new Curl());
   
-    $response = $client>send($request, new Response());
+    $response = $client->send($request, new Response());
 ```
