@@ -143,7 +143,7 @@ class Request implements RequestInterface
   public function setMethod($method)
   {
 
-    if (in_array($method,array('HEAD', 'GET', 'POST', 'PUT', 'DELETE')))
+    if (in_array($method, array('HEAD', 'GET', 'POST', 'PUT', 'DELETE', 'PURGE')))
     {
       $this->method = $method;
 
