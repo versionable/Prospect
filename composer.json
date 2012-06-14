@@ -21,6 +21,10 @@
         "php": ">=5.3.0",
         "versionable/common": "1.*"
     },
+    "require-dev": {
+        "php": ">=5.3.0",
+        "versionable/common": "1.*"
+    },
     "autoload": {
         "psr-0": {
             "Versionable\\Prospect": "src"

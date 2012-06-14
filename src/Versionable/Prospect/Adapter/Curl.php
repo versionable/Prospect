@@ -74,7 +74,9 @@ class Curl extends AdapterAbstract implements AdapterInterface
       $files[$file->getName()] = '@' . $file->getValue() . ';type=' . $file->getType();
     }
 
-    if ($request->getMethod() == 'POST' || $request->getMethod() == 'PUT')
+    if ($request->getMethod() == 'POST' ||
+        $request->getMethod() == 'PUT'  ||
+        $request->getMethod() == 'PATCH')
     { 
       // Files and any parameters - note body is not used
       if (!empty($files))
