@@ -142,9 +142,7 @@ class Request implements RequestInterface
 
   public function setMethod($method)
   {
-
-    if (in_array($method, array('HEAD', 'GET', 'POST', 'PUT', 'DELETE', 'PURGE')))
-    {
+    if (preg_match('/^[A-Za-z]+$/', $method)) {
       $this->method = $method;
 
       return true;
