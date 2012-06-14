@@ -156,7 +156,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     
     public function testSetMethodInvalid()
     {
-      $method = 'INVALID';
+      $method = 'not valid';
       $this->setExpectedException('\InvalidArgumentException');
       $this->object->setMethod($method);
     }
