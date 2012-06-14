@@ -142,7 +142,9 @@ class Request implements RequestInterface
 
   public function setMethod($method)
   {
-    if (preg_match('/^[A-Za-z]+$/', $method)) {
+    $method = strtoupper(trim($method));
+      
+    if (preg_match('/^[A-Z]+$/', $method)) {
       $this->method = $method;
 
       return true;
