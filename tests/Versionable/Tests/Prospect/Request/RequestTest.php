@@ -155,7 +155,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * @dataProvider('getInvalidMethods') 
+     * @dataProvider getInvalidMethods
      */
     public function testSetMethodInvalid($method)
     {
@@ -238,7 +238,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
       $this->assertEquals($version, $this->readAttribute($this->object, 'version'));
     }
 
-    protected function getInvalidMethods()
+    public function getInvalidMethods()
     {
         return array(
             array('invalid method'),
