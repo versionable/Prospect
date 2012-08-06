@@ -1,4 +1,4 @@
-# Prospect ![project status](http://stillmaintained.com/versionable/Prospect.png)#
+# Prospect
 
 README
 ======
