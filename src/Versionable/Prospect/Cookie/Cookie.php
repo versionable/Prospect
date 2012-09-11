@@ -71,14 +71,14 @@ class Cookie implements CookieInterface
         }
 
         $map = array(
-          'expires'   => 'setExpires',
-          'path'      => 'setPath',
-          'domain'    => 'setDomain',
-          'secure'    => 'setSecure',
-          'httponly'  => 'setHttpOnly'
+          'Expires'   => 'setExpires',
+          'Path'      => 'setPath',
+          'Domain'    => 'setDomain',
+          'Secure'    => 'setSecure',
+          'HttpOnly'  => 'setHttpOnly'
 
         );
-        $this->$map[$name]($value);          
+        $this->$map[ucfirst($name)]($value);
       }      
     }
   }
