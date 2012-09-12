@@ -267,12 +267,11 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $files->expects($this->any())
               ->method('isEmpty')
               ->will($this->returnValue(false));
-
-
+        
         $this->object->setFiles($files);
         $this->object->setMethod('test');
         $this->object->setBody('some body');
-
+        
         $this->assertFalse($this->object->isMultipart());
     }
 }

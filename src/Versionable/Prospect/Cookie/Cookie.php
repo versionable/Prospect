@@ -69,6 +69,7 @@ class Cookie implements CookieInterface
           'HttpOnly'  => 'setHttpOnly'
 
         );
+        
         $this->$map[ucfirst($name)]($value);
       }      
     }
