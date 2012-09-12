@@ -65,7 +65,7 @@ class Cookie implements CookieInterface
       }
       else
       {
-        if($name === 'expires')
+        if(ucfirst($name) === 'Expires')
         {
           $value = new \DateTime($value);
         }
