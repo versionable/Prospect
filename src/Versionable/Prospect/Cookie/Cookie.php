@@ -56,8 +56,11 @@ class Cookie implements CookieInterface
       if ($i==0) {
         $this->setName($name);
         $this->setValue($value);
-      } else {
-        if ($name === 'expires') {
+      }
+      else
+      {
+        if(ucfirst($name) === 'Expires')
+        {
           $value = new \DateTime($value);
         }
 
@@ -67,7 +70,6 @@ class Cookie implements CookieInterface
           'Domain'    => 'setDomain',
           'Secure'    => 'setSecure',
           'HttpOnly'  => 'setHttpOnly'
-
         );
         
         $this->$map[ucfirst($name)]($value);
