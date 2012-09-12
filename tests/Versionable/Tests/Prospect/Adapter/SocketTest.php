@@ -34,7 +34,7 @@ class SocketTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers Versionable\Prospect\Adapter\Socket::initialize
      */
-    public function testInitalize()
+    public function testInitialize()
     {
         $this->object->initialize();
 
