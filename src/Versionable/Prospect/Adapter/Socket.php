@@ -10,7 +10,7 @@ class Socket extends AdapterAbstract implements AdapterInterface
 {
   protected $socket = null;
 
-  public function initalize() {
+  public function initialize() {
     $this->setOption('Content-Type', 'application/x-www-form-urlencoded');
   }
 
