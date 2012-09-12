@@ -31,9 +31,8 @@ class Cookie implements CookieInterface
   {
     $this->setName($name);
     $this->setValue($value);
-    
-    if(false === \is_null($expires))
-    {
+
+    if (false === \is_null($expires)) {
       $this->setExpires($expires);
     }
     $this->setPath($path);
@@ -41,25 +40,20 @@ class Cookie implements CookieInterface
     $this->setSecure($secure);
     $this->setHttpOnly($httponly);
   }
-  
+
   public function parse($string)
   {
     $parts = \explode('; ', $string);
 
-    for($i=0; $i < count($parts); $i++)
-    {
-      if(false !== \strpos($parts[$i], '='))
-      {
+    for ($i=0; $i < count($parts); $i++) {
+      if (false !== \strpos($parts[$i], '=')) {
         list($name, $value) = explode('=', $parts[$i]);
-      }
-      else
-      {
+      } else {
         $name = \str_replace(';', '', $parts[$i]);
         $value = true;
       }
 
-      if ($i==0)
-      {
+      if ($i==0) {
         $this->setName($name);
         $this->setValue($value);
       }
@@ -76,8 +70,8 @@ class Cookie implements CookieInterface
           'Domain'    => 'setDomain',
           'Secure'    => 'setSecure',
           'HttpOnly'  => 'setHttpOnly'
-
         );
+        
         $this->$map[ucfirst($name)]($value);
       }      
     }
@@ -125,8 +119,7 @@ class Cookie implements CookieInterface
 
   public function hasExpired()
   {
-    if ($this->expires instanceof \DateTime)
-    {
+    if ($this->expires instanceof \DateTime) {
       $now = new \DateTime();
 
       return ($now > $this->expires);
@@ -162,7 +155,7 @@ class Cookie implements CookieInterface
 
   public function setSecure($secure)
   {
-    $this->secure = (boolean)$secure;
+    $this->secure = (boolean) $secure;
   }
 
   public function isHttpOnly()
@@ -172,6 +165,6 @@ class Cookie implements CookieInterface
 
   public function setHttpOnly($httponly)
   {
-    $this->httponly = (boolean)$httponly;
+    $this->httponly = (boolean) $httponly;
   }
 }

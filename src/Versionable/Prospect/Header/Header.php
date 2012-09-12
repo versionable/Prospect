@@ -7,15 +7,14 @@ abstract class Header implements HeaderInterface
   protected $name;
 
   protected $value;
-  
+
   public function __construct($value = null)
   {
-    if (!is_null($value))
-    {
+    if (!is_null($value)) {
       $this->setValue($value);
     }
   }
-  
+
   public function getName()
   {
     return $this->name;

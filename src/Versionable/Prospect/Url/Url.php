@@ -23,11 +23,10 @@ class Url implements UrlInterface
 
   protected $query_separator = '&';
 
-
   public function __construct($url = null, $parameters = array())
   {
     $this->setParameters($parameters);
-    
+
     if (null !== $url) {
         $this->setUrl($url);
     }
@@ -57,46 +56,38 @@ class Url implements UrlInterface
   public function setUrl($url)
   {
 
-    if (filter_var($url, FILTER_VALIDATE_URL, FILTER_FLAG_SCHEME_REQUIRED) === false)
-    {
+    if (filter_var($url, FILTER_VALIDATE_URL, FILTER_FLAG_SCHEME_REQUIRED) === false) {
       throw new \RuntimeException('Not a valid Url');
     }
 
     $components = parse_url($url);
-    if (is_array($components))
-    {
-      if (isset($components['user']))
-      {
+    if (is_array($components)) {
+      if (isset($components['user'])) {
         $this->setUsername($components['user']);
-        if (isset($components['pass']))
-        {
+        if (isset($components['pass'])) {
           $this->setPassword($components['pass']);
         }
       }
 
       $this->setScheme($components['scheme']);
 
-      if (! empty($components['query']))
-      {
+      if (! empty($components['query'])) {
         $this->setParameters(array_merge($this->parameters, explode($this->query_separator, $components['query'])));
       }
 
       $this->setHostname($components['host']);
 
-      if (isset($components['path']))
-      {
+      if (isset($components['path'])) {
         $this->setPath($components['path']);
       }
 
-      if (isset($components['port']))
-      {
+      if (isset($components['port'])) {
         $this->setPort($components['port']);
       }
 
       $this->setScheme($components['scheme']);
 
-      if (isset($components['fragment']))
-      {
+      if (isset($components['fragment'])) {
         $this->setFragment($components['fragment']);
       }
     }
@@ -114,8 +105,7 @@ class Url implements UrlInterface
 
   public function getParameter($name)
   {
-    if ($this->hasParameter($name))
-    {
+    if ($this->hasParameter($name)) {
       return $this->parameters[$name];
     }
 
@@ -144,14 +134,10 @@ class Url implements UrlInterface
 
   public function setScheme($scheme)
   {
-    if ($this->getPort() == 80 || $this->getPort() == 443)
-    {
-      if ($scheme == 'http')
-      {
+    if ($this->getPort() == 80 || $this->getPort() == 443) {
+      if ($scheme == 'http') {
         $this->setPort(80);
-      }
-      elseif ($scheme == 'https')
-      {
+      } elseif ($scheme == 'https') {
         $this->setPort(443);
       }
     }
@@ -166,8 +152,7 @@ class Url implements UrlInterface
 
   public function setPort($port)
   {
-    if (\is_numeric($port))
-    {
+    if (\is_numeric($port)) {
       $this->port = $port;
     }
   }
@@ -199,8 +184,7 @@ class Url implements UrlInterface
 
   public function setPath($path)
   {
-    if(empty($path))
-    {
+    if (empty($path)) {
       $path = '/';
     }
 
@@ -226,8 +210,7 @@ class Url implements UrlInterface
   {
     $path = $this->path;
     $query = $this->getQuery();
-    if (false === empty($query))
-    {
+    if (false === empty($query)) {
       $path .= '?'. $this->getQuery();
     }
 
@@ -237,8 +220,7 @@ class Url implements UrlInterface
   public function getQuery()
   {
     $query = '';
-    if (count($this->parameters) > 0)
-    {
+    if (count($this->parameters) > 0) {
       $query = http_build_query($this->getParameters());
     }
 
@@ -258,19 +240,15 @@ class Url implements UrlInterface
       'fragment' => $this->getFragment()
     );
 
-
     $keys = array('user','pass','port','path','query','fragment');
 
-    foreach ($keys as $key)
-    {
-      if (empty($components[$key]))
-      {
+    foreach ($keys as $key) {
+      if (empty($components[$key])) {
         unset($components[$key]);
       }
     }
 
-    if ($components['port'] == 80)
-    {
+    if ($components['port'] == 80) {
       unset($components['port']);
     }
 
