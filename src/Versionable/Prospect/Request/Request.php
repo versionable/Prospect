@@ -8,7 +8,6 @@ use Versionable\Prospect\File\CollectionInterface as FileCollectionInterface;
 use Versionable\Prospect\Header\CollectionInterface as HeaderCollectionInterface;
 use Versionable\Prospect\Parameter\CollectionInterface as ParameterCollectionInterface;
 
-
 //use Versionable\Prospect\Cookie\Collection as CookieCollection;
 //use Versionable\Prospect\File\Collection as FileCollection;
 //use Versionable\Prospect\Header\Collection as HeaderCollection;
@@ -33,15 +32,14 @@ class Request implements RequestInterface
   protected $body = '';
 
   protected $version = 1.1;
-  
+
   protected $parts = array();
-  
+
   protected $stringBuilder = null;
 
   public function __construct(UrlInterface $url = null)
   {
-    if (!is_null($url))
-    {
+    if (!is_null($url)) {
       $this->setUrl($url);
     }
 
@@ -101,7 +99,7 @@ class Request implements RequestInterface
   }
 
   public function getParameters()
-  {    
+  {
     return $this->parameters;
   }
 
@@ -111,7 +109,7 @@ class Request implements RequestInterface
   }
 
   public function getFiles()
-  {    
+  {
     return $this->files;
   }
 
@@ -121,7 +119,7 @@ class Request implements RequestInterface
   }
 
   public function getHeaders()
-  {    
+  {
     return $this->headers;
   }
 
@@ -131,7 +129,7 @@ class Request implements RequestInterface
   }
 
   public function getCookies()
-  {    
+  {
     return $this->cookies;
   }
 
@@ -143,7 +141,7 @@ class Request implements RequestInterface
   public function setMethod($method)
   {
     $method = strtoupper(trim($method));
-      
+
     if (preg_match('/^[A-Z]+$/', $method)) {
       $this->method = $method;
 
@@ -176,36 +174,31 @@ class Request implements RequestInterface
   {
     $this->version = $version;
   }
-  
+
   public function isMultipart()
   {
-    if ($this->hasContent() && false === $this->getFiles()->isEmpty() && $this->isBodySupported())
-    {
+    if ($this->hasContent() && false === $this->getFiles()->isEmpty() && $this->isBodySupported()) {
       return true;
     }
 
     return false;
   }
-  
+
   protected function hasContent()
   {
-    if ($this->hasBody() || !$this->getParameters()->isEmpty())
-    {
+    if ($this->hasBody() || !$this->getParameters()->isEmpty()) {
         return true;
     }
-    
+
     return false;
   }
-
-
 
   protected function isBodySupported()
   {
-    if (in_array($this->getMethod(), array('POST', 'PUT')))
-    {
+    if (in_array($this->getMethod(), array('POST', 'PUT'))) {
       return true;
     }
-    
+
     return false;
   }
 }

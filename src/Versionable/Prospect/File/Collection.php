@@ -7,7 +7,7 @@ use Versionable\Common\Collection\Map;
 class Collection extends Map implements CollectionInterface
 {
   protected $boundary = '';
-  
+
   public function add(FileInterface $file)
   {
     $this->put($file->getName(), $file);
@@ -16,8 +16,7 @@ class Collection extends Map implements CollectionInterface
   public function toString()
   {
     $data = array();
-    foreach($this->elements as $file)
-    {
+    foreach ($this->elements as $file) {
       $data[] = \sprintf('------------------------------%s', $this->boundary);
       $data[] = $file;
       $data[] = \sprintf('------------------------------%s', $this->boundary);

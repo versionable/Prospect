@@ -14,14 +14,14 @@ interface ResponseInterface
   public function setHeaders(HeaderCollectionInterface $headers);
 
   public function getHeaders();
-  
+
   public function getCookies();
-  
+
   public function setCookies(CookieCollectionInterface $cookies);
 
   public function setContent($content);
 
   public function getContent();
-  
+
   public function parse($responseString);
 }
