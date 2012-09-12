@@ -247,4 +247,32 @@ class RequestTest extends \PHPUnit_Framework_TestCase
             array('test_method')
         );
     }
+
+    /**
+     * @depends testSetMethod
+     * @covers Versionable\Prospect\Request\Request::setMethod
+     * @covers Versionable\Prospect\Request\Request::getFiles
+     * @covers Versionable\Prospect\Request\Request::hasContent
+     * @covers Versionable\Prospect\Request\Request::isMultipart
+     * @covers Versionable\Prospect\Request\Request::getMethod
+     * @covers Versionable\Prospect\Request\Request::isBodySupported
+     */
+    public function testBodyNotSupport()
+    {
+        $files = $this->getMock('Versionable\Prospect\File\CollectionInterface', array(
+            'isEmpty',
+            'toString',
+            'setBoundary'
+        ));
+        $files->expects($this->any())
+              ->method('isEmpty')
+              ->will($this->returnValue(false));
+
+
+        $this->object->setFiles($files);
+        $this->object->setMethod('test');
+        $this->object->setBody('some body');
+
+        $this->assertFalse($this->object->isMultipart());
+    }
 }
