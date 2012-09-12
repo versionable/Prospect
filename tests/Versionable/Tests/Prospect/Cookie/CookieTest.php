@@ -34,7 +34,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
     
     public function testParse()
     {
-      $this->object->parse('foo=bar; expires=Fri, 01-Apr-2011 00:00:00 GMT; path=/user/; domain=testing.com; secure; httponly;');
+      $this->object->parse('foo=bar; Expires=Fri, 01-Apr-2011 00:00:00 GMT; Path=/user/; Domain=testing.com; Secure; HttpOnly;');
       
       $cookie = new Cookie('foo', 'bar', new \DateTime('01-Apr-2011 00:00:00 GMT'), '/user/', 'testing.com', true, true);
       
