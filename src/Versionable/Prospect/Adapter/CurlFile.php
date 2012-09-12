@@ -8,7 +8,7 @@ use Versionable\Prospect\Response\ResponseInterface;
 class CurlFile extends Curl
 {
     protected $fileHandle;
-    
+
     public function initialize()
     {
         $this->handle = curl_init();
@@ -40,7 +40,7 @@ class CurlFile extends Curl
 
         $post = array();
         $files = array();
-        
+
         foreach ($request->getParameters() as $param) {
             $post[$param->getName()] = $param->getValue();
         }
@@ -48,7 +48,7 @@ class CurlFile extends Curl
         foreach ($request->getFiles() as $file) {
             $files[$file->getName()] = '@' . $file->getValue() . ';type=' . $file->getType();
         }
-        
+
         if ($request->getMethod() == 'POST' || $request->getMethod() == 'PUT') {
             if (!empty($files)) {
                 $body = array_merge($post, $files);
@@ -57,7 +57,7 @@ class CurlFile extends Curl
             } else {
                 $body = $request->getBody();
             }
-            
+
             \curl_setopt($this->handle, \CURLOPT_POSTFIELDS, $body);
         }
 

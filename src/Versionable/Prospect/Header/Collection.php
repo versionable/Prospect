@@ -10,7 +10,7 @@ class Collection extends Map implements CollectionInterface
   {
     $this->put($header->getName(), $header);
   }
-  
+
   public function parse($name, $value)
   {
     $class_name = 'Versionable\Prospect\Header\\' . \str_replace(' ' , '', \ucwords(\str_replace('-', ' ', $name)));
@@ -20,18 +20,17 @@ class Collection extends Map implements CollectionInterface
     } else {
         $header = new Custom($name, $value);
     }
-    
+
     $this->add($header);
   }
-  
+
   public function toString()
   {
     $data = '';
-    foreach ($this as $header)
-    {
+    foreach ($this as $header) {
       $data .= $header->toString() . "\r\n";
     }
 
-    return $data; 
+    return $data;
   }
 }

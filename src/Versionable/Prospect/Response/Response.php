@@ -15,8 +15,8 @@ class Response implements ResponseInterface
    * @var integer HTTP Response code
    */
   protected $code = null;
-  
-  static public $valid_codes = array(
+
+  public static $valid_codes = array(
       100 => 'Continue',
       101 => 'Switching Protocols',
       200 => 'OK',
@@ -65,23 +65,23 @@ class Response implements ResponseInterface
    * @var string Response body
    */
   protected $content = '';
-  
+
   /**
    *
    * @var \Versionable\Prospect\Header\Collection
    */
   protected $headers = null;
-  
+
   /**
    *
    * @var \Versionable\Prospect\Cookie\Collection
    */
   protected $cookies = null;
-  
+
   public function parse($responseString)
-  {    
+  {
     list($code, $headers, $cookies,  $content) = $this->parseResponse($responseString);
-    
+
     $this->setCode($code);
     $this->setHeaders($headers);
     $this->setCookies($cookies);
@@ -95,12 +95,9 @@ class Response implements ResponseInterface
 
   public function setCode($code)
   {
-    if (array_key_exists($code, self::$valid_codes))
-    {
+    if (array_key_exists($code, self::$valid_codes)) {
       $this->code = $code;
-    }
-    else
-    {    
+    } else {
       throw new \InvalidArgumentException('Unknown HTTP code: ' . $code);
     }
   }
@@ -124,7 +121,7 @@ class Response implements ResponseInterface
   {
     $this->headers = $headers;
   }
-  
+
   public function getCookies()
   {
     return $this->cookies;
@@ -134,39 +131,34 @@ class Response implements ResponseInterface
   {
     $this->cookies = $cookies;
   }
-  
+
   protected function parseResponse($response)
-  {         
-    list($response_headers,$body) = explode("\r\n\r\n",$response,2); 
+  {
+    list($response_headers,$body) = explode("\r\n\r\n",$response,2);
 
-    $header_lines = explode("\r\n",$response_headers);  
+    $header_lines = explode("\r\n",$response_headers);
 
-    // first line of headers is the HTTP response code 
-    $http_response_line = array_shift($header_lines); 
-    
+    // first line of headers is the HTTP response code
+    $http_response_line = array_shift($header_lines);
+
     $code = null;
-    if (preg_match('@^HTTP/[0-9]\.[0-9] ([0-9]{3})@',$http_response_line, $matches))
-    { 
-      $code = $matches[1]; 
+    if (preg_match('@^HTTP/[0-9]\.[0-9] ([0-9]{3})@',$http_response_line, $matches)) {
+      $code = $matches[1];
     }
-    
-    $cookies = new CookieCollection(); 
-    $headers = new HeaderCollection(); 
-    foreach($header_lines as $line)
-    {
+
+    $cookies = new CookieCollection();
+    $headers = new HeaderCollection();
+    foreach ($header_lines as $line) {
       list($name, $value) = explode(': ', $line);
 
-      if ($name == 'Set-Cookie')
-      {
+      if ($name == 'Set-Cookie') {
         $cookies->parse($value);
-      }
-      else
-      {
+      } else {
         $headers->parse($name, $value);
       }
     }
 
-    return array($code, $headers, $cookies,  $body); 
+    return array($code, $headers, $cookies,  $body);
   }
-  
+
 }
