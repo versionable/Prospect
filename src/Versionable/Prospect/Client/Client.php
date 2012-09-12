@@ -5,7 +5,6 @@ namespace Versionable\Prospect\Client;
 use Versionable\Prospect\Adapter\AdapterInterface;
 use Versionable\Prospect\Request\RequestInterface;
 use Versionable\Prospect\Response\ResponseInterface;
-use Versionable\Prospect\UserAgent\UserAgentInterface;
 
 class Client implements ClientInterface
 {
@@ -14,11 +13,10 @@ class Client implements ClientInterface
    * @var AdapterInterface Adapter used
    */
   protected $adapter = null;
-  
+
   public function __construct(AdapterInterface $adapter = null)
   {
-    if (!is_null($adapter))
-    {
+    if (!is_null($adapter)) {
       $this->setAdapter($adapter);
     }
   }

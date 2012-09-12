@@ -61,4 +61,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     $this->assertEquals('foo=bar&alpha=bravo', $this->object->toString());
   }
 
+  public function testInvalid()
+  {
+      $this->assertFalse($this->object->isValid('test'));
+  }
 }

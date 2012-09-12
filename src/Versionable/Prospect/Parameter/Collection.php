@@ -19,22 +19,20 @@ class Collection extends Map implements CollectionInterface
   public function toString()
   {
     $parameters = array();
-    
-    foreach($this->elements as $parameter)
-    {
+
+    foreach ($this->elements as $parameter) {
        $parameters[$parameter->getName()] = $parameter->getValue();
     }
-    
+
     return http_build_query($parameters);
   }
-  
+
   public function isValid($element)
   {
-    if ($element instanceof ParameterInterface)
-    {
+    if ($element instanceof ParameterInterface) {
       return true;
     }
-    
+
     return false;
   }
 }
