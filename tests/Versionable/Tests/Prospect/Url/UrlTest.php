@@ -84,6 +84,8 @@ class UrlTest extends \PHPUnit_Framework_TestCase
       $this->assertEquals($this->readAttribute($this->object, 'port'), 8080);
       $this->assertEquals($this->readAttribute($this->object, 'username'), 'testuser');
       $this->assertEquals($this->readAttribute($this->object, 'password'), 'testpass');
+      $parameters = $this->readAttribute($this->object, 'parameters');
+      $this->assertEquals($parameters['b'], 'c');
     }
 
     /**
