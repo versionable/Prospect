@@ -72,7 +72,8 @@ class Url implements UrlInterface
       $this->setScheme($components['scheme']);
 
       if (! empty($components['query'])) {
-        $this->setParameters(array_merge($this->parameters, explode($this->query_separator, $components['query'])));
+        parse_str($components['query'], $parameters);
+        $this->setParameters(array_merge($this->parameters, $parameters));
       }
 
       $this->setHostname($components['host']);
