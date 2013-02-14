@@ -134,6 +134,12 @@ class Response implements ResponseInterface
 
   protected function parseResponse($response)
   {
+
+    // cURL automatically handles Proxy rewrites, remove the "HTTP/1.0 200 Connection established" string
+    if (false !== stripos($response, "HTTP/1.0 200 Connection established\r\n\r\n")) {
+        $response = str_ireplace("HTTP/1.0 200 Connection established\r\n\r\n", '', $response);
+    }
+
     list($response_headers,$body) = explode("\r\n\r\n",$response,2);
 
     $header_lines = explode("\r\n",$response_headers);
