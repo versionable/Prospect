@@ -7,11 +7,11 @@ class File extends Response
   /**
    * @var string Filename
    */
-  protected $filename = null;
+  protected $filename;
 
   public function __construct()
   {
-      $this->filename = \tempnam(\sys_get_temp_dir(), '');
+      $this->filename = null;
   }
 
   public function getFilename()

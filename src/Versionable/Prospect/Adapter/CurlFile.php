@@ -4,6 +4,7 @@ namespace Versionable\Prospect\Adapter;
 
 use Versionable\Prospect\Request\RequestInterface;
 use Versionable\Prospect\Response\ResponseInterface;
+use Versionable\Prospect\Response\File;
 
 class CurlFile extends Curl
 {
@@ -87,9 +88,14 @@ class CurlFile extends Curl
 
         return $response;
     }
-
-    protected function createOutFile(ResponseInterface $response)
+    
+    protected function createOutFile(File $response)
     {
+        if($response->getFilename() == null){
+            $file = \tempnam(\sys_get_temp_dir(), '');
+            $response->setFilename($file);
+        }
+
         $this->fileHandle = \fopen($response->getFilename(), 'w+');
     }
 }
