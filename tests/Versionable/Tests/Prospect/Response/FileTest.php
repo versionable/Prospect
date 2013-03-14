@@ -29,7 +29,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetFilename()
     {
-        $this->assertNotNull($this->object->getFilename());
+        $this->assertNull($this->object->getFilename());
     }
 
     /**
