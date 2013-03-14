@@ -2,6 +2,7 @@
 
 namespace Versionable\Prospect\Adapter;
 
+use Versionable\Prospect\Adapter\Exception\CurlFileException;
 use Versionable\Prospect\Request\RequestInterface;
 use Versionable\Prospect\Response\ResponseInterface;
 use Versionable\Prospect\Response\File;
@@ -89,11 +90,27 @@ class CurlFile extends Curl
         return $response;
     }
     
-    protected function createOutFile(File $response)
+    public function createOutFile(File $response)
     {
-        if($response->getFilename() == null){
-            $file = \tempnam(\sys_get_temp_dir(), '');
-            $response->setFilename($file);
+        $filename = $response->getFilename();
+
+        if($filename == null){
+            throw new CurlFileException('The target filename of the response is null');
+        }
+
+        $outFileInfo = new \SplFileInfo($filename);
+        $parentDir = new \SplFileInfo($outFileInfo->getPath());
+
+        if(!$parentDir->isDir()){
+            throw new CurlFileException('The target filename directory does not exist');
+        }
+
+        if(!$parentDir->isWritable()){
+            throw new CurlFileException('The target filename directory is not writable');
+        }
+
+        if($outFileInfo->isFile() && !$outFileInfo->isWritable()){
+            throw new CurlFileException('The target filename is not writable');
         }
 
         $this->fileHandle = \fopen($response->getFilename(), 'w+');
