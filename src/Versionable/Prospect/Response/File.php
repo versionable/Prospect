@@ -11,7 +11,7 @@ class File extends Response
 
   public function __construct()
   {
-      $this->filename = null;
+      $this->filename = sys_get_temp_dir().DIRECTORY_SEPARATOR.uniqid('prospect_', true);
   }
 
   public function getFilename()
