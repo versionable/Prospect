@@ -1,0 +1,24 @@
+HTTP/1.0 200 Connection established
+
+HTTP/1.1 200 OK
+Server: nginx/0.7.67
+Date: Wed, 13 Apr 2011 20:19:22 GMT
+Content-Type: text/html; charset=UTF-8
+Transfer-Encoding: chunked
+Connection: close
+Set-Cookie: _SESS=54ae467a63ed170963fbc368f5bd15ea; expires=Wed, 13-Apr-2011 21:19:22 GMT; path=/
+cache-control: no-cache
+
+<!doctype html>
+    <head> 
+        <title>Versionable - Open Source</title>
+    </head>
+
+    <body>
+        <header>
+        <h1>Versionable</h1>
+
+        </header>
+    Text
+    </body>
+</html>"
